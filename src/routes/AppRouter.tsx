@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthPage } from '../pages/AuthPage/AuthPage';
 
-// import { RecipesPage } from '../pages/RecipesPage/RecipesPage';
+import RecipesPage from '../../src/pages/RecipesPage/RecipesPage';
 // import { RecipeDetailPage } from '../pages/RecipeDetailPage/RecipeDetailPage';
 // import { NotFoundPage } from '../pages/NotFoundPage';
 import { RequireAuth } from '../components/auth/RequireAuth';
@@ -13,10 +13,10 @@ export function AppRouter() {
         <Route path="/auth" element={<AuthPage />} />
 
         <Route
-          path="/"
+          path="/recipes"
           element={
-            <RequireAuth children={undefined}>
-                {/* <RecipesPage /> */}
+            <RequireAuth>
+                <RecipesPage />
             </RequireAuth>
           }
         />
