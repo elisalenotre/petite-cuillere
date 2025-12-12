@@ -48,7 +48,7 @@ export function LoginForm() {
           onChange={(e) => setPassword(e.target.value)}
           required
           autoComplete="current-password"
-          placeholder='Choisir un mot passe avec au moins 6 caractères.'
+          placeholder='Saisir son mot de passe'
         />
       </label>
 

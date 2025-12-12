@@ -38,6 +38,7 @@ export function SignupForm() {
           onChange={(e) => setEmail(e.target.value)}
           required
           autoComplete="email"
+          placeholder='RemiRatatouille@email.com'
         />
       </label>
 
@@ -49,6 +50,7 @@ export function SignupForm() {
           onChange={(e) => setPassword(e.target.value)}
           required
           autoComplete="new-password"
+          placeholder='Choisir un mot passe avec au moins 6 caractères.'
         />
       </label>
 
