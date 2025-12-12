@@ -146,16 +146,17 @@
   transform: none;
 }
 
-/* --- Messages d'erreur / succès --- */
+/* --- Messages d'erreur --- */
 
-.auth-error {
-  color: #b5413c;
-  font-size: 0.8rem;
-}
-
-.auth-success {
-  color: #3e7e4e;
-  font-size: 0.8rem;
+.auth-global-error {
+  background: #f8d7d7;
+  color: #a1463b;
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  border: 1px solid #e7b5b5;
+  font-size: 0.82rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
 }
 
 /* --- Séparateur + bouton Google --- */
@@ -190,6 +191,7 @@
 
 .auth-google-btn:hover {
   background: #f5e3c8;
+  border: 1px solid rgba(128, 93, 49, 0.35);
   box-shadow: 0 6px 12px rgba(150, 115, 66, 0.18);
   transform: translateY(-1px);
 }
