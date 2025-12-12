@@ -8,25 +8,28 @@ import spoonLogo from '../../assets/spoon.svg';
 export function AuthPage() {
   const { signInWithGoogle, signOut, loading, user } = useAuth();
   const [mode, setMode] = useState<'login' | 'signup'>('login');
+  const [globalError, setGlobalError] = useState<string | null>(null);
 
   const handleGoogle = async () => {
+    setGlobalError(null);
     try {
       await signInWithGoogle();
     } catch {
-      // afficher un message d'erreur global
+      setGlobalError("Oups, la connexion avec Google a échoué.");
     }
   };
 
   const handleLogout = async () => {
+    setGlobalError(null);
     try {
       await signOut();
     } catch {
-      // idem
+      setGlobalError("Impossible de se déconnecter.");
     }
   };
 
   if (loading) {
-    return <p className="auth-loading">Chargement de la session...Nous cuisinons...</p>;
+    return <p className="auth-loading">Chargement de la session... Nous cuisinons...</p>;
   }
 
   if (user) {
@@ -40,6 +43,7 @@ export function AuthPage() {
 
           <section className="auth-card auth-card--logged">
             <p>Tu es connecté·e en tant que {user.email}</p>
+            {globalError && <p className="auth-global-error">{globalError}</p>}
             <button onClick={handleLogout} className="auth-logout-btn">
               Se déconnecter
             </button>
@@ -58,6 +62,8 @@ export function AuthPage() {
         </header>
 
         <section className="auth-card">
+          {globalError && ( <p className="auth-global-error">{globalError}</p> )}
+          
           <div className="auth-tabs">
             <button
               type="button"
