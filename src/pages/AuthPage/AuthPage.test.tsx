@@ -125,9 +125,7 @@ describe('AuthPage', () => {
     ).toBeInTheDocument();
   });
 
-  // ---------------------------
-  // 5. User déjà connecté
-  // ---------------------------
+  // User déjà connecté
   it('affiche le message "déjà connecté" quand user est défini', () => {
     mockedUseAuth.mockReturnValueOnce({
       user: { email: 'logged@example.com' } as any,
