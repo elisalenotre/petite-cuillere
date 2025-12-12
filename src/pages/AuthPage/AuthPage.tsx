@@ -3,6 +3,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { LoginForm } from '../../components/auth/LoginForm';
 import { SignupForm } from '../../components/auth/SignupForm';
 import './AuthPage.css';
+import spoonLogo from '../../assets/spoon.svg';
 
 export function AuthPage() {
   const { signInWithGoogle, signOut, loading, user } = useAuth();
@@ -11,31 +12,38 @@ export function AuthPage() {
   const handleGoogle = async () => {
     try {
       await signInWithGoogle();
-    } catch (error) {
-      // gestion d'erreur
+    } catch {
+      // afficher un message d'erreur global
     }
   };
 
   const handleLogout = async () => {
     try {
       await signOut();
-    } catch (error) {
-      // gestion d'erreur
+    } catch {
+      // idem
     }
   };
 
   if (loading) {
-    return <p className="auth-loading">Chargement de la session... Nous cuisinons...</p>;
+    return <p className="auth-loading">Chargement de la session...Nous cuisinons...</p>;
   }
 
   if (user) {
     return (
       <main className="auth-page">
-        <div className="auth-card">
-          <p>Tu es connecté·e en tant que {user.email}</p>
-          <button onClick={handleLogout} className="auth-logout-btn">
-            Se déconnecter
-          </button>
+        <div className="auth-layout">
+          <header className="auth-header">
+            <img src={spoonLogo} alt="" className="auth-logo" />
+            <h1 className="auth-title">Petite Cuillère</h1>
+          </header>
+
+          <section className="auth-card auth-card--logged">
+            <p>Tu es connecté·e en tant que {user.email}</p>
+            <button onClick={handleLogout} className="auth-logout-btn">
+              Se déconnecter
+            </button>
+          </section>
         </div>
       </main>
     );
@@ -43,38 +51,44 @@ export function AuthPage() {
 
   return (
     <main className="auth-page">
-      <div className="auth-card">
-        <div className="auth-tabs">
+      <div className="auth-layout">
+        <header className="auth-header">
+          <img src={spoonLogo} alt="" className="auth-logo" />
+          <h1 className="auth-title">Petite Cuillère</h1>
+        </header>
+
+        <section className="auth-card">
+          <div className="auth-tabs">
+            <button
+              type="button"
+              className={mode === 'login' ? 'active' : ''}
+              onClick={() => setMode('login')}
+            >
+              Se connecter
+            </button>
+            <button
+              type="button"
+              className={mode === 'signup' ? 'active' : ''}
+              onClick={() => setMode('signup')}
+            >
+              S'inscrire
+            </button>
+          </div>
+
+          {mode === 'login' ? <LoginForm /> : <SignupForm />}
+
+          <div className="auth-separator">
+            <span>ou</span>
+          </div>
+
           <button
             type="button"
-            className={mode === 'login' ? 'active' : ''}
-            onClick={() => setMode('login')}
+            className="auth-google-btn"
+            onClick={handleGoogle}
           >
-            Se connecter
+            Continuer avec Google
           </button>
-          <button
-            type="button"
-            className={mode === 'signup' ? 'active' : ''}
-            onClick={() => setMode('signup')}
-          >
-            S'inscrire
-          </button>
-        </div>
-
-        {/* Le formulaire */}
-        {mode === 'login' ? <LoginForm /> : <SignupForm />}
-
-        <div className="auth-separator">
-          <span>ou</span>
-        </div>
-
-        <button
-          type="button"
-          className="auth-google-btn"
-          onClick={handleGoogle}
-        >
-          Continuer avec Google
-        </button>
+        </section>
       </div>
     </main>
   );
