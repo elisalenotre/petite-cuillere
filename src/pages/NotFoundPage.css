@@ -1,0 +1,87 @@
+.notfound-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #6c5333;
+}
+
+.notfound-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.75rem;
+}
+
+.notfound-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.notfound-logo {
+  width: 70px;
+  height: auto;
+}
+
+.notfound-title {
+  font-size: 2.5rem;
+  color: #7a5a38;
+  font-family: 'Italianno', cursive;
+}
+
+.notfound-card {
+  width: 360px;
+  max-width: calc(100vw - 3rem);
+  padding: 2rem 2.1rem 1.8rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 2rem;
+  border: 2px dashed #e0c9a3;
+  box-shadow: 0 16px 40px rgba(139, 108, 60, 0.12);
+  text-align: center;
+}
+
+.notfound-heading {
+  font-size: 1.1rem;
+  margin-bottom: 0.7rem;
+  color: #7a5a38;
+}
+
+.notfound-text {
+  font-size: 0.9rem;
+  margin-bottom: 1.4rem;
+  color: #8b6b45;
+}
+
+.notfound-button {
+  display: inline-block;
+  padding: 0.6rem 1.4rem;
+  border-radius: 999px;
+  border: none;
+  background: #b88d5c;
+  color: #fffaf4;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.1s, transform 0.1s;
+}
+
+.notfound-button:hover {
+  background: #a57845;
+  color: #fffaf4;
+  box-shadow: 0 6px 14px rgba(128, 93, 49, 0.35);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 480px) {
+  .notfound-card {
+    width: 320px;
+    padding: 1.7rem 1.6rem 1.6rem;
+  }
+
+  .notfound-title {
+    font-size: 1.6rem;
+  }
+}
