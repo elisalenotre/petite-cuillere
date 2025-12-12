@@ -60,7 +60,6 @@ export function AuthPage() {
     return <p className="auth-loading">Chargement de la session de cuisine...</p>;
   }
 
-  // D'abord, juste un simple message mais plus tard, on redirigera vers la page des recettes.
   if (user) {
   return (
     <main className="auth-page">
@@ -118,7 +117,7 @@ export function AuthPage() {
           {formError && <p className="auth-error">{formError}</p>}
           {formSuccess && <p className="auth-success">{formSuccess}</p>}
 
-          <button type="submit" disabled={submitting}>
+          <button type="submit" disabled={submitting} data-testid="auth-submit-button">
             {submitting
               ? 'Veuillez patienter…'
               : mode === 'login'
