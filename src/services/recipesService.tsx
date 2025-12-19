@@ -29,13 +29,12 @@ export async function getRecipes(page: number, pageSize: number) {
 /* =============================
    GET RECIPE BY ID
 ============================= */
-export async function getRecipeById(id: string) {
+export async function getRecipeById(id: number) {
   const { data, error } = await supabase
-    .from("recipes")
+    .from("recettes") // table correcte
     .select("*, categories(*)")
-    .eq("recette_id", id)
+    .eq("recettes_id", id) // colonne correcte
     .single();
-
   if (error) throw new Error(error.message);
   return data as Recipe;
 }
@@ -110,11 +109,14 @@ export async function updateRecipe(id: string, form: any) {
 /* =============================
    DELETE RECIPE
 ============================= */
-export async function deleteRecipe(id: string) {
+export async function deleteRecipe(recettes_id: number) {
   const { error } = await supabase
-    .from("recipes")
+    .from("recettes") // exact table name
     .delete()
-    .eq("recette_id", id);
+    .eq("recettes_id", recettes_id); // exact column name
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    console.error("Erreur Supabase :", error);
+    throw error;
+  }
 }

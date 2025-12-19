@@ -9,15 +9,14 @@ export type Category = {
 
 // Représente une recette
 export type Recipe = {
-  categorie: any;
-  recette_id: string;
-  user_id: string;
-  cat_id: string;
-  img: string;
+  recettes_id: number;
   title: string;
-  description: string;
-  created_at: string;
-
-  // optionnel : si on fait un join dans Supabase
-  categories?: Category;
+  img?: string;
+  description?: string;
+  categories?: {
+    regime: string;
+    temps: string;
+    tech_cuisson: string;
+    difficulty: string;
+  };
 };

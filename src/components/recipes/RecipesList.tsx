@@ -1,22 +1,25 @@
 import type { Recipe } from "../../types/recipes";
-import RecipeCard from "./RecipeCard";
 
 type Props = {
   recipes: Recipe[];
-  onDelete: (id: string) => void;
+  onDelete: (id: number) => void;
 };
 
-const RecipesList = ({ recipes, onDelete }: Props) => {
-  if (recipes.length === 0)
-    return <p>Aucune recette trouvée.</p>;
-
+export default function RecipesList({ recipes, onDelete }: Props) {
   return (
-    <div>
-      {recipes.map((r) => (
-        <RecipeCard key={r.recette_id} recipe={r} onDelete={onDelete} />
+    <div className="recipes-grid">
+      {recipes.map((recipe) => (
+        <div key={recipe.recettes_id} className="recipe-card">
+          <h3>{recipe.title}</h3>
+
+          <button
+            className="delete-btn"
+            onClick={() => onDelete(recipe.recettes_id)}
+          >
+            Supprimer
+          </button>
+        </div>
       ))}
     </div>
   );
-};
-
-export default RecipesList;
+}
