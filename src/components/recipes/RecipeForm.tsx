@@ -25,6 +25,18 @@ export default function RecipeForm({ onClose, onRecipeAdded }: Props) {
       return;
     }
 
+    // --- Récupérer l'utilisateur connecté
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      alert("Vous devez être connecté pour ajouter une recette");
+      console.error(userError);
+      return;
+    }
+
     // --- Vérifier si la catégorie existe déjà
     let catId: number | null = null;
     const { data: existingCat } = await supabase
@@ -55,10 +67,18 @@ export default function RecipeForm({ onClose, onRecipeAdded }: Props) {
       catId = newCat.id;
     }
 
-    // --- Ajouter la recette
+    // --- Ajouter la recette avec user_id
     const { data, error } = await supabase
       .from("recettes")
-      .insert([{ title, img, description, cat_id: catId }])
+      .insert([
+        {
+          title,
+          img,
+          description,
+          cat_id: catId,
+          user_id: user.id, // ← IMPORTANT
+        },
+      ])
       .select()
       .single();
 
