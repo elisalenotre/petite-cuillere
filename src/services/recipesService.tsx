@@ -11,17 +11,20 @@ export async function getRecipes(page: number, pageSize: number) {
 
   const { data, error, count } = await supabase
     .from("recipes")
-    .select("*, categories(*)", { count: "exact" })
-    .range(from, to)
-    .order("created_at", { ascending: false });
+    .select("*, categorie(*)", { count: "exact" }) 
+    .range(from, to);
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    console.error("Erreur Supabase :", error);
+    throw error;
+  }
 
   return {
-    recipes: data as Recipe[],
+    recipes: data ?? [],
     total: count ?? 0,
   };
 }
+
 
 /* =============================
    GET RECIPE BY ID

@@ -9,6 +9,7 @@ export type Category = {
 
 // Représente une recette
 export type Recipe = {
+  categorie: any;
   recette_id: string;
   user_id: string;
   cat_id: string;

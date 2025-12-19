@@ -1,95 +1,223 @@
-/* --- Fond de tout l'écran --- */
+/* --- Fond global --- */
 body {
   background-color: #faf0e3;
-  margin: 0px;
+  margin: 0;
   padding: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color: #6c5333;
 }
 
-/* --- Layout principal --- */
-.recipes-page { 
+/* --- Page --- */
+.recipes-page {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2rem;
   width: 100%;
-  min-height: 100vh; 
+  min-height: 100vh;
   padding: 2rem;
   margin-top: 80px;
 }
 
-/* --- Header + barre recherche + bouton créer --- */
+/* --- Header --- */
 .recipes-header {
-  display: flex;
-  justify-content: center; /* titre centré */
-  align-items: center;
-  gap: 1rem;
   width: 100%;
   max-width: 900px;
-  flex-wrap: wrap;
+  text-align: center;
 }
 
 .recipes-title {
   font-size: 2.5rem;
   font-family: 'Italianno', cursive;
   color: #7a5a38;
-  text-align: center;
-  flex: 1 1 100%; /* pour que le titre soit sur toute la largeur */
 }
 
-/* Wrapper barre + bouton */
-.recipes-search-wrapper {
+/* --- Top bar --- */
+.recipes-top-bar {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 0.9rem;
   width: 100%;
   max-width: 900px;
-  margin-top: 1rem;
-  gap: 1rem;
 }
 
-/* Barre de recherche */
-.recipes-search-wrapper input {
+/* --- Encadré recherche + filtres --- */
+.recipes-search-box {
   flex: 1;
-  padding: 0.55rem 1rem;
+  background-color: #fffaf4;
+  border: 1px dashed #6c5333;
+  border-radius: 20px;
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  box-shadow: 0 4px 12px rgba(108, 83, 51, 0.08);
+}
+
+
+/* --- Barre de recherche --- */
+.recipes-search-box input {
+  width: 94%;
+  padding: 0.65rem 1.2rem;
   border-radius: 999px;
-  border: 1px solid #6c5333; /* bord foncé */
-  background-color: #fffaf4; /* clair */
-  font-size: 0.95rem;
-  outline: none;
+  border: 1px solid #6c5333;
+  background-color: #fffaf4;
+  font-size: 0.9rem;
   color: #6c5333;
 }
 
-.recipes-search-wrapper input::placeholder {
-  color: #6c5333; /* même couleur que bord */
+.recipes-search-box input:focus {
+  border-color: #b88d5c;
+  box-shadow: 0 0 0 2px rgba(184, 141, 92, 0.2);
 }
 
-/* Bouton créer une recette */
+.recipes-search-box input::placeholder {
+  color: #a78b6d;
+}
+
+/* --- Filtres --- */
+.filters-wrapper {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* ⬅ 4 filtres = 4 colonnes */
+  gap: 0.9rem;
+  padding: 1rem;
+  background-color: #f5e9d8;
+  border-radius: 16px;
+  border: 1px solid #e2cfae;
+}
+
+
+/* Style des sélecteurs de filtres */
+.filters-wrapper select {
+  flex: 1;
+  min-width: 160px;
+  padding: 0.65rem 1.4rem;
+  padding-right: 3rem;
+  border-radius: 999px;
+  border: 1px solid #b88d5c;
+  background-color: #fffdf9; /* ⬅ différent de la recherche */
+  font-size: 0.85rem;
+  color: #6c5333;
+  cursor: pointer;
+  appearance: none;
+
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236c5333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1.2rem center;
+  background-size: 0.9rem;
+
+  transition: all 0.2s ease;
+}
+
+.filters-wrapper select:hover {
+  background-color: #fff7eb;
+  border-color: #a57845;
+}
+
+.filters-wrapper select:focus {
+  outline: none;
+  border-color: #a57845;
+  box-shadow: 0 0 0 2px rgba(165, 120, 69, 0.25);
+}
+
+.filters-wrapper select option {
+  background-color: #fffaf4;
+  color: #6c5333;
+  padding: 0.6rem;
+  font-size: 0.85rem;
+}
+
+
+/* Bouton de réinitialisation des filtres */
+.filters-reset {
+  background: none;
+  border: 1px solid #d4b896;
+  color: #7a5a38;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  align-self: center;
+}
+
+.filters-reset:hover {
+  background-color: #f5e9d8;
+  border-color: #b88d5c;
+}
+
+/* --- Bouton créer --- */
 .recipes-create-btn {
+  align-self: center; /* ⬅ centré sous les filtres */
+  margin-top: 0.5rem;
   border-radius: 999px;
   border: none;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 2rem;
   background: #b88d5c;
   color: #fffaf4;
   cursor: pointer;
   font-weight: 600;
-  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+  font-size: 0.9rem;
+  transition: all 0.25s ease;
+  text-decoration: none;
 }
 
-.recipes-create-btn:hover {
-  transform: scale(0.95); /* légèrement plus petit au hover */
-  background: #a57845;
-  color: #fffaf4; /* pas de bleu */
+.recipes-create-wrapper {
+  display: flex;
+  justify-content: flex-start; /* ⬅ gauche */
 }
+
+
+.recipes-create-btn:hover {
+  transform: translateY(-2px);
+  background: #a57845;
+  box-shadow: 0 6px 16px rgba(165, 120, 69, 0.35);
+  color: white;
+}
+
 
 /* --- Liste des recettes --- */
 .recipes-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+  gap: 2rem;
   width: 100%;
   max-width: 900px;
+}
+
+/* --- Animation simple au hover des cartes recette --- */
+.recipe-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.recipe-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(108, 83, 51, 0.15);
+}
+
+/* --- Indicateur de filtres actifs --- */
+.filters-active-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #7a5a38;
+  margin-top: 0.5rem;
+}
+
+.filters-active-count {
+  background: #b88d5c;
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
 }
 
 /* --- Pagination --- */
@@ -99,30 +227,274 @@ body {
   align-items: center;
   width: 100%;
   max-width: 900px;
-  gap: 0.5rem;
-  margin-top: 1.5rem;
+  gap: 1.4rem;
+  margin-top: 2rem;
   font-size: 0.95rem;
-  color: #6c5333;
 }
 
 .recipes-pagination button {
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.2rem;
   border-radius: 999px;
   border: 1px solid #b88d5c;
   background: #fffaf4;
   cursor: pointer;
   font-weight: 600;
-  transition: border-color 0.2s, background 0.15s;
-  margin: 0 0.5rem; /* espace du texte */
+  transition: all 0.2s ease;
+  color: #6c5333;
 }
 
-.recipes-pagination button:hover {
-  border-color: #7a5a38; /* marron foncé */
-  background: #fffaf4;
+.recipes-pagination button:hover:not(:disabled) {
+  background: #b88d5c;
+  color: white;
+  transform: translateY(-1px);
 }
 
 .recipes-pagination button:disabled {
-  opacity: 0.5;
-  cursor: default;
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* --- Pagination container --- */
+.pagination-container {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem; 
+}
+
+/* --- Texte Page x / y --- */
+.page-indicator {
+  margin: 0 0.4rem;     
+  font-weight: 500;
+  color: #7a5a38;
+  white-space: nowrap;
+}
+
+
+/* --- Backdrop du modal --- */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+/* --- Contenu du modal --- */
+.modal-content {
+  background-color: #fffaf4;
+  border: 1px solid #6c5333;
+  border-radius: 18px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 8px 24px rgba(108, 83, 51, 0.2);
+  position: relative;
+  animation: slideIn 0.25s ease;
+}
+
+/* --- Animation --- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* --- Bouton de fermeture --- */
+.modal-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #6c5333;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.modal-close-btn:hover {
+  transform: scale(1.2);
+  color: #b88d5c;
+}
+
+/* --- Fond du modal --- */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* --- Contenu du modal --- */
+.modal-content {
+  background-color: #fffaf4;
+  padding: 2rem;
+  border-radius: 16px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 10px 25px rgba(108, 83, 51, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+
+/* --- Formulaire recette --- */
+.recipe-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* espace vertical entre champs */
+  padding: 1rem 1.2rem;
+}
+
+/* Tous les champs du formulaire */
+.recipe-form input,
+.recipe-form textarea,
+.recipe-form select {
+  width: 100%;
+  height: 2.8rem; /* même hauteur pour tous */
+  padding: 0 1rem; /* padding horizontal uniforme */
+  border-radius: 999px;
+  border: 1px solid #6c5333;
+  background-color: #fffaf4;
+  font-size: 0.9rem;
+  color: #6c5333;
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+/* Permet de redimensionner textarea uniquement verticalement */
+.recipe-form textarea {
+  height: 5rem; /* plus grand pour texte long */
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+  resize: vertical;
+  border-radius: 12px; /* arrondi légèrement plus petit pour textarea */
+}
+
+/* Focus identique pour tous */
+.recipe-form input:focus,
+.recipe-form textarea:focus,
+.recipe-form select:focus {
   border-color: #b88d5c;
+  box-shadow: 0 0 0 2px rgba(184, 141, 92, 0.2);
+}
+
+/* Placeholder */
+.recipe-form input::placeholder,
+.recipe-form textarea::placeholder {
+  color: #a78b6d;
+}
+
+/* Select arrow styling identique aux filtres */
+.recipe-form select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236c5333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 0.9rem;
+  padding-right: 2.8rem;
+}
+
+/* Boutons */
+.recipe-form-buttons {
+  display: flex;
+  gap: 1rem; 
+}
+
+.recipe-form-buttons button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid #b88d5c;
+  background: #fffaf4;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  color: #6c5333;
+}
+
+.recipe-form-buttons button:hover:not(:disabled) {
+  background: #b88d5c;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.recipe-form-buttons button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
+/* --- Responsive --- */
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 1.5rem;
+    width: 95%;
+  }
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .recipes-page {
+    padding: 1rem;
+    margin-top: 60px;
+  }
+  
+  .recipes-top-bar {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .filters-wrapper {
+    flex-direction: column;
+    padding: 0.9rem;
+  }
+
+  .filters-wrapper select {
+    min-width: 100%;
+  }
+
+  .recipes-create-btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .recipes-list {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .recipes-title {
+    font-size: 2rem;
+  }
+  
+  .recipes-search-box {
+    padding: 1rem;
+  }
+  
+  .recipes-pagination {
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
 }
