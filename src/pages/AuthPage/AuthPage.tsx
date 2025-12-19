@@ -10,7 +10,7 @@ import spoonLogo from '../../assets/spoon.svg';
 
 export function AuthPage() {
   // Récupère les fonctions d'authentification et l'état utilisateur depuis le contexte
-  const { signInWithGoogle, signOut, loading, user } = useAuth();
+  const { signInWithGoogle, signInWithGitHub, signOut, loading, user } = useAuth();
   // Gère le mode affiché : connexion ou inscription
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   // Gère l'affichage d'une erreur globale
@@ -25,6 +25,18 @@ export function AuthPage() {
       setGlobalError("Oups, la connexion avec Google a échoué.");
     }
   };
+
+  // Connexion via GitHub
+  const handleGitHub = async () => {
+    setGlobalError(null);
+    try {
+      await signInWithGitHub();
+    } catch {
+      setGlobalError("Oups, la connexion avec GitHub a échoué.");
+    }
+  };
+
+
 
   // Déconnexion de l'utilisateur
   const handleLogout = async () => {
@@ -98,13 +110,16 @@ export function AuthPage() {
             <span>ou</span>
           </div>
 
-          <button
-            type="button"
-            className="auth-google-btn"
-            onClick={handleGoogle}
-          >
-            Continuer avec Google
-          </button>
+          <div className="auth-oauth">
+            <button type="button" className="auth-google-btn" onClick={handleGoogle}>
+              Continuer avec Google
+            </button>
+
+            <button type="button" className="auth-github-btn" onClick={handleGitHub}>
+              Continuer avec GitHub
+            </button>
+          </div>
+
         </section>
       </div>
     </main>

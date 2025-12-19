@@ -15,6 +15,7 @@ const mockedUseAuth = useAuth as unknown as Mock;
 const signInWithEmail = vi.fn();
 const signUpWithEmail = vi.fn();
 const signInWithGoogle = vi.fn();
+const signInWithGitHub = vi.fn();
 const signOut = vi.fn();
 
 // Setup par défaut pour chaque test
@@ -26,6 +27,7 @@ function setupDefaultAuthMock() {
     signInWithEmail,
     signUpWithEmail,
     signInWithGoogle,
+    signInWithGitHub,
     signOut,
   });
 }
@@ -34,13 +36,13 @@ beforeEach(() => {
   signInWithEmail.mockReset();
   signUpWithEmail.mockReset();
   signInWithGoogle.mockReset();
+  signInWithGitHub.mockReset();
   signOut.mockReset();
 
   setupDefaultAuthMock();
 });
 
 describe('AuthPage', () => {
-
   // Affichage initial (login)
   it('affiche le formulaire de connexion par défaut', () => {
     render(<AuthPage />);
@@ -55,22 +57,14 @@ describe('AuthPage', () => {
   });
 
   // Login
-  it("permet de se connecter et appelle signInWithEmail avec les bonnes valeurs", async () => {
+  it('permet de se connecter et appelle signInWithEmail avec les bonnes valeurs', async () => {
     const user = userEvent.setup();
     render(<AuthPage />);
 
-    await user.type(
-      screen.getByLabelText(/email/i),
-      'test@example.com'
-    );
-    await user.type(
-      screen.getByLabelText(/mot de passe/i),
-      'password123'
-    );
+    await user.type(screen.getByLabelText(/email/i), 'test@example.com');
+    await user.type(screen.getByLabelText(/mot de passe/i), 'password123');
 
-    await user.click(
-      screen.getByTestId('auth-submit-button')
-    );
+    await user.click(screen.getByTestId('auth-submit-button'));
 
     expect(signInWithEmail).toHaveBeenCalledTimes(1);
     expect(signInWithEmail).toHaveBeenCalledWith(
@@ -84,26 +78,15 @@ describe('AuthPage', () => {
     const user = userEvent.setup();
     render(<AuthPage />);
 
-    await user.click(
-      screen.getByRole('button', { name: /s'inscrire/i })
-    );
+    await user.click(screen.getByRole('button', { name: /s'inscrire/i }));
 
-    await user.type(
-      screen.getByLabelText(/email/i),
-      'new@example.com'
-    );
-    await user.type(
-      screen.getByLabelText(/mot de passe/i),
-      'newpass'
-    );
+    await user.type(screen.getByLabelText(/email/i), 'new@example.com');
+    await user.type(screen.getByLabelText(/mot de passe/i), 'newpass');
 
     await user.click(screen.getByTestId('auth-submit-button'));
 
     expect(signUpWithEmail).toHaveBeenCalledTimes(1);
-    expect(signUpWithEmail).toHaveBeenCalledWith(
-      'new@example.com',
-      'newpass'
-    );
+    expect(signUpWithEmail).toHaveBeenCalledWith('new@example.com', 'newpass');
   });
 
   // Loading state
@@ -115,14 +98,13 @@ describe('AuthPage', () => {
       signInWithEmail,
       signUpWithEmail,
       signInWithGoogle,
+      signInWithGitHub,
       signOut,
     });
 
     render(<AuthPage />);
 
-    expect(
-      screen.getByText(/chargement de la session/i)
-    ).toBeInTheDocument();
+    expect(screen.getByText(/chargement de la session/i)).toBeInTheDocument();
   });
 
   // User déjà connecté
@@ -134,6 +116,7 @@ describe('AuthPage', () => {
       signInWithEmail,
       signUpWithEmail,
       signInWithGoogle,
+      signInWithGitHub,
       signOut,
     });
 
@@ -142,13 +125,11 @@ describe('AuthPage', () => {
     expect(
       screen.getByText(/tu es connecté·e en tant que/i)
     ).toBeInTheDocument();
-    expect(
-      screen.getByText(/logged@example.com/i)
-    ).toBeInTheDocument();
+    expect(screen.getByText(/logged@example.com/i)).toBeInTheDocument();
   });
 
   // Login via Google
-  it("appelle signInWithGoogle quand on clique sur le bouton Google", async () => {
+  it('appelle signInWithGoogle quand on clique sur le bouton Google', async () => {
     const user = userEvent.setup();
     render(<AuthPage />);
 
@@ -159,6 +140,20 @@ describe('AuthPage', () => {
     await user.click(googleBtn);
 
     expect(signInWithGoogle).toHaveBeenCalledTimes(1);
+  });
+
+  // Login via GitHub
+  it('appelle signInWithGitHub quand on clique sur le bouton GitHub', async () => {
+    const user = userEvent.setup();
+    render(<AuthPage />);
+
+    const githubBtn = screen.getByRole('button', {
+      name: /continuer avec github/i,
+    });
+
+    await user.click(githubBtn);
+
+    expect(signInWithGitHub).toHaveBeenCalledTimes(1);
   });
 
   // Logout
@@ -172,6 +167,7 @@ describe('AuthPage', () => {
       signInWithEmail,
       signUpWithEmail,
       signInWithGoogle,
+      signInWithGitHub,
       signOut,
     });
 
@@ -185,5 +181,4 @@ describe('AuthPage', () => {
 
     expect(signOut).toHaveBeenCalledTimes(1);
   });
-
 });
