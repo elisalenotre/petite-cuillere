@@ -1,15 +1,20 @@
+// ------- Page d'authentification affichée pour la connexion ou l'inscription --------
+// Affiche un formulaire d'inscription avec gestion des erreurs et succès.
+
 import { type FormEvent, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 
 export function SignupForm() {
   const { signUpWithEmail } = useAuth();
 
+  // États pour les champs du formulaire et messages d'état
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [formSuccess, setFormSuccess] = useState<string | null>(null);
 
+  // Soumission du formulaire d'inscription
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setFormError(null);
@@ -30,6 +35,7 @@ export function SignupForm() {
 
   return (
     <form className="auth-form" onSubmit={handleSubmit}>
+      {/* Champ email */}
       <label>
         Email
         <input
@@ -42,6 +48,7 @@ export function SignupForm() {
         />
       </label>
 
+      {/* Champ mot de passe */}
       <label>
         Mot de passe
         <input
@@ -54,9 +61,11 @@ export function SignupForm() {
         />
       </label>
 
+      {/* Affichage des messages d'erreur ou de succès */}
       {formError && <p className="auth-error">{formError}</p>}
       {formSuccess && <p className="auth-success">{formSuccess}</p>}
 
+      {/* Bouton de soumission */}
       <button
         type="submit"
         disabled={submitting}

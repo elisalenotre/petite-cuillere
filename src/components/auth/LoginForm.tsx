@@ -1,15 +1,20 @@
+// ------- Page d'authentification affichée pour la connexion ou l'inscription --------
+// Affiche un formulaire de connexion, d'inscription, ou l'état connecté selon l'utilisateur.
+
 import { type FormEvent, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 
 export function LoginForm() {
   const { signInWithEmail } = useAuth();
 
+  // États pour les champs du formulaire et les messages d'état
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [formSuccess, setFormSuccess] = useState<string | null>(null);
 
+  // Gestion de la soumission du formulaire
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setFormError(null);
@@ -28,6 +33,7 @@ export function LoginForm() {
 
   return (
     <form className="auth-form" onSubmit={handleSubmit}>
+      {/* Champ email */}
       <label>
         Email
         <input
@@ -40,6 +46,7 @@ export function LoginForm() {
         />
       </label>
 
+      {/* Champ mot de passe */}
       <label>
         Mot de passe
         <input
@@ -52,9 +59,11 @@ export function LoginForm() {
         />
       </label>
 
+      {/* Affichage des messages d'erreur ou de succès */}
       {formError && <p className="auth-error">{formError}</p>}
       {formSuccess && <p className="auth-success">{formSuccess}</p>}
 
+      {/* Bouton de soumission */}
       <button
         type="submit"
         disabled={submitting}

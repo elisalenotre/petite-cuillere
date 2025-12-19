@@ -1,3 +1,6 @@
+// ------- Page d'authentification affichée pour la connexion ou l'inscription --------
+// Affiche un formulaire de connexion, d'inscription, ou l'état connecté selon l'utilisateur.
+
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { LoginForm } from '../../components/auth/LoginForm';
@@ -6,10 +9,14 @@ import './AuthPage.css';
 import spoonLogo from '../../assets/spoon.svg';
 
 export function AuthPage() {
+  // Récupère les fonctions d'authentification et l'état utilisateur depuis le contexte
   const { signInWithGoogle, signOut, loading, user } = useAuth();
+  // Gère le mode affiché : connexion ou inscription
   const [mode, setMode] = useState<'login' | 'signup'>('login');
+  // Gère l'affichage d'une erreur globale
   const [globalError, setGlobalError] = useState<string | null>(null);
 
+  // Connexion via Google
   const handleGoogle = async () => {
     setGlobalError(null);
     try {
@@ -19,6 +26,7 @@ export function AuthPage() {
     }
   };
 
+  // Déconnexion de l'utilisateur
   const handleLogout = async () => {
     setGlobalError(null);
     try {
@@ -28,10 +36,12 @@ export function AuthPage() {
     }
   };
 
+  // Affichage pendant le chargement de la session 
   if (loading) {
     return <p className="auth-loading">Chargement de la session... Nous cuisinons...</p>;
   }
 
+  // Affichage si l'utilisateur est déjà connecté
   if (user) {
     return (
       <main className="auth-page">
@@ -53,6 +63,7 @@ export function AuthPage() {
     );
   }
 
+  // Affichage du formulaire de connexion ou d'inscription
   return (
     <main className="auth-page">
       <div className="auth-layout">
