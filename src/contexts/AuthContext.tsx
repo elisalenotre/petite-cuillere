@@ -4,7 +4,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { supabase } from '../supabase';
 import type { Session, User } from '@supabase/supabase-js';
-import { signInWithEmailService, signUpWithEmailService, signOutService, signInWithGoogleService } from '../services/authService';
+import { signInWithEmailService, signUpWithEmailService, signOutService, signInWithGoogleService, signInWithGitHubService } from '../services/authService';
 
 // Type du contexte d'authentification
 type AuthContextType = {
@@ -15,6 +15,7 @@ type AuthContextType = {
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   signInWithGoogle: () => Promise<void>;
+  signInWithGitHub: () => Promise<void>;
 };
 
 // Création du contexte
@@ -69,6 +70,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await signInWithGoogleService();
   };
 
+  const signInWithGitHub = async () => {
+    await signInWithGitHubService();
+  }
+
   // Valeur du contexte
   const value: AuthContextType = {
     user,
@@ -78,6 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signInWithEmail,
     signOut,
     signInWithGoogle,
+    signInWithGitHub,
   };
 
   // Fournit le contexte aux enfants

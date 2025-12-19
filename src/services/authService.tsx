@@ -31,3 +31,15 @@ export async function signInWithGoogleService() {
   });
   if (error) throw error;
 }
+
+// Connexion via GitHub OAuth
+export async function signInWithGitHubService() {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'github',
+    options: {
+      redirectTo: window.location.origin,
+    },
+  });
+  if (error) throw error;
+}
+
