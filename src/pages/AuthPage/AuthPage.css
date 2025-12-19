@@ -159,7 +159,7 @@ body {
   margin-bottom: 0.5rem;
 }
 
-/* --- Séparateur + bouton Google --- */
+/* --- Séparateur + bouton Google + bouton GitHub --- */
 
 .auth-separator {
   display: flex;
@@ -179,6 +179,12 @@ body {
   background: #ead6ba;
 }
 
+.auth-oauth {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
 .auth-google-btn {
   border-radius: 999px;
   border: 1px solid #e2cbaa;
@@ -190,6 +196,24 @@ body {
 }
 
 .auth-google-btn:hover {
+  background: #f5e3c8;
+  border: 1px solid rgba(128, 93, 49, 0.35);
+  box-shadow: 0 6px 12px rgba(150, 115, 66, 0.18);
+  transform: translateY(-1px);
+}
+
+.auth-github-btn {
+  border-radius: 999px;
+  border: 1px solid #e2cbaa;
+  background: #fff8ee;
+  padding: 0.55rem 0.8rem;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.1s, transform 0.1s;
+  margin-top: 0.6rem;
+}
+
+.auth-github-btn:hover {
   background: #f5e3c8;
   border: 1px solid rgba(128, 93, 49, 0.35);
   box-shadow: 0 6px 12px rgba(150, 115, 66, 0.18);
