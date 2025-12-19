@@ -76,6 +76,10 @@
 }
 
 @media (max-width: 480px) {
+  .body {
+    background-color: #faf0e3;
+  }
+
   .notfound-card {
     width: 320px;
     padding: 1.7rem 1.6rem 1.6rem;
