@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 export function AuthPage() {
   // Récupère les fonctions d'authentification et l'état utilisateur depuis le contexte
-  const { signInWithGoogle, signInWithGitHub, signOut, loading, user } = useAuth();
+  const { signInWithGoogle, signInWithGitHub, loading, user } = useAuth();
   // Gère le mode affiché : connexion ou inscription
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   // Gère l'affichage d'une erreur globale
@@ -43,18 +43,6 @@ export function AuthPage() {
       await signInWithGitHub();
     } catch {
       setGlobalError("Oups, la connexion avec GitHub a échoué.");
-    }
-  };
-
-
-
-  // Déconnexion de l'utilisateur
-  const handleLogout = async () => {
-    setGlobalError(null);
-    try {
-      await signOut();
-    } catch {
-      setGlobalError("Impossible de se déconnecter.");
     }
   };
 
