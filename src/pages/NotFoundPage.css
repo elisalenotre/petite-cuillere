@@ -13,24 +13,6 @@
   gap: 1.75rem;
 }
 
-.notfound-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.notfound-logo {
-  width: 70px;
-  height: auto;
-}
-
-.notfound-title {
-  font-size: 2.5rem;
-  color: #7a5a38;
-  font-family: 'Italianno', cursive;
-}
-
 .notfound-card {
   width: 360px;
   max-width: calc(100vw - 3rem);
@@ -40,6 +22,7 @@
   border: 2px dashed #e0c9a3;
   box-shadow: 0 16px 40px rgba(139, 108, 60, 0.12);
   text-align: center;
+  margin: 10rem;
 }
 
 .notfound-heading {
