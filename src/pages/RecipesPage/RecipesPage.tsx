@@ -11,6 +11,8 @@ import { supabase } from "../../supabase";
 import "./RecipesPage.css";
 import { deleteRecipe } from "../../services/recipesService";
 
+import type { SortValue } from "../../components/recipes/Filters";
+
 export default function RecipesPage() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [search, setSearch] = useState("");
@@ -27,6 +29,8 @@ export default function RecipesPage() {
   const pageSize = 6;
 
   const [showModal, setShowModal] = useState(false);
+
+  const [sort, setSort] = useState<SortValue>("date-desc");
 
   // -----------------------------
   // Chargement des recettes
@@ -64,7 +68,7 @@ export default function RecipesPage() {
 
       // Mise à jour immédiate du state (UX fluide)
       setRecipes((prev) =>
-        prev.filter((r) => r.recettes_id !== recettes_id)
+        prev.filter((r) => String(r.recettes_id) !== String(recettes_id))
       );
     } catch (error) {
       console.error("Erreur suppression :", error);
@@ -104,6 +108,22 @@ export default function RecipesPage() {
     return matchSearch && matchFilters;
   });
 
+  const sortedRecipes = [...filteredRecipes].sort((a, b) => {
+    switch (sort) {
+      case "alpha-asc":
+        return a.title.localeCompare(b.title);
+      case "alpha-desc":
+        return b.title.localeCompare(a.title);
+      case "date-asc":
+        return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+      case "date-desc":
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      default:
+        return 0;
+    }
+  });
+
+
   // -----------------------------
   // Ajout recette
   // -----------------------------
@@ -127,6 +147,8 @@ export default function RecipesPage() {
             selectedFilters={selectedFilters}
             setSelectedFilters={setSelectedFilters}
             options={filterOptions}
+            sort={sort}
+            setSort={setSort}
           />
         </div>
 
@@ -144,7 +166,7 @@ export default function RecipesPage() {
       {/* -------- Liste -------- */}
       <div className="recipes-list">
         <RecipesList
-          recipes={filteredRecipes}
+          recipes={sortedRecipes}
           onDelete={handleDelete}
         />
       </div>

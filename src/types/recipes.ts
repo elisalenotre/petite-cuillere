@@ -1,22 +1,14 @@
-// Représente une catégorie (liaison avec recette)
-export type Category = {
-  cat_id: string;
-  tech_cuisson: string;
-  regime: string;
-  temps: string;
-  difficulty: string;
-};
+import type { Category } from "./categories";
 
-// Représente une recette
 export type Recipe = {
-  recettes_id: number;
+  recettes_id: string;
+  user_id: string;
+  cat_id: string | null;
+
   title: string;
-  img?: string;
-  description?: string;
-  categories?: {
-    regime: string;
-    temps: string;
-    tech_cuisson: string;
-    difficulty: string;
-  };
+  img?: string | null;
+  description?: string | null;
+  created_at: string;
+
+  categories?: Category | null;
 };

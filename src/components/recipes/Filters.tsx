@@ -1,5 +1,7 @@
 import React from "react";
 
+export type SortValue = "date-desc" | "date-asc" | "alpha-asc" | "alpha-desc";
+
 type Props = {
   selectedFilters: {
     regime: string;
@@ -21,9 +23,19 @@ type Props = {
     tech_cuisson: string[];
     difficulty: string[];
   };
+
+  // ✅ nouveau
+  sort: SortValue;
+  setSort: React.Dispatch<React.SetStateAction<SortValue>>;
 };
 
-export default function Filters({ selectedFilters, setSelectedFilters, options }: Props) {
+export default function Filters({
+  selectedFilters,
+  setSelectedFilters,
+  options,
+  sort,
+  setSort,
+}: Props) {
   return (
     <div className="filters-wrapper">
       {/* Régime */}
@@ -35,7 +47,9 @@ export default function Filters({ selectedFilters, setSelectedFilters, options }
       >
         <option value="">Régime</option>
         {options.regime.map((r) => (
-          <option key={r} value={r}>{r}</option>
+          <option key={r} value={r}>
+            {r}
+          </option>
         ))}
       </select>
 
@@ -48,7 +62,9 @@ export default function Filters({ selectedFilters, setSelectedFilters, options }
       >
         <option value="">Temps de cuisson</option>
         {options.temps.map((t) => (
-          <option key={t} value={t}>{t}</option>
+          <option key={t} value={t}>
+            {t}
+          </option>
         ))}
       </select>
 
@@ -56,12 +72,17 @@ export default function Filters({ selectedFilters, setSelectedFilters, options }
       <select
         value={selectedFilters.tech_cuisson}
         onChange={(e) =>
-          setSelectedFilters((prev) => ({ ...prev, tech_cuisson: e.target.value }))
+          setSelectedFilters((prev) => ({
+            ...prev,
+            tech_cuisson: e.target.value,
+          }))
         }
       >
         <option value="">Tech de cuisson</option>
         {options.tech_cuisson.map((tc) => (
-          <option key={tc} value={tc}>{tc}</option>
+          <option key={tc} value={tc}>
+            {tc}
+          </option>
         ))}
       </select>
 
@@ -74,8 +95,18 @@ export default function Filters({ selectedFilters, setSelectedFilters, options }
       >
         <option value="">Difficulté</option>
         {options.difficulty.map((d) => (
-          <option key={d} value={d}>{d}</option>
+          <option key={d} value={d}>
+            {d}
+          </option>
         ))}
+      </select>
+
+      {/* ✅ TRI */}
+      <select value={sort} onChange={(e) => setSort(e.target.value as SortValue)}>
+        <option value="date-desc">Les plus récentes</option>
+        <option value="date-asc">Les plus anciennes</option>
+        <option value="alpha-asc">A → Z</option>
+        <option value="alpha-desc">Z → A</option>
       </select>
     </div>
   );
