@@ -1,6 +1,6 @@
 /* --- Layout général --- */
-
-body {
+.auth-page {
+  min-height: 100vh;
   background-color: #faf0e3;
   display: flex;
   justify-content: center;
@@ -17,7 +17,6 @@ body {
 }
 
 /* --- Logo + titre --- */
-
 .auth-header {
   display: flex;
   flex-direction: column;
@@ -37,7 +36,6 @@ body {
 }
 
 /* --- Card principale --- */
-
 .auth-card {
   width: 360px;
   max-width: calc(100vw - 3rem);
@@ -58,16 +56,35 @@ body {
 }
 
 /* --- Onglets login / signup --- */
-
-.auth-tabs {
+.authTabs {
+  position: relative;
   display: flex;
   background: #ebdec7;
   border-radius: 999px;
   padding: 0.25rem;
   margin-bottom: 0.2rem;
+  overflow: hidden;
 }
 
-.auth-tabs button {
+/* le “slider” */
+.tabIndicator {
+  position: absolute;
+  top: 0.25rem;
+  bottom: 0.25rem;
+  left: 0.25rem;
+  width: calc(50% - 0.25rem);
+  border-radius: 999px;
+  background: #7b6445; /* marron foncé */
+  transition: transform 220ms ease;
+  z-index: 0;
+}
+
+/* quand signup est actif, on décale le slider à droite */
+.authTabs[data-mode='signup'] .tabIndicator {
+  transform: translateX(100%);
+}
+
+.tabButton {
   flex: 1;
   border: none;
   background: transparent;
@@ -77,20 +94,16 @@ body {
   font-weight: 500;
   cursor: pointer;
   color: #7b6445;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.1s;
+  transition: color 180ms ease, transform 0.1s ease;
+  position: relative;
+  z-index: 1;
 }
 
-.auth-tabs button.active {
-  background: #c59e6d;
+.tabActive {
   color: #fdf8ee;
 }
 
-.auth-tabs button:not(.active):hover {
-  transform: translateY(-1px);
-}
-
 /* --- Formulaires --- */
-
 .auth-form {
   display: flex;
   flex-direction: column;
@@ -147,7 +160,6 @@ body {
 }
 
 /* --- Messages d'erreur --- */
-
 .auth-global-error {
   background: #f8d7d7;
   color: #a1463b;
@@ -159,8 +171,7 @@ body {
   margin-bottom: 0.5rem;
 }
 
-/* --- Séparateur + bouton Google + bouton GitHub --- */
-
+/* --- Séparateur + boutons OAuth --- */
 .auth-separator {
   display: flex;
   align-items: center;
@@ -185,23 +196,7 @@ body {
   gap: 0.6rem;
 }
 
-.auth-google-btn {
-  border-radius: 999px;
-  border: 1px solid #e2cbaa;
-  background: #fff8ee;
-  padding: 0.55rem 0.8rem;
-  font-size: 0.88rem;
-  cursor: pointer;
-  transition: background 0.15s ease, box-shadow 0.1s, transform 0.1s;
-}
-
-.auth-google-btn:hover {
-  background: #f5e3c8;
-  border: 1px solid rgba(128, 93, 49, 0.35);
-  box-shadow: 0 6px 12px rgba(150, 115, 66, 0.18);
-  transform: translateY(-1px);
-}
-
+.auth-google-btn,
 .auth-github-btn {
   border-radius: 999px;
   border: 1px solid #e2cbaa;
@@ -210,9 +205,9 @@ body {
   font-size: 0.88rem;
   cursor: pointer;
   transition: background 0.15s ease, box-shadow 0.1s, transform 0.1s;
-  margin-top: 0.6rem;
 }
 
+.auth-google-btn:hover,
 .auth-github-btn:hover {
   background: #f5e3c8;
   border: 1px solid rgba(128, 93, 49, 0.35);
@@ -221,7 +216,6 @@ body {
 }
 
 /* --- Logout view --- */
-
 .auth-logout-btn {
   margin-top: 1rem;
   padding: 0.55rem 1.2rem;
@@ -235,7 +229,6 @@ body {
 }
 
 /* --- Loading --- */
-
 .auth-loading {
   text-align: center;
   padding: 2rem;
@@ -243,12 +236,7 @@ body {
 }
 
 /* --- Responsive --- */
-
 @media (max-width: 480px) {
-  .body {
-      background-color: #faf0e3;
-    }
-    
   .auth-card {
     width: 320px;
     padding: 1.7rem 1.6rem 1.6rem;

@@ -5,7 +5,7 @@ import Navbar from "../components/layout/Navbar";
 
 import { AuthPage } from "../pages/AuthPage/AuthPage";
 import RecipesPage from "../pages/RecipesPage/RecipesPage";
-import { NotFoundPage } from "../pages/NotFoundPage";
+import { NotFoundPage } from "../pages/NotFoundPage/NotFoundPage";
 import { RequireAuth } from "../components/auth/RequireAuth";
 
 export default function AppRouter() {
