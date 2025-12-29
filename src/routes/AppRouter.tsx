@@ -3,7 +3,7 @@ import { AuthPage } from '../pages/AuthPage/AuthPage';
 
 // import { RecipesPage } from '../pages/RecipesPage/RecipesPage';
 // import { RecipeDetailPage } from '../pages/RecipeDetailPage/RecipeDetailPage';
-import { NotFoundPage } from '../pages/NotFoundPage';
+import { NotFoundPage } from '../pages/NotFoundPage/NotFoundPage';
 import { RequireAuth } from '../components/auth/RequireAuth';
 
 export function AppRouter() {
