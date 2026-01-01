@@ -37,7 +37,7 @@ export async function signInWithGitHubService() {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'github',
     options: {
-      redirectTo: window.location.origin,
+      redirectTo: "http://localhost:5173/recipes",
     },
   });
   if (error) throw error;

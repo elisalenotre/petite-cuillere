@@ -4,7 +4,6 @@ import { LoginForm } from '../../components/auth/LoginForm';
 import { SignupForm } from '../../components/auth/SignupForm';
 import styles from './AuthPage.module.css';
 import spoonLogo from '../../assets/spoon.svg';
-import { useNavigate } from 'react-router-dom';
 
 export function AuthPage() {
   const { signInWithGoogle, signInWithGitHub, signOut, loading, user } = useAuth();
