@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import spoonLogo from "../../assets/spoon.svg";
-import "./Navbar.css";
+import styles from "./Navbar.module.css";
 
 export default function Navbar() {
   const { signOut } = useAuth();
@@ -17,16 +18,16 @@ export default function Navbar() {
   };
 
   return (
-    <header className="navbar">
-      <div className="navbar-left">
-        <img src={spoonLogo} alt="" className="navbar-logo" />
-        <span className="navbar-title">Petite Cuillère</span>
-      </div>
+    <header className={styles.navbar}>
+      <Link to="/recipes" className={styles.navbarBrand} aria-label="Aller aux recettes">
+        <img src={spoonLogo} alt="" className={styles.navbarLogo} />
+        <span className={styles.navbarTitle}>Petite Cuillère</span>
+      </Link>
 
-      <div className="navbar-right">
-        {error && <p className="navbar-error">{error}</p>}
+      <div className={styles.navbarRight}>
+        {error && <p className={styles.navbarError}>{error}</p>}
 
-        <button className="navbar-logout-btn" onClick={handleLogout}>
+        <button className={styles.navbarLogoutBtn} onClick={handleLogout}>
           Se déconnecter
         </button>
       </div>

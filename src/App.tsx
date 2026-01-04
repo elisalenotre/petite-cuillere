@@ -1,8 +1,16 @@
-import './App.css';
-import AppRouter from './routes/AppRouter';
+import AppRouter from "./routes/AppRouter";
+import Navbar from "./components/layout/Navbar";
+import { useAuth } from "./contexts/AuthContext";
 
-function App() {
-  return <AppRouter />;
+export default function App() {
+  const { user } = useAuth();
+
+  return (
+    <>
+      {user && <Navbar />}
+      <main style={{ paddingTop: user ? "72px" : "0px" }}>
+        <AppRouter />
+      </main>
+    </>
+  );
 }
-
-export default App;
