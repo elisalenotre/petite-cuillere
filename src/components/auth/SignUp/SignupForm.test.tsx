@@ -5,7 +5,7 @@ import { SignupForm } from './SignupForm';
 import { useAuth } from '../../../contexts/AuthContext';
 
 // Mock du hook useAuth
-vi.mock('../../contexts/AuthContext', () => ({
+vi.mock('../../../contexts/AuthContext', () => ({
   useAuth: vi.fn(),
 }));
 

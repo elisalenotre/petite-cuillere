@@ -2,7 +2,7 @@
 // Affiche un formulaire d'inscription avec gestion des erreurs et succès.
 
 import { type FormEvent, useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/AuthContext';
 
 export function SignupForm() {
   const { signUpWithEmail } = useAuth();

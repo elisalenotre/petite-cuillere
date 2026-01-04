@@ -2,7 +2,7 @@
 // Affiche un formulaire de connexion, d'inscription, ou l'état connecté selon l'utilisateur.
 
 import { type FormEvent, useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/AuthContext';
 
 export function LoginForm() {
   const { signInWithEmail } = useAuth();
