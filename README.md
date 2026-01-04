@@ -1,73 +1,107 @@
-# React + TypeScript + Vite
+# Petite Cuillère 🥄
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description
+**Petite Cuillère** est une application web de type *cookbook* permettant de gérer ses recettes personnelles.
+Elle propose une authentification via Supabase, un CRUD complet sur les recettes, ainsi qu’un système de recherche, filtres, tri et pagination pour retrouver facilement ses plats.
+L’interface est pensée pour être claire, responsive et accessible.
 
-Currently, two official plugins are available:
+## Fonctionnalités
+- [x] Authentification (Supabase Auth)
+  - [x] Inscription email / mot de passe
+  - [x] Connexion
+  - [x] Déconnexion
+  - [x] Persistance de session
+  - [x] Protection des routes (pages privées)
+  - [x] OAuth (Google + GitHub)
+- [x] CRUD complet sur la ressource principale : **recipes**
+  - [x] Create : ajout d’une recette
+  - [x] Read : liste + page détail
+  - [x] Update : modification d’une recette
+  - [x] Delete : suppression d’une recette
+- [x] Recherche + filtrage + tri
+  - [x] Recherche textuelle
+  - [x] Filtres (régime, temps, technique de cuisson, difficulté)
+  - [x] Tri (date, alphabétique)
+  - [x] Pagination
+- [x] UI/UX
+  - [x] États de chargement, erreurs, messages de succès
+  - [x] Empty states (liste vide, aucun résultat)
+  - [x] Responsive (mobile + desktop)
+- [x] Page 404
+- [x] Tests unitaires (Vitest + Testing Library)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Stack technique
+- React 18
+- TypeScript
+- Vite
+- React Router v6
+- Supabase (Auth + Database)
+- CSS Modules
+- Vitest + React Testing Library
 
-## React Compiler
+## Installation
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Prérequis
+- Node.js 18+
+- npm ou yarn
+- Un projet Supabase (URL + Anon Key)
 
-## Expanding the ESLint configuration
+### Lancement en local
+1. Cloner le projet :
+   ```bash
+   git clone <URL_DU_REPO>
+   cd petite-cuillere
+   ```
+2. Installer les dépendances
+   ```bash
+   npm install
+   ```
+3. Créer un fichier .env à la racine du projet
+   ```bash
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+4. Lancer l'application
+   ```bash
+   npm run dev
+   ```
+5. Lancer les tests
+   ```bash
+   npx vitest --ui
+   ```
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Structure du projet
+```bash
+src/
+  components/
+    Auth/
+    Filters/
+    Pagination/
+    RecipeCard/
+    RecipeForm/
+  contexts/
+    AuthContext.tsx
+  pages/
+    Auth/
+    Recipes/
+    NotFound/
+  services/
+    supabase/
+  types/
+    recipes.ts
+  supabase.ts
+  main.tsx
+  App.tsx
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Détails rapides
+- components/ : composants réutilisables (filtres, pagination, cards, formulaires…)
+- pages/ : pages principales (auth, liste/détail recettes, 404…)
+- contexts/ : state management via Context API (auth)
+- services/ : logique d’accès aux données / appels Supabase
+- types/ : types TypeScript (Recipe, etc.)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Autrices
+Jihad DOUHI — jihad.douhipro@gmail.com & Elisa LENOTRE - elisalenotre6@gmail.com
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+
