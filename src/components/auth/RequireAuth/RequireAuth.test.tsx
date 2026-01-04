@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { vi, type Mock } from 'vitest';
 import { RequireAuth } from './RequireAuth';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../../contexts/AuthContext';
 
 // On mocke le hook useAuth
 vi.mock('../../contexts/AuthContext', () => ({

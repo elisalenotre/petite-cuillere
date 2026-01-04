@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthPage } from "../pages/AuthPage/AuthPage";
 import RecipesPage from "../pages/RecipesPage/RecipesPage";
 import { NotFoundPage } from "../pages/NotFoundPage/NotFoundPage";
-import { RequireAuth } from "../components/auth/RequireAuth";
+import { RequireAuth } from "../components/auth/RequireAuth/RequireAuth";
 import RecipesDetails from "../pages/RecipesDetailsPage/RecipesDetails";
 
 export default function AppRouter() {

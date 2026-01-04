@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { LoginForm } from '../../components/auth/LoginForm';
-import { SignupForm } from '../../components/auth/SignupForm';
+import { LoginForm } from '../../components/auth/Login/LoginForm';
+import { SignupForm } from '../../components/auth/SignUp/SignupForm';
 import styles from './AuthPage.module.css';
 import spoonLogo from '../../assets/spoon.svg';
 

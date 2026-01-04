@@ -1,5 +1,5 @@
-import type { Recipe } from "../../types/recipes";
-import RecipeCard from "./RecipeCard";
+import type { Recipe } from "../../../types/recipes";
+import RecipeCard from "../RecipeCard/RecipeCard";
 
 type Props = {
   recipes: Recipe[];

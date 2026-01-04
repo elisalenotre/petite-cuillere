@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
 import type { Recipe } from "../../types/recipes";
-import RecipeForm from "../../components/recipes/RecipeForm";
+import RecipeForm from "../../components/recipes/RecipeForm/RecipeForm";
 import "./RecipesDetails.css";
 
 export default function RecipesDetails() {

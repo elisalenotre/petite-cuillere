@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { supabase } from "../../supabase";
-import type { Recipe } from "../../types/recipes";
+import { supabase } from "../../../supabase";
+import type { Recipe } from "../../../types/recipes";
 
 type Props = {
   onClose: () => void;

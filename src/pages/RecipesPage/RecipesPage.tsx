@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import type { Recipe } from "../../types/recipes";
 
-import SearchBar from "../../components/recipes/searchBar";
-import RecipesList from "../../components/recipes/RecipesList";
-import Pagination from "../../components/recipes/Pagination";
-import Filters from "../../components/recipes/Filters";
-import RecipeForm from "../../components/recipes/RecipeForm";
+import SearchBar from "../../components/recipes/SearchBar/searchBar";
+import RecipesList from "../../components/recipes/RecipeList/RecipesList";
+import Pagination from "../../components/recipes/Pagination/Pagination";
+import Filters from "../../components/recipes/Filters/Filters";
+import RecipeForm from "../../components/recipes/RecipeForm/RecipeForm";
 
 import { supabase } from "../../supabase";
-import "./RecipesPage.css";
+import styles from "./RecipesPage.module.css";
 import { deleteRecipe } from "../../services/recipesService";
 
-import type { SortValue } from "../../components/recipes/Filters";
+import type { SortValue } from "../../components/recipes/Filters/Filters";
 
 export default function RecipesPage() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -59,12 +59,12 @@ export default function RecipesPage() {
   // -----------------------------
   // Suppression d'une recette
   // -----------------------------
-  async function handleDelete(recettes_id: string): Promise<void> {
+  async function handleDelete(recettes_id: string) {
     const confirmDelete = window.confirm("Supprimer cette recette ?");
     if (!confirmDelete) return;
 
     try {
-      await deleteRecipe(recettes_id);
+      await deleteRecipe(String(recettes_id));
 
       setRecipes((prev) =>
         prev.filter((r) => r.recettes_id !== recettes_id)
@@ -132,66 +132,49 @@ export default function RecipesPage() {
   };
 
   return (
-    <div className="recipes-page">
-      {/* -------- Header -------- */}
-      <div className="recipes-header">
-        <h1 className="recipes-title">Mes Recettes</h1>
-      </div>
-
-      {/* -------- Recherche + filtres -------- */}
-      <div className="recipes-top-bar">
-        <div className="recipes-search-box">
-          <SearchBar search={search} setSearch={setSearch} />
-
-          <Filters
-            selectedFilters={selectedFilters}
-            setSelectedFilters={setSelectedFilters}
-            options={filterOptions}
-            sort={sort}
-            setSort={setSort}
-          />
-        </div>
-
-        {/* -------- Bouton création -------- */}
-        <div className="recipes-create-wrapper">
-          <button
-            className="recipes-create-btn"
-            onClick={() => setShowModal(true)}
-          >
-            Créer une recette
-          </button>
-        </div>
-      </div>
-
-      {/* -------- Liste -------- */}
-      <div className="recipes-list">
-        <RecipesList
-          recipes={sortedRecipes}
-          onDelete={handleDelete}
-        />
-      </div>
-
-      {/* -------- Pagination -------- */}
-      <div className="recipes-pagination">
-        <Pagination
-          page={page}
-          setPage={setPage}
-          total={total}
-          pageSize={pageSize}
-        />
-      </div>
-
-      {/* -------- Modal -------- */}
-      {showModal && (
-        <div className="modal-backdrop">
-          <div className="modal-content">
-            <RecipeForm
-              onClose={() => setShowModal(false)}
-              onRecipeAdded={handleRecipeAdded}
-            />
-          </div>
-        </div>
-      )}
+  <div className={styles.recipesPage}>
+    <div className={styles.recipesHeader}>
+      <h1 className={styles.recipesTitle}>Les Recettes</h1>
     </div>
-  );
+
+    <div className={styles.recipesTopBar}>
+      <div className={styles.recipesSearchBox}>
+        <SearchBar search={search} setSearch={setSearch} />
+
+        <Filters
+          selectedFilters={selectedFilters}
+          setSelectedFilters={setSelectedFilters}
+          options={filterOptions}
+          sort={sort}
+          setSort={setSort}
+        />
+      </div>
+
+      <div className={styles.recipesCreateWrapper}>
+        <button
+          className={styles.recipesCreateBtn}
+          onClick={() => setShowModal(true)}
+        >
+          Créer une recette
+        </button>
+      </div>
+    </div>
+
+    <div className={styles.recipesList}>
+      <RecipesList recipes={sortedRecipes} onDelete={handleDelete} />
+    </div>
+
+    <div className={styles.recipesPagination}>
+      <Pagination page={page} setPage={setPage} total={total} pageSize={pageSize} />
+    </div>
+
+    {showModal && (
+      <div className={styles.modalBackdrop}>
+        <div className={styles.modalContent}>
+          <RecipeForm onClose={() => setShowModal(false)} onRecipeAdded={handleRecipeAdded} />
+        </div>
+      </div>
+    )}
+  </div>
+);
 }
