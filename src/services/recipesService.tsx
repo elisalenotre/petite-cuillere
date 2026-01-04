@@ -25,11 +25,10 @@ export async function getRecipes(page: number, pageSize: number) {
   };
 }
 
-
 /* =============================
    GET RECIPE BY ID
 ============================= */
-export async function getRecipeById(id: number) {
+export async function getRecipeById(id: string) {
   const { data, error } = await supabase
     .from("recettes") // table correcte
     .select("*, categories(*)")
@@ -109,14 +108,13 @@ export async function updateRecipe(id: string, form: any) {
 /* =============================
    DELETE RECIPE
 ============================= */
-export async function deleteRecipe(recettes_id: number) {
+export async function deleteRecipe(recettes_id: string): Promise<void> {
   const { error } = await supabase
-    .from("recettes") // exact table name
+    .from("recettes")
     .delete()
-    .eq("recettes_id", recettes_id); // exact column name
+    .eq("recettes_id", recettes_id);
 
   if (error) {
-    console.error("Erreur Supabase :", error);
     throw error;
   }
 }

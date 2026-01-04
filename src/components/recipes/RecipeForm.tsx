@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../../supabase";
 import type { Recipe } from "../../types/recipes";
 
 type Props = {
   onClose: () => void;
   onRecipeAdded: (recipe: Recipe) => void;
+  existingRecipe?: Recipe; 
 };
 
-export default function RecipeForm({ onClose, onRecipeAdded }: Props) {
+export default function RecipeForm({ onClose, onRecipeAdded, existingRecipe }: Props) {
   const [title, setTitle] = useState("");
   const [img, setImg] = useState("");
   const [description, setDescription] = useState("");
@@ -19,6 +20,24 @@ export default function RecipeForm({ onClose, onRecipeAdded }: Props) {
 
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+
+  const isEditing = !!existingRecipe; 
+
+  // Pré-remplir le formulaire si mode édition
+  useEffect(() => {
+    if (existingRecipe) {
+      setTitle(existingRecipe.title || "");
+      setImg(existingRecipe.img || "");
+      setDescription(existingRecipe.description || "");
+      
+      if (existingRecipe.categories) {
+        setRegime(existingRecipe.categories.regime || "");
+        setTemps(existingRecipe.categories.temps || "");
+        setTechCuisson(existingRecipe.categories.tech_cuisson || "");
+        setDifficulty(existingRecipe.categories.difficulty || "");
+      }
+    }
+  }, [existingRecipe]);
 
   const resetForm = () => {
     setTitle("");
@@ -42,18 +61,17 @@ export default function RecipeForm({ onClose, onRecipeAdded }: Props) {
     setSubmitting(true);
 
     try {
-      // 1) user connecté
       const {
         data: { user },
         error: userError,
       } = await supabase.auth.getUser();
 
       if (userError || !user) {
-        setFormError("Vous devez être connecté pour ajouter une recette.");
+        setFormError("Vous devez être connecté.");
         return;
       }
 
-      // 2) catégorie existante ?
+      // Recherche ou création de catégorie
       const { data: existingCat, error: existingCatError } = await supabase
         .from("categories")
         .select("cat_id")
@@ -74,7 +92,6 @@ export default function RecipeForm({ onClose, onRecipeAdded }: Props) {
       if (existingCat?.cat_id) {
         catId = existingCat.cat_id;
       } else {
-        // 3) sinon créer une catégorie
         const { data: newCat, error: catError } = await supabase
           .from("categories")
           .insert([
@@ -97,30 +114,74 @@ export default function RecipeForm({ onClose, onRecipeAdded }: Props) {
         catId = newCat.cat_id;
       }
 
-      // 4) insert recette (et on récupère aussi la catégorie jointe)
-      const { data: recipe, error: recipeError } = await supabase
+    // Mode édition : UPDATE
+    if (isEditing && existingRecipe) {
+      console.log("🔄 Début de la modification...");
+      
+      // faire l'update sans select
+      const { error: updateError } = await supabase
         .from("recettes")
-        .insert([
-          {
-            title,
-            img: img || null,
-            description: description || null,
-            cat_id: catId,
-            user_id: user.id,
-          },
-        ])
+        .update({
+          title,
+          img: img || null,
+          description: description || null,
+          cat_id: catId,
+        })
+        .eq("recettes_id", existingRecipe.recettes_id);
+
+      console.log("📝 Résultat update:", updateError ? "ERREUR" : "OK");
+
+      if (updateError) {
+        console.error("❌ Erreur update:", updateError);
+        setFormError("Erreur lors de la modification de la recette.");
+        return;
+    }
+
+  // récupérer la recette mise à jour avec les catégories
+      const { data: recipe, error: fetchError } = await supabase
+        .from("recettes")
         .select("*, categories(*)")
+        .eq("recettes_id", existingRecipe.recettes_id)
         .single();
 
-      if (recipeError) {
-        console.error(recipeError);
-        setFormError("Erreur lors de l'ajout de la recette.");
-        return;
-      }
+        console.log("📦 Recette récupérée:", recipe);
 
-      onRecipeAdded(recipe as Recipe);
-      resetForm();
-      onClose();
+        if (fetchError || !recipe) {
+          console.error("❌ Erreur fetch:", fetchError);
+          setFormError("Erreur lors de la récupération de la recette.");
+          return;
+        }
+
+        console.log("✅ Recette mise à jour avec succès!");
+        onRecipeAdded(recipe as Recipe);
+        onClose();
+      }
+      // Mode création : INSERT
+      else {
+        const { data: recipe, error: recipeError } = await supabase
+          .from("recettes")
+          .insert([
+            {
+              title,
+              img: img || null,
+              description: description || null,
+              cat_id: catId,
+              user_id: user.id,
+            },
+          ])
+          .select("*, categories(*)")
+          .single();
+
+        if (recipeError) {
+          console.error(recipeError);
+          setFormError("Erreur lors de l'ajout de la recette.");
+          return;
+        }
+
+        onRecipeAdded(recipe as Recipe);
+        resetForm();
+        onClose();
+      }
     } finally {
       setSubmitting(false);
     }
@@ -129,7 +190,7 @@ export default function RecipeForm({ onClose, onRecipeAdded }: Props) {
   return (
     <form className="recipe-form" onSubmit={handleSubmit}>
       <div className="recipes-title">
-      <h2>Ajouter une recette</h2>
+        <h2>{isEditing ? "Modifier la recette" : "Ajouter une recette"}</h2>
       </div>
 
       <label>
@@ -210,7 +271,7 @@ export default function RecipeForm({ onClose, onRecipeAdded }: Props) {
 
       <div className="recipe-form-buttons">
         <button type="submit" disabled={submitting}>
-          {submitting ? "Ajout en cours..." : "Ajouter"}
+          {submitting ? "En cours..." : (isEditing ? "Modifier" : "Ajouter")}
         </button>
         <button type="button" onClick={onClose} disabled={submitting}>
           Annuler

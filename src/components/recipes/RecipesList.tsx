@@ -1,25 +1,21 @@
 import type { Recipe } from "../../types/recipes";
+import RecipeCard from "./RecipeCard";
 
 type Props = {
   recipes: Recipe[];
-  onDelete: (id: number) => void;
+  onDelete: (id: string) => void;
 };
 
 export default function RecipesList({ recipes, onDelete }: Props) {
   return (
-    <div className="recipes-grid">
+    <>
       {recipes.map((recipe) => (
-        <div key={recipe.recettes_id} className="recipe-card">
-          <h3>{recipe.title}</h3>
-
-          <button
-            className="delete-btn"
-            onClick={() => onDelete(recipe.recettes_id)}
-          >
-            Supprimer
-          </button>
-        </div>
+        <RecipeCard
+          key={recipe.recettes_id}
+          recipe={recipe}
+          onDelete={onDelete}
+        />
       ))}
-    </div>
+    </>
   );
 }

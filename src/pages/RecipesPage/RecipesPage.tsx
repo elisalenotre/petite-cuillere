@@ -59,22 +59,22 @@ export default function RecipesPage() {
   // -----------------------------
   // Suppression d'une recette
   // -----------------------------
-  async function handleDelete(recettes_id: number) {
+  async function handleDelete(recettes_id: string): Promise<void> {
     const confirmDelete = window.confirm("Supprimer cette recette ?");
     if (!confirmDelete) return;
 
     try {
       await deleteRecipe(recettes_id);
 
-      // Mise à jour immédiate du state (UX fluide)
       setRecipes((prev) =>
-        prev.filter((r) => String(r.recettes_id) !== String(recettes_id))
+        prev.filter((r) => r.recettes_id !== recettes_id)
       );
     } catch (error) {
       console.error("Erreur suppression :", error);
       alert("Erreur lors de la suppression");
     }
   }
+
 
 
   // -----------------------------
