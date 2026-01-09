@@ -41,6 +41,17 @@
   border-radius: 8px;
 }
 
+.emptyMsg {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  border: 1px solid #e2cfae;
+  background: #fffdf9;
+  color: #6c5333;
+  border-radius: 12px;
+  text-align: center;
+  grid-column: 1 / -1; /* occupe toute la largeur de la grille */
+}
+
 /* --- Encadré recherche + filtres --- */
 .recipesSearchBox {
   flex: 1;

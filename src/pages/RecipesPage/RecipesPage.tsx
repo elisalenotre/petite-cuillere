@@ -39,9 +39,19 @@ export default function RecipesPage() {
   async function loadRecipes() {
     const from = (page - 1) * pageSize;
 
+    const hasCategoryFilter =
+      !!selectedFilters.regime ||
+      !!selectedFilters.temps ||
+      !!selectedFilters.tech_cuisson ||
+      !!selectedFilters.difficulty;
+
+    const selectClause = hasCategoryFilter
+      ? "*, categories!inner(*)"
+      : "*, categories(*)";
+
     let query: any = supabase
       .from("recettes")
-      .select("*, categories(*)", { count: "exact" });
+      .select(selectClause, { count: "exact" });
 
     if (search.trim() && typeof query.ilike === "function") {
       query = query.ilike("title", `%${search.trim()}%`);
@@ -112,8 +122,12 @@ export default function RecipesPage() {
 
   useEffect(() => {
     loadRecipes();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, search, selectedFilters, sort]);
+
+  // Reset en page 1 dès que filtres ou tri changent
+  useEffect(() => {
+    setPage(1);
+  }, [selectedFilters, sort]);
 
   // -----------------------------
   // Suppression d'une recette
@@ -195,7 +209,13 @@ export default function RecipesPage() {
     </div>
 
     <div className={styles.recipesList}>
-      <RecipesList recipes={sortedRecipes} onDelete={handleDelete} />
+      {sortedRecipes.length === 0 ? (
+        <p className={styles.emptyMsg}>
+          Oops, aucune recette ne correspond à votre recherche, chef.fe.
+        </p>
+      ) : (
+        <RecipesList recipes={sortedRecipes} onDelete={handleDelete} />
+      )}
     </div>
 
     <div className={styles.recipesPagination}>
