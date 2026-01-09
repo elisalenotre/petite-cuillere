@@ -174,7 +174,7 @@
 /* Filters */
 .recipesSearchBox :global(.filters-wrapper) {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 0.9rem;
   padding: 1rem;
   background-color: #f5e9d8;
@@ -589,11 +589,23 @@
   }
 
   .recipesSearchBox :global(.filters-wrapper) {
-    grid-template-columns: 1fr;
+    display: contents;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.9rem;
+    padding: 1rem;
+    background-color: #f5e9d8;
+    border-radius: 16px;
+    border: 1px solid #e2cfae;
   }
 
   .recipesSearchBox :global(.filters-wrapper select) {
     min-width: 100%;
+  }
+
+  .recipesSearchBox :global(.filters-end) {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
   }
 }
 

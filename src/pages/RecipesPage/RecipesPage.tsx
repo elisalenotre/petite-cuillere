@@ -21,6 +21,7 @@ export default function RecipesPage() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const [selectedFilters, setSelectedFilters] = useState({
+    owner: "",
     regime: "",
     temps: "",
     tech_cuisson: "",
@@ -73,7 +74,7 @@ export default function RecipesPage() {
     loadRecipes();
   }, [page, search, selectedFilters, sort]);
 
-  // Reset en page 1 dès que filtres ou tri changent
+  // Remise en page 1 lors des changements de filtres/tri
   useEffect(() => {
     setPage(1);
   }, [selectedFilters, sort]);
@@ -109,7 +110,6 @@ export default function RecipesPage() {
     difficulty: ["Facile", "Intermédiaire", "Difficile"],
   };
 
-  // Les recettes sont déjà filtrées/triées côté serveur
   const sortedRecipes = Array.isArray(recipes) ? recipes : [];
 
 

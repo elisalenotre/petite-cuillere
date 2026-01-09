@@ -179,6 +179,7 @@ export type ListFilters = {
   temps?: string;
   tech_cuisson?: string;
   difficulty?: string;
+  owner?: string; // "mine" | "others" | ""
 };
 
 export type ListParams = {
@@ -217,6 +218,19 @@ export async function getRecipesWithClient(client: any, params: ListParams): Pro
   }
   if (filters.difficulty && typeof query.eq === "function") {
     query = query.eq("categories.difficulty", filters.difficulty);
+  }
+
+  // Filtre propriétaire (mine/others) basé sur l'utilisateur courant
+  if (filters.owner && typeof client?.auth?.getUser === "function") {
+    const { data } = await client.auth.getUser();
+    const uid = data?.user?.id;
+    if (uid && typeof query.eq === "function" && typeof query.neq === "function") {
+      if (filters.owner === "mine") {
+        query = query.eq("user_id", uid);
+      } else if (filters.owner === "others") {
+        query = query.neq("user_id", uid);
+      }
+    }
   }
 
   let needsLocalSort = false;

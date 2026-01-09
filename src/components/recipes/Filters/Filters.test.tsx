@@ -5,6 +5,7 @@ import { useState } from "react";
 import Filters, { type SortValue } from "./Filters";
 
 type FiltersState = {
+  owner: string;
   regime: string;
   temps: string;
   tech_cuisson: string;
@@ -29,6 +30,7 @@ function Wrapper({
 }) {
   const [selectedFilters, setSelectedFilters] = useState<FiltersState>(
     initialFilters ?? {
+      owner: "",
       regime: "",
       temps: "",
       tech_cuisson: "",
