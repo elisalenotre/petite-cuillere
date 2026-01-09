@@ -1,3 +1,5 @@
+// ------- Barre de navigation --------
+// Logo, titre et bouton de déconnexion pour utilisateur connecté.
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";

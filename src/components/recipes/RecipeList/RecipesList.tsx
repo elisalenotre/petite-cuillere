@@ -1,3 +1,5 @@
+// ------- Liste des recettes --------
+// Délègue chaque item à RecipeCard.
 import type { Recipe } from "../../../types/recipes";
 import RecipeCard from "../RecipeCard/RecipeCard";
 

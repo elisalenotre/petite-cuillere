@@ -1,3 +1,5 @@
+// ------- Point d'entrée de l'application --------
+// Monte l'app avec BrowserRouter et AuthProvider.
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";

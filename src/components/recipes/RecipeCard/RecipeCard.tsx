@@ -1,3 +1,5 @@
+// ------- Carte de recette --------
+// Affiche une recette, ses catégories et actions (voir/modifier/supprimer).
 import { Link } from "react-router-dom";
 import type { Recipe } from "../../../types/recipes";
 

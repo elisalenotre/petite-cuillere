@@ -1,3 +1,5 @@
+// ------- Page des recettes --------
+// Liste, recherche, filtres, tri, pagination, ajout et suppression.
 import { useEffect, useState } from "react";
 import type { Recipe } from "../../types/recipes";
 

@@ -1,3 +1,5 @@
+// ------- Filtres et tri des recettes --------
+// Sélecteurs (régime, temps, technique, difficulté) et tri.
 import React from "react";
 
 export type SortValue = "date-desc" | "date-asc" | "alpha-asc" | "alpha-desc";

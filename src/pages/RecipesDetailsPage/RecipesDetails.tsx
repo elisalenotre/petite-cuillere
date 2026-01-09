@@ -1,3 +1,5 @@
+// ------- Page de détails d'une recette --------
+// Chargement, affichage et actions propriétaire (éditer/supprimer).
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";

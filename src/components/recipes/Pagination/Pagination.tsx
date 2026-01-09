@@ -1,3 +1,5 @@
+// ------- Composant de pagination --------
+// Navigation précédente/suivante et numéros de page avec ellipses.
 type Props = {
   page: number;
   setPage: (p: number) => void;
