@@ -148,6 +148,20 @@
   box-shadow: 0 4px 10px rgba(108, 83, 51, 0.3);
 }
 
+/* --- Bouton supprimer --- */
+.deleteBtn {
+  background-color: #dc3545;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.deleteBtn:hover {
+  background-color: #c82333;
+}
+
 /* --- Modal --- */
 .modalBackdrop {
   position: fixed;

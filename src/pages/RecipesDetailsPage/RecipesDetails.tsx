@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
 import type { Recipe } from "../../types/recipes";
@@ -7,6 +7,7 @@ import styles from "./RecipesDetails.module.css";
 
 export default function RecipesDetails() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -47,6 +48,36 @@ export default function RecipesDetails() {
     // Forcer un nouveau rendu avec un nouvel objet
     setRecipe({ ...updatedRecipe });
     setShowEditModal(false);
+  };
+
+  // Fonction pour supprimer la recette
+  const handleDelete = async () => {
+    if (!recipe || !id) return;
+
+    const confirmed = window.confirm(
+      `Êtes-vous sûr de vouloir supprimer la recette "${recipe.title}" ?`
+    );
+
+    if (!confirmed) return;
+
+    try {
+      const { error } = await supabase
+        .from("recettes")
+        .delete()
+        .eq("recettes_id", id);
+
+      if (error) {
+        console.error("❌ Erreur lors de la suppression :", error);
+        alert("Erreur lors de la suppression de la recette");
+      } else {
+        console.log("✅ Recette supprimée avec succès");
+        // Rediriger vers la liste des recettes
+        navigate("/recipes");
+      }
+    } catch (err) {
+      console.error("❌ Erreur inattendue :", err);
+      alert("Une erreur inattendue s'est produite");
+    }
   };
 
   if (loading) {
@@ -129,9 +160,14 @@ export default function RecipesDetails() {
             ← Retour aux recettes
           </Link>
           {isOwner && (
-            <button onClick={() => setShowEditModal(true)} className={styles.editBtn}>
-              ✏️ Modifier
-            </button>
+            <>
+              <button onClick={() => setShowEditModal(true)} className={styles.editBtn}>
+                ✏️ Modifier
+              </button>
+              <button onClick={handleDelete} className={styles.deleteBtn}>
+                🗑️ Supprimer
+              </button>
+            </>
           )}
         </div>
       </div>
@@ -151,3 +187,6 @@ export default function RecipesDetails() {
     </div>
   );
 }
+
+
+
