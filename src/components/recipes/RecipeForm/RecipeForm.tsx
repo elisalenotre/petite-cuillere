@@ -26,6 +26,7 @@ export default function RecipeForm({ onClose, onRecipeAdded, existingRecipe }: P
   // Pré-remplir le formulaire si mode édition
   useEffect(() => {
     if (existingRecipe) {
+      console.log("🔍 Recette existante:", existingRecipe);
       setTitle(existingRecipe.title || "");
       setImg(existingRecipe.img || "");
       setDescription(existingRecipe.description || "");
@@ -68,6 +69,7 @@ export default function RecipeForm({ onClose, onRecipeAdded, existingRecipe }: P
 
       if (userError || !user) {
         setFormError("Vous devez être connecté.");
+        setSubmitting(false);
         return;
       }
 
@@ -82,8 +84,9 @@ export default function RecipeForm({ onClose, onRecipeAdded, existingRecipe }: P
         .maybeSingle();
 
       if (existingCatError) {
-        console.error(existingCatError);
+        console.error("❌ Erreur recherche catégorie:", existingCatError);
         setFormError("Erreur lors de la recherche de la catégorie.");
+        setSubmitting(false);
         return;
       }
 
@@ -91,6 +94,7 @@ export default function RecipeForm({ onClose, onRecipeAdded, existingRecipe }: P
 
       if (existingCat?.cat_id) {
         catId = existingCat.cat_id;
+        console.log("✅ Catégorie existante trouvée:", catId);
       } else {
         const { data: newCat, error: catError } = await supabase
           .from("categories")
@@ -106,59 +110,66 @@ export default function RecipeForm({ onClose, onRecipeAdded, existingRecipe }: P
           .single();
 
         if (catError) {
-          console.error(catError);
+          console.error("❌ Erreur création catégorie:", catError);
           setFormError("Erreur lors de la création de la catégorie.");
+          setSubmitting(false);
           return;
         }
 
         catId = newCat.cat_id;
+        console.log("✅ Nouvelle catégorie créée:", catId);
       }
 
-    // Mode édition : UPDATE
-    if (isEditing && existingRecipe) {
-      console.log("🔄 Début de la modification...");
-      
-      // faire l'update sans select
-      const { error: updateError } = await supabase
-        .from("recettes")
-        .update({
-          title,
-          img: img || null,
-          description: description || null,
-          cat_id: catId,
-        })
-        .eq("recettes_id", existingRecipe.recettes_id);
+      // Mode édition : UPDATE
+      if (isEditing && existingRecipe) {
+        console.log("🔄 Mode édition - ID:", existingRecipe.recettes_id);
+        console.log("📝 Données à mettre à jour:", { title, img, description, catId });
+        
+        // Faire l'UPDATE
+        const { error: updateError } = await supabase
+          .from("recettes")
+          .update({
+            title,
+            img: img || null,
+            description: description || null,
+            cat_id: catId,
+          })
+          .eq("recettes_id", existingRecipe.recettes_id);
 
-      console.log("📝 Résultat update:", updateError ? "ERREUR" : "OK");
+        if (updateError) {
+          console.error("❌ Erreur UPDATE:", updateError);
+          setFormError("Erreur lors de la modification de la recette.");
+          setSubmitting(false);
+          return;
+        }
 
-      if (updateError) {
-        console.error("❌ Erreur update:", updateError);
-        setFormError("Erreur lors de la modification de la recette.");
-        return;
-    }
+        console.log("✅ UPDATE réussi");
 
-  // récupérer la recette mise à jour avec les catégories
-      const { data: recipe, error: fetchError } = await supabase
-        .from("recettes")
-        .select("*, categories(*)")
-        .eq("recettes_id", existingRecipe.recettes_id)
-        .single();
+        // Récupérer la recette mise à jour avec les catégories
+        const { data: updatedRecipe, error: fetchError } = await supabase
+          .from("recettes")
+          .select("*, categories(*)")
+          .eq("recettes_id", existingRecipe.recettes_id)
+          .single();
 
-        console.log("📦 Recette récupérée:", recipe);
+        console.log("📦 Recette mise à jour récupérée:", updatedRecipe);
 
-        if (fetchError || !recipe) {
-          console.error("❌ Erreur fetch:", fetchError);
+        if (fetchError || !updatedRecipe) {
+          console.error("❌ Erreur récupération:", fetchError);
           setFormError("Erreur lors de la récupération de la recette.");
+          setSubmitting(false);
           return;
         }
 
         console.log("✅ Recette mise à jour avec succès!");
-        onRecipeAdded(recipe as Recipe);
+        onRecipeAdded(updatedRecipe as Recipe);
         onClose();
       }
       // Mode création : INSERT
       else {
-        const { data: recipe, error: recipeError } = await supabase
+        console.log("➕ Mode création");
+        
+        const { data: newRecipe, error: recipeError } = await supabase
           .from("recettes")
           .insert([
             {
@@ -173,15 +184,21 @@ export default function RecipeForm({ onClose, onRecipeAdded, existingRecipe }: P
           .single();
 
         if (recipeError) {
-          console.error(recipeError);
+          console.error("❌ Erreur création recette:", recipeError);
           setFormError("Erreur lors de l'ajout de la recette.");
+          setSubmitting(false);
           return;
         }
 
-        onRecipeAdded(recipe as Recipe);
+        console.log("✅ Recette créée:", newRecipe);
+        onRecipeAdded(newRecipe as Recipe);
         resetForm();
         onClose();
       }
+    } catch (err) {
+      console.error("❌ Erreur globale:", err);
+      setFormError("Une erreur inattendue s'est produite.");
+      setSubmitting(false);
     } finally {
       setSubmitting(false);
     }

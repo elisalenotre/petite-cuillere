@@ -4,11 +4,15 @@ import type { Recipe } from "../../../types/recipes";
 type Props = {
   recipe: Recipe;
   onDelete: (id: string) => void;
+  currentUserId: string | null; // Ajout du userId
 };
 
-export default function RecipeCard({ recipe, onDelete }: Props) {
+export default function RecipeCard({ recipe, onDelete, currentUserId }: Props) {
   console.log("🔍 Recipe dans card:", recipe);
   console.log("🆔 ID:", recipe.recettes_id);
+
+  // Vérifier si l'utilisateur est le propriétaire
+  const isOwner = currentUserId && currentUserId === recipe.user_id;
 
   return (
     <div className="recipe-card">
@@ -27,15 +31,22 @@ export default function RecipeCard({ recipe, onDelete }: Props) {
         )}
 
         <div className="recipe-card-actions">
+          {/* Bouton "Voir" toujours visible */}
           <Link to={`/recipes/${recipe.recettes_id}`} title="Voir la recette">
             Voir
           </Link>
-          <Link to={`/recipes/update/${recipe.recettes_id}`} title="Modifier">
-            Modifier
-          </Link>
-          <button onClick={() => onDelete(recipe.recettes_id)} title="Supprimer">
-            Supprimer
-          </button>
+
+          {/* Boutons "Modifier" et "Supprimer" uniquement pour le propriétaire */}
+          {isOwner && (
+            <>
+              <Link to={`/recipes/update/${recipe.recettes_id}`} title="Modifier">
+                Modifier
+              </Link>
+              <button onClick={() => onDelete(recipe.recettes_id)} title="Supprimer">
+                Supprimer
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>
