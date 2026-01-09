@@ -28,7 +28,7 @@ function mapAuthError(error: any): string {
     return 'Email ou mot de passe incorrect.';
   }
   if (msg.includes('email not confirmed')) {
-    return 'Votre email doit être confirmé avant connexion.';
+    return 'Regardez vos mails et confirmez votre adresse email pour pouvoir commencer à cuisiner, chef.fe';
   }
 
   return "Une erreur est survenue lors de l'authentification.";
