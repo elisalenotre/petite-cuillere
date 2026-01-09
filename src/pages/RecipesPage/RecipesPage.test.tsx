@@ -54,11 +54,21 @@ vi.mock("../../components/recipes/RecipeForm/RecipeForm", () => ({
 }));
 
 // --------------------
-// Mock deleteRecipe
+// Mock du service recettes
 // --------------------
 const deleteRecipeMock = vi.fn();
 vi.mock("../../services/recipesService", () => ({
   deleteRecipe: (...args: any[]) => deleteRecipeMock(...args),
+  getRecipesWithClient: async (client: any, params: { page: number; pageSize: number }) => {
+    const from = (params.page - 1) * params.pageSize;
+    const to = from + params.pageSize - 1;
+    const { data, error, count } = await client
+      .from("recettes")
+      .select("*, categories(*)", { count: "exact" })
+      .range(from, to);
+    if (error) throw error;
+    return { recipes: data ?? [], total: count ?? 0 };
+  },
 }));
 
 // --------------------

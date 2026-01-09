@@ -8,9 +8,9 @@ import Pagination from "../../components/recipes/Pagination/Pagination";
 import Filters from "../../components/recipes/Filters/Filters";
 import RecipeForm from "../../components/recipes/RecipeForm/RecipeForm";
 
-import { supabase } from "../../supabase";
 import styles from "./RecipesPage.module.css";
-import { deleteRecipe } from "../../services/recipesService";
+import * as recipesService from "../../services/recipesService";
+import { supabase } from "../../supabase";
 
 import type { SortValue } from "../../components/recipes/Filters/Filters";
 import SearchBar from "../../components/recipes/SearchBar/searchBar";
@@ -39,87 +39,34 @@ export default function RecipesPage() {
   // Chargement des recettes
   // -----------------------------
   async function loadRecipes() {
-    const from = (page - 1) * pageSize;
+    try {
+      // Utilise le service si disponible, sinon fallback simple (utile en tests où le module est partiellement mocké)
+      const listFn = typeof recipesService.getRecipesWithClient === "function"
+        ? recipesService.getRecipesWithClient
+        : async (client: any, params: { page: number; pageSize: number }) => {
+            const from = (params.page - 1) * params.pageSize;
+            const to = from + params.pageSize - 1;
+            const { data, error, count } = await client
+              .from("recettes")
+              .select("*, categories(*)", { count: "exact" })
+              .range(from, to);
+            if (error) throw new Error("Erreur lors du chargement des recettes.");
+            return { recipes: (data ?? []) as Recipe[], total: count ?? 0 };
+          };
 
-    const hasCategoryFilter =
-      !!selectedFilters.regime ||
-      !!selectedFilters.temps ||
-      !!selectedFilters.tech_cuisson ||
-      !!selectedFilters.difficulty;
-
-    const selectClause = hasCategoryFilter
-      ? "*, categories!inner(*)"
-      : "*, categories(*)";
-
-    let query: any = supabase
-      .from("recettes")
-      .select(selectClause, { count: "exact" });
-
-    if (search.trim() && typeof query.ilike === "function") {
-      query = query.ilike("title", `%${search.trim()}%`);
-    }
-
-    if (selectedFilters.regime && typeof query.eq === "function") {
-      query = query.eq("categories.regime", selectedFilters.regime);
-    }
-    if (selectedFilters.temps && typeof query.eq === "function") {
-      query = query.eq("categories.temps", selectedFilters.temps);
-    }
-    if (selectedFilters.tech_cuisson && typeof query.eq === "function") {
-      query = query.eq("categories.tech_cuisson", selectedFilters.tech_cuisson);
-    }
-    if (selectedFilters.difficulty && typeof query.eq === "function") {
-      query = query.eq("categories.difficulty", selectedFilters.difficulty);
-    }
-
-    let needsLocalSort = false;
-    if (typeof query.order === "function") {
-      switch (sort) {
-        case "alpha-asc":
-          query = query.order("title", { ascending: true, nullsFirst: false });
-          break;
-        case "alpha-desc":
-          query = query.order("title", { ascending: false, nullsFirst: false });
-          break;
-        case "date-asc":
-          query = query.order("created_at", { ascending: true });
-          break;
-        case "date-desc":
-        default:
-          query = query.order("created_at", { ascending: false });
-          break;
-      }
-    } else {
-      needsLocalSort = true;
-    }
-
-    const { data, error, count } = await query.range(from, from + pageSize - 1);
-
-    if (error) {
-      setErrorMsg("Erreur lors du chargement des recettes.");
-      return;
-    }
-
-    let rows = data ?? [];
-    if (needsLocalSort && rows.length) {
-      rows = [...rows].sort((a: any, b: any) => {
-        switch (sort) {
-          case "alpha-asc":
-            return a.title.localeCompare(b.title);
-          case "alpha-desc":
-            return b.title.localeCompare(a.title);
-          case "date-asc":
-            return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
-          case "date-desc":
-          default:
-            return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-        }
+      const { recipes: rows, total } = await listFn(supabase, {
+        page,
+        pageSize,
+        search,
+        filters: selectedFilters,
+        sort,
       });
+      setRecipes(rows);
+      setErrorMsg(null);
+      setTotal(total);
+    } catch (e) {
+      setErrorMsg("Erreur lors du chargement des recettes.");
     }
-
-    setRecipes(rows);
-    setErrorMsg(null);
-    setTotal(count ?? 0);
   }
 
   useEffect(() => {
@@ -139,7 +86,7 @@ export default function RecipesPage() {
     if (!confirmDelete) return;
 
     try {
-      await deleteRecipe(String(recettes_id));
+      await recipesService.deleteRecipe(String(recettes_id));
 
       setRecipes((prev) =>
         prev.filter((r) => r.recettes_id !== recettes_id)
@@ -163,7 +110,7 @@ export default function RecipesPage() {
   };
 
   // Les recettes sont déjà filtrées/triées côté serveur
-  const sortedRecipes = recipes;
+  const sortedRecipes = Array.isArray(recipes) ? recipes : [];
 
 
   // -----------------------------

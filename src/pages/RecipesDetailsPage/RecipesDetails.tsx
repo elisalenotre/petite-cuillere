@@ -3,6 +3,7 @@
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
+import { getRecipeById, deleteRecipe } from "../../services/recipesService";
 import type { Recipe } from "../../types/recipes";
 import RecipeForm from "../../components/recipes/RecipeForm/RecipeForm";
 import styles from "./RecipesDetails.module.css";
@@ -27,16 +28,12 @@ export default function RecipesDetails() {
       const { data: { user } } = await supabase.auth.getUser();
       setCurrentUserId(user?.id || null);
 
-      const { data, error } = await supabase
-        .from("recettes")
-        .select("*, categories(*)")
-        .eq("recettes_id", id)
-        .single();
-
-      if (error) {
-        setErrorMsg("Erreur lors du chargement de la recette.");
-      } else {
+      try {
+        const data = await getRecipeById(id);
         setRecipe(data);
+        setErrorMsg(null);
+      } catch (e) {
+        setErrorMsg("Erreur lors du chargement de la recette.");
       }
 
       setLoading(false);
@@ -78,21 +75,11 @@ export default function RecipesDetails() {
     if (!confirmed) return;
 
     try {
-      const { error } = await supabase
-        .from("recettes")
-        .delete()
-        .eq("recettes_id", id);
-
-      if (error) {
-        setErrorMsg("Erreur lors de la suppression de la recette.");
-        alert("Erreur lors de la suppression de la recette");
-      } else {
-        // Rediriger vers la liste des recettes
-        navigate("/recipes");
-      }
+      await deleteRecipe(id);
+      navigate("/recipes");
     } catch (err) {
-      setErrorMsg("Une erreur inattendue s'est produite.");
-      alert("Une erreur inattendue s'est produite");
+      setErrorMsg("Erreur lors de la suppression de la recette.");
+      alert("Erreur lors de la suppression de la recette");
     }
   };
 
