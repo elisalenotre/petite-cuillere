@@ -67,7 +67,7 @@
 
 .recipesCreateBtn:hover {
   transform: translateY(-2px);
-  background: #7a5a38; /* hover foncé (contraste ok) */
+  background: #7a5a38;
   box-shadow: 0 6px 16px rgba(165, 120, 69, 0.35);
 }
 

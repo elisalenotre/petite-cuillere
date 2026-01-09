@@ -126,26 +126,26 @@
   border: none;
 }
 
-.backBtn {
-  background-color: #b88d5c;
-  color: white;
+.backBtn {  
+  border: 1px solid #a57845;
+  background-color: transparent;
+  color: #2b1c0a;
 }
 
-.backBtn:hover {
-  background-color: #a57845;
+.backBtn:hover {  
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(165, 120, 69, 0.3);
 }
 
 .editBtn {
-  background-color: #7a5a38;
-  color: white;
+  background-color: #655540;
+  color: #ffffff;
 }
 
 .editBtn:hover {
-  background-color: #6c5333;
+  background-color: #7a5a38;
   transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(108, 83, 51, 0.3);
+  box-shadow: 0 4px 10px rgba(46, 30, 13, 0.35);
 }
 
 /* --- Bouton supprimer --- */
@@ -159,7 +159,9 @@
 }
 
 .deleteBtn:hover {
-  background-color: #c82333;
+  background-color: #e52d40;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(142, 41, 41, 0.34);
 }
 
 /* --- Modal --- */

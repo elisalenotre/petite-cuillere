@@ -47,8 +47,8 @@
   padding: 0.6rem 1.4rem;
   border-radius: 999px;
   border: none;
-  background: #b88d5c;
-  color: #fffaf4;
+  background: #655540;
+  color: #ffffff;
   font-size: 0.9rem;
   font-weight: 600;
   text-decoration: none;
@@ -57,10 +57,15 @@
 }
 
 .notfoundButton:hover {
-  background: #a57845;
-  color: #fffaf4;
-  box-shadow: 0 6px 14px rgba(128, 93, 49, 0.35);
+  background: #7a5a38;
+  color: #ffffff;
+  box-shadow: 0 6px 14px rgba(31, 20, 7, 0.35);
   transform: translateY(-1px);
+}
+
+.notfoundButton:focus-visible {
+  outline: 3px solid #2b1c0a;
+  outline-offset: 3px;
 }
 
 /* --- Responsive --- */

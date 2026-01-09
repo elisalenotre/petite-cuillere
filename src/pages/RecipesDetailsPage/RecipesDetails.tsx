@@ -162,10 +162,10 @@ export default function RecipesDetails() {
           {isOwner && (
             <>
               <button onClick={() => setShowEditModal(true)} className={styles.editBtn}>
-                ✏️ Modifier
+                Modifier
               </button>
               <button onClick={handleDelete} className={styles.deleteBtn}>
-                🗑️ Supprimer
+                Supprimer
               </button>
             </>
           )}
