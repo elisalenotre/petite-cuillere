@@ -6,14 +6,14 @@
   min-height: 100vh;
   padding: 2rem;
   margin-top: 45px;
-  background-color: #faf0e3;
+  background-color: var(--bg);
 }
 
 .recipeDetailsContainer {
   width: 75%;
   max-width: 755px;
-  background-color: #fffaf4;
-  border: 1px solid #e2cfae;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 20px;
   padding: 2.5rem;
   box-shadow: 0 4px 12px rgba(108, 83, 51, 0.08);
@@ -22,9 +22,9 @@
 .errorMsg {
   margin: 0 0 1rem 0;
   padding: 0.6rem 0.8rem;
-  border: 1px solid #e7b1b1;
+  border: 1px solid var(--danger-weak);
   background: #fdecec;
-  color: #7a1f1f;
+  color: var(--danger);
   border-radius: 8px;
 }
 
@@ -33,13 +33,13 @@
   text-align: center;
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
-  border-bottom: 2px solid #f5e9d8;
+  border-bottom: 2px solid var(--border);
 }
 
 .recipeDetailsTitle {
   font-size: 3rem;
   font-family: 'Italianno', cursive;
-  color: #7a5a38;
+  color: var(--text-accent);
   margin: 0;
   line-height: 1.2;
 }
@@ -49,7 +49,7 @@
   margin-bottom: 2rem;
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid #e2cfae;
+  border: 1px solid var(--border);
 }
 
 .recipeDetailsImage {
@@ -64,22 +64,22 @@
 .recipeDetailsSection {
   margin-bottom: 2rem;
   padding: 1.5rem;
-  background-color: #f5e9d8;
+  background-color: var(--surface-2);
   border-radius: 16px;
-  border: 1px solid #e2cfae;
+  border: 1px solid var(--border);
 }
 
 .recipeDetailsSectionTitle {
   font-size: 1.8rem;
   font-family: 'Italianno', cursive;
-  color: #7a5a38;
+  color: var(--text-accent);
   margin: 0 0 1rem 0;
 }
 
 .recipeDetailsDescription {
   font-size: 1rem;
   line-height: 1.7;
-  color: #6c5333;
+  color: var(--text-primary);
   margin: 0;
   white-space: pre-wrap;
 }
@@ -96,20 +96,20 @@
   flex-direction: column;
   gap: 0.3rem;
   padding: 1rem;
-  background-color: #fffaf4;
+  background-color: var(--surface);
   border-radius: 12px;
-  border: 1px solid #e2cfae;
+  border: 1px solid var(--border);
 }
 
 .detailLabel {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #7a5a38;
+  color: var(--text-accent);
 }
 
 .detailValue {
   font-size: 1rem;
-  color: #6c5333;
+  color: var(--text-primary);
 }
 
 /* --- Actions --- */
@@ -118,7 +118,7 @@
   gap: 1rem;
   margin-top: 2rem;
   padding-top: 2rem;
-  border-top: 2px solid #f5e9d8;
+  border-top: 2px solid var(--border);
 }
 
 .backBtn,
@@ -136,9 +136,9 @@
 }
 
 .backBtn {  
-  border: 1px solid #a57845;
+  border: 1px solid var(--accent);
   background-color: transparent;
-  color: #2b1c0a;
+  color: var(--text-primary);
 }
 
 .backBtn:hover {  
@@ -147,19 +147,19 @@
 }
 
 .editBtn {
-  background-color: #655540;
+  background-color: var(--text-accent);
   color: #ffffff;
 }
 
 .editBtn:hover {
-  background-color: #7a5a38;
+  background-color: var(--accent);
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(46, 30, 13, 0.35);
 }
 
 /* --- Bouton supprimer --- */
 .deleteBtn {
-  background-color: #dc3545;
+  background-color: var(--danger);
   color: white;
   padding: 0.5rem 1rem;
   border: none;
@@ -168,7 +168,7 @@
 }
 
 .deleteBtn:hover {
-  background-color: #e52d40;
+  background-color: var(--danger);
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(142, 41, 41, 0.34);
 }
@@ -189,7 +189,7 @@
 }
 
 .modalContent {
-  background-color: #fffaf4;
+  background-color: var(--surface);
   padding: 2rem;
   border-radius: 16px;
   max-width: 500px;
@@ -220,7 +220,7 @@
 .recipeDetailsPage input:focus-visible,
 .recipeDetailsPage select:focus-visible,
 .recipeDetailsPage textarea:focus-visible {
-  outline: 3px solid #2b1c0a;
+  outline: 3px solid var(--text-primary);
   outline-offset: 3px;
 }
 
@@ -239,10 +239,10 @@
   height: 2.8rem;
   padding: 0 1rem;
   border-radius: 999px;
-  border: 1px solid #6c5333;
-  background-color: #fffaf4;
+  border: 1px solid var(--text-primary);
+  background-color: var(--surface);
   font-size: 0.9rem;
-  color: #6c5333;
+  color: var(--text-primary);
   outline: none;
   transition: all 0.2s ease;
   box-sizing: border-box;
@@ -259,7 +259,7 @@
 .modalContent :global(.recipe-form input:focus),
 .modalContent :global(.recipe-form textarea:focus),
 .modalContent :global(.recipe-form select:focus) {
-  border-color: #b88d5c;
+  border-color: var(--border-strong);
   box-shadow: 0 0 0 2px rgba(184, 141, 92, 0.2);
 }
 
@@ -295,13 +295,13 @@
 
 /* Primaire (Ajouter/Modifier) */
 .modalContent :global(.recipe-form-buttons button:first-child) {
-  background: #655540;
-  color: #fffaf4;
+  background: var(--text-accent);
+  color: var(--surface);
   border: none;
 }
 
 .modalContent :global(.recipe-form-buttons button:first-child:hover:not(:disabled)) {
-  background: #7a5a38;
+  background: var(--accent);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(165, 120, 69, 0.35);
 }
@@ -309,14 +309,14 @@
 /* Secondaire (Annuler) */
 .modalContent :global(.recipe-form-buttons button:last-child) {
   background: transparent;
-  color: #7a5a38;
-  border: 1px solid #d4b896;
+  color: var(--text-accent);
+  border: 1px solid var(--border);
 }
 
 .modalContent :global(.recipe-form-buttons button:last-child:hover:not(:disabled)) {
-  background: #f5e9d8;
-  border-color: #b88d5c;
-  color: #2b1c0a;
+  background: var(--surface-2);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
   transform: translateY(-1px);
 }
 
@@ -330,7 +330,7 @@
 .modalContent :global(.recipes-title h2) {
   font-family: 'Italianno', cursive;
   font-size: 2rem;
-  color: #7a5a38;
+  color: var(--text-accent);
   margin: 0 0 0.5rem 0;
   text-align: center;
 }

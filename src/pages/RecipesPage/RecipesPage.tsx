@@ -213,7 +213,7 @@ export default function RecipesPage() {
     <div className={styles.recipesList}>
       {sortedRecipes.length === 0 ? (
         <p className={styles.emptyMsg}>
-          Oops, aucune recette ne correspond à votre recherche, chef.fe.
+          Oops, il n'y a pas encore de recette par ici, chef.fe.
         </p>
       ) : (
         <RecipesList recipes={sortedRecipes} onDelete={handleDelete} />

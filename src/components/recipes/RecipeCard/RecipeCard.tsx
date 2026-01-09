@@ -17,7 +17,7 @@ export default function RecipeCard({ recipe, onDelete, currentUserId }: Props) {
   return (
     <div className="recipe-card">
       {recipe.img ? (
-        <img src={recipe.img} alt={recipe.title} />
+        <img src={recipe.img} alt={recipe.title} loading="lazy" />
       ) : (
         <div className="recipe-card-placeholder" aria-label="Image indisponible">
           <span className="emoji" aria-hidden="true">🍽️</span>

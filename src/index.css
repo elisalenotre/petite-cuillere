@@ -7,6 +7,27 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Palette & thème léger */
+  --bg: #faf0e3;
+  --surface: #fffaf4;
+  --surface-2: #fffdf9;
+  --text-primary: #6c5333;
+  --text-accent: #7a5a38;
+  --border: #e2cfae;
+  --border-strong: #b88d5c;
+  --accent: #a57845;
+  --danger: #a13f3f;
+  --danger-weak: #e7b1b1;
+
+  /* Espacements */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
 }
 
 * {
@@ -20,8 +41,8 @@ body {
 
 body {
   margin: 0;
-  background: #faf0e3;
-  color: #6c5333;
+  background: var(--bg);
+  color: var(--text-primary);
 }
 
 /* Liens */

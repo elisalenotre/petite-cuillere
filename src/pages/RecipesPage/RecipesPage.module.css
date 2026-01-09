@@ -3,10 +3,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: var(--space-6);
   width: 100%;
   min-height: 100vh;
-  padding: 2rem;
+  padding: var(--space-6);
   margin-top: 5px;
 }
 
@@ -20,7 +20,7 @@
 .recipesTitle {
   font-size: 2.5rem;
   font-family: 'Italianno', cursive;
-  color: #7a5a38;
+  color: var(--text-accent);
 }
 
 /* --- Top bar --- */
@@ -35,7 +35,7 @@
 .errorMsg {
   margin: 0;
   padding: 0.6rem 0.8rem;
-  border: 1px solid #e7b1b1;
+  border: 1px solid var(--danger-weak);
   background: #fdecec;
   color: #7a1f1f;
   border-radius: 8px;
@@ -43,10 +43,10 @@
 
 .emptyMsg {
   margin: 0;
-  padding: 1rem 1.2rem;
-  border: 1px solid #e2cfae;
-  background: #fffdf9;
-  color: #6c5333;
+  padding: var(--space-4) 1.2rem;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-primary);
   border-radius: 12px;
   text-align: center;
   grid-column: 1 / -1; /* occupe toute la largeur de la grille */
@@ -55,8 +55,8 @@
 /* --- Encadré recherche + filtres --- */
 .recipesSearchBox {
   flex: 1;
-  background-color: #fffaf4;
-  border: 1px dashed #6c5333;
+  background-color: var(--surface);
+  border: 1px dashed var(--text-primary);
   border-radius: 20px;
   padding: 1.4rem;
   display: flex;
@@ -78,7 +78,7 @@
   border: none;
   padding: 0.75rem 2rem;
   background: #655540;
-  color: #fffaf4;
+  color: var(--surface);
   cursor: pointer;
   font-weight: 600;
   font-size: 0.9rem;
@@ -95,7 +95,7 @@
 .recipesList {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
+  gap: var(--space-6);
   width: 100%;
   max-width: 900px;
 }
@@ -108,7 +108,7 @@
   width: 100%;
   max-width: 900px;
   gap: 1.4rem;
-  margin-top: 2rem;
+  margin-top: var(--space-6);
   font-size: 0.95rem;
 }
 
@@ -260,8 +260,8 @@
 
 /* RecipesList / RecipeCard */
 .recipesList :global(.recipe-card) {
-  background-color: #fffaf4;
-  border: 1px solid #e2cfae;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 16px;
   overflow: hidden;
   display: flex;
@@ -279,19 +279,19 @@
   width: 100%;
   height: 200px;
   object-fit: cover;
-  border-bottom: 1px solid #e2cfae;
+  border-bottom: 1px solid var(--border);
 }
 
 .recipesList :global(.recipe-card-placeholder) {
   width: 100%;
   height: 200px;
-  border-bottom: 1px solid #e2cfae;
-  background: #f7efe3;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  color: #735f4a;
+  color: var(--text-primary);
   font-size: 0.95rem;
 }
 
@@ -310,7 +310,7 @@
 .recipesList :global(.recipe-card h2) {
   font-size: 1.5rem;
   font-family: 'Italianno', cursive;
-  color: #7a5a38;
+  color: var(--text-accent);
   margin: 0;
   line-height: 1.2;
 }
@@ -324,11 +324,11 @@
 .recipesList :global(.recipe-card-categories p) {
   margin: 0;
   padding: 0.4rem 0.8rem;
-  background-color: #f5e9d8;
+  background-color: var(--surface-2);
   border-radius: 20px;
   font-size: 0.8rem;
-  color: #6c5333;
-  border: 1px solid #e2cfae;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
 }
 
 .recipesList :global(.recipe-card-actions) {
@@ -336,7 +336,7 @@
   gap: 0.6rem;
   margin-top: auto;
   padding-top: 1rem;
-  border-top: 1px solid #e2cfae;
+  border-top: 1px solid var(--border);
 }
 
 .recipesList :global(.recipe-card-actions a),
@@ -355,9 +355,9 @@
 
 /* Voir */
 .recipesList :global(.recipe-card-actions a:first-child) {
-  border: 1px solid #a57845;
+  border: 1px solid var(--accent);
   background-color: transparent;
-  color: #2b1c0a;
+  color: var(--text-primary);
 }
 .recipesList :global(.recipe-card-actions a:first-child:hover) {
   transform: translateY(-2px);
@@ -366,22 +366,22 @@
 
 /* Modifier */
 .recipesList :global(.recipe-card-actions a:nth-child(2)) {
-  background-color: #7a5a38;
-  color: #fffaf4;
+  background-color: var(--text-accent);
+  color: var(--surface);
 }
 .recipesList :global(.recipe-card-actions a:nth-child(2):hover) {
-  background-color: #a38155;
+  background-color: var(--accent);
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(108, 83, 51, 0.3);
 }
 
 /* Supprimer */
 .recipesList :global(.recipe-card-actions button) {
-  background-color: #a13f3f;
-  color: #fffaf4;
+  background-color: var(--danger);
+  color: var(--surface);
 }
 .recipesList :global(.recipe-card-actions button:hover) {
-  background-color: #b55c5c;
+  background-color: var(--danger);
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(201, 123, 123, 0.3);
 }
@@ -408,16 +408,16 @@
 .recipesPagination :global(.pagination-btn) {
   padding: 0.6rem 1.2rem;
   border-radius: 999px;
-  border: 1px solid #d4b896;
+  border: 1px solid var(--border);
   background: transparent;
   cursor: pointer;
   font-weight: 600;
   transition: background-color 0.2s ease, border-color 0.2s ease;
-  color: #6c5333;
+  color: var(--text-primary);
 }
 
 .recipesPagination :global(.pagination-btn:hover:not(:disabled)) {
-  background: #f5e9d8;
+  background: var(--surface-2);
 }
 
 .recipesPagination :global(.pagination-btn:disabled) {
@@ -431,20 +431,20 @@
   height: 40px;
   padding: 0 0.8rem;
   border-radius: 999px;
-  border: 1px solid #d4b896;
+  border: 1px solid var(--border);
   background: transparent;
-  color: #6c5333;
+  color: var(--text-primary);
   font-weight: 500;
   cursor: pointer;
 }
 
 .recipesPagination :global(.page-number:hover):not(.disabled) {
-  background: #f5e9d8;
+  background: var(--surface-2);
 }
 
 .recipesPagination :global(.page-number.active) {
-  border-color: #a57845;
-  background: #fffaf4;
+  border-color: var(--accent);
+  background: var(--surface);
   font-weight: 700;
 }
 
@@ -563,7 +563,7 @@
 .recipesPage :global(input:focus-visible),
 .recipesPage :global(select:focus-visible),
 .recipesPage :global(textarea:focus-visible) {
-  outline: 3px solid #2b1c0a;
+  outline: 3px solid var(--text-primary);
   outline-offset: 3px;
 }
 

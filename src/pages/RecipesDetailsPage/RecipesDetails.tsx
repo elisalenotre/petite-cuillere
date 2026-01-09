@@ -134,6 +134,7 @@ export default function RecipesDetails() {
               src={recipe.img}
               alt={recipe.title}
               className={styles.recipeDetailsImage}
+              loading="lazy"
             />
           </div>
         )}
