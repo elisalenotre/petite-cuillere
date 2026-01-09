@@ -15,7 +15,6 @@ export async function getRecipes(page: number, pageSize: number) {
     .range(from, to);
 
   if (error) {
-    console.error("Erreur Supabase :", error);
     throw error;
   }
 

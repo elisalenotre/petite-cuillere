@@ -19,6 +19,15 @@
   box-shadow: 0 4px 12px rgba(108, 83, 51, 0.08);
 }
 
+.errorMsg {
+  margin: 0 0 1rem 0;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #e7b1b1;
+  background: #fdecec;
+  color: #7a1f1f;
+  border-radius: 8px;
+}
+
 /* --- Header --- */
 .recipeDetailsHeader {
   text-align: center;

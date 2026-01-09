@@ -12,12 +12,13 @@ export default function RecipesDetails() {
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadRecipe() {
       if (!id) return;
 
-      console.log("🔍 ID recherché :", id);
+      
 
       // Récupérer l'utilisateur connecté
       const { data: { user } } = await supabase.auth.getUser();
@@ -30,9 +31,8 @@ export default function RecipesDetails() {
         .single();
 
       if (error) {
-        console.error("❌ Erreur :", error);
+        setErrorMsg("Erreur lors du chargement de la recette.");
       } else {
-        console.log("✅ Recette trouvée :", data);
         setRecipe(data);
       }
 
@@ -44,7 +44,7 @@ export default function RecipesDetails() {
 
   // Fonction pour rafraîchir après modification
   const handleRecipeUpdated = (updatedRecipe: Recipe) => {
-    console.log("🔄 Mise à jour de la recette locale:", updatedRecipe);
+    
     // Forcer un nouveau rendu avec un nouvel objet
     setRecipe({ ...updatedRecipe });
     setShowEditModal(false);
@@ -67,15 +67,14 @@ export default function RecipesDetails() {
         .eq("recettes_id", id);
 
       if (error) {
-        console.error("❌ Erreur lors de la suppression :", error);
+        setErrorMsg("Erreur lors de la suppression de la recette.");
         alert("Erreur lors de la suppression de la recette");
       } else {
-        console.log("✅ Recette supprimée avec succès");
         // Rediriger vers la liste des recettes
         navigate("/recipes");
       }
     } catch (err) {
-      console.error("❌ Erreur inattendue :", err);
+      setErrorMsg("Une erreur inattendue s'est produite.");
       alert("Une erreur inattendue s'est produite");
     }
   };
@@ -105,6 +104,7 @@ export default function RecipesDetails() {
   return (
     <div className={styles.recipeDetailsPage}>
       <div className={styles.recipeDetailsContainer}>
+        {errorMsg && <p className={styles.errorMsg}>{errorMsg}</p>}
         {/* Header avec titre */}
         <div className={styles.recipeDetailsHeader}>
           <h1 className={styles.recipeDetailsTitle}>{recipe.title}</h1>

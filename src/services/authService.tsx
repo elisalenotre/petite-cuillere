@@ -38,8 +38,6 @@ function mapAuthError(error: any): string {
 export async function signUpWithEmailService(email: string, password: string) {
   const { error } = await supabase.auth.signUp({ email, password });
   if (error) {
-    // eslint-disable-next-line no-console
-    console.error('[Auth] signUp error:', { status: (error as any)?.status, message: error.message, name: error.name });
     throw new Error(mapAuthError(error));
   }
 }
@@ -48,8 +46,6 @@ export async function signUpWithEmailService(email: string, password: string) {
 export async function signInWithEmailService(email: string, password: string) {
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) {
-    // eslint-disable-next-line no-console
-    console.error('[Auth] signIn error:', { status: (error as any)?.status, message: error.message, name: error.name });
     throw new Error(mapAuthError(error));
   }
 }
@@ -58,8 +54,6 @@ export async function signInWithEmailService(email: string, password: string) {
 export async function signOutService() {
   const { error } = await supabase.auth.signOut();
   if (error) {
-    // eslint-disable-next-line no-console
-    console.error('[Auth] signOut error:', { status: (error as any)?.status, message: error.message, name: error.name });
     throw new Error(mapAuthError(error));
   }
 }

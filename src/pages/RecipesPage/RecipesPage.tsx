@@ -16,6 +16,7 @@ import SearchBar from "../../components/recipes/SearchBar/searchBar";
 export default function RecipesPage() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [search, setSearch] = useState("");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const [selectedFilters, setSelectedFilters] = useState({
     regime: "",
@@ -83,7 +84,7 @@ export default function RecipesPage() {
     const { data, error, count } = await query.range(from, from + pageSize - 1);
 
     if (error) {
-      console.error("Erreur Supabase :", error);
+      setErrorMsg("Erreur lors du chargement des recettes.");
       return;
     }
 
@@ -105,6 +106,7 @@ export default function RecipesPage() {
     }
 
     setRecipes(rows);
+    setErrorMsg(null);
     setTotal(count ?? 0);
   }
 
@@ -127,7 +129,7 @@ export default function RecipesPage() {
         prev.filter((r) => r.recettes_id !== recettes_id)
       );
     } catch (error) {
-      console.error("Erreur suppression :", error);
+      setErrorMsg("Erreur lors de la suppression.");
       alert("Erreur lors de la suppression");
     }
   }
@@ -170,6 +172,7 @@ export default function RecipesPage() {
 
     <div className={styles.recipesTopBar}>
       <div className={styles.recipesSearchBox}>
+        {errorMsg && <p className={styles.errorMsg}>{errorMsg}</p>}
         <SearchBar search={search} setSearch={handleSearchChange} />
 
         <Filters

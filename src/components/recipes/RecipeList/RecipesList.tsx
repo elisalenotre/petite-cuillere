@@ -13,8 +13,8 @@ export default function RecipesList({ recipes, onDelete }: Props) {
         <RecipeCard
           key={recipe.recettes_id}
           recipe={recipe}
-          onDelete={onDelete}
-        />
+          onDelete={onDelete} currentUserId={null}        
+          />
       ))}
     </>
   );

@@ -32,6 +32,15 @@
   max-width: 900px;
 }
 
+.errorMsg {
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #e7b1b1;
+  background: #fdecec;
+  color: #7a1f1f;
+  border-radius: 8px;
+}
+
 /* --- Encadré recherche + filtres --- */
 .recipesSearchBox {
   flex: 1;
