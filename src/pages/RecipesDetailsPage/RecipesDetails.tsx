@@ -83,7 +83,7 @@ export default function RecipesDetails() {
   if (loading) {
     return (
       <div className={styles.recipeDetailsPage}>
-        <p>Chargement...</p>
+        <p>Chargement... Nous cuisinons votre recette...</p>
       </div>
     );
   }

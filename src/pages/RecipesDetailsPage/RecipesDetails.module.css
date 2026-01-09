@@ -278,39 +278,52 @@
   flex: 1;
   padding: 0.7rem 1.2rem;
   border-radius: 999px;
-  border: none;
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.modalContent :global(.recipe-form-buttons button[type="submit"]) {
-  background-color: #7a5a38;
+/* Primaire (Ajouter/Modifier) */
+.modalContent :global(.recipe-form-buttons button:first-child) {
+  background: #655540;
   color: #fffaf4;
+  border: none;
 }
 
-.modalContent :global(.recipe-form-buttons button[type="submit"]:hover:not(:disabled)) {
-  background-color: #6c5333;
+.modalContent :global(.recipe-form-buttons button:first-child:hover:not(:disabled)) {
+  background: #7a5a38;
   transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(108, 83, 51, 0.3);
+  box-shadow: 0 6px 16px rgba(165, 120, 69, 0.35);
 }
 
-.modalContent :global(.recipe-form-buttons button[type="button"]) {
-  background-color: #b88d5c;
-  color: #fffaf4;
+/* Secondaire (Annuler) */
+.modalContent :global(.recipe-form-buttons button:last-child) {
+  background: transparent;
+  color: #7a5a38;
+  border: 1px solid #d4b896;
 }
 
-.modalContent :global(.recipe-form-buttons button[type="button"]:hover) {
-  background-color: #a57845;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(165, 120, 69, 0.3);
+.modalContent :global(.recipe-form-buttons button:last-child:hover:not(:disabled)) {
+  background: #f5e9d8;
+  border-color: #b88d5c;
+  color: #2b1c0a;
+  transform: translateY(-1px);
 }
 
 .modalContent :global(.recipe-form-buttons button:disabled) {
   opacity: 0.4;
   cursor: not-allowed;
   transform: none;
+}
+
+/* Titre du formulaire en Italianno */
+.modalContent :global(.recipes-title h2) {
+  font-family: 'Italianno', cursive;
+  font-size: 2rem;
+  color: #7a5a38;
+  margin: 0 0 0.5rem 0;
+  text-align: center;
 }
 
 /* --- Responsive --- */

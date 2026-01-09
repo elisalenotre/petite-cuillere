@@ -446,24 +446,48 @@
 .modalContent :global(.recipe-form-buttons button) {
   padding: 0.6rem 1.2rem;
   border-radius: 999px;
-  border: 1px solid #b88d5c;
-  background: #fffaf4;
   cursor: pointer;
   font-weight: 600;
   transition: all 0.2s ease;
-  color: #6c5333;
-}
-
-.modalContent :global(.recipe-form-buttons button:hover:not(:disabled)) {
-  background: #b88d5c;
-  color: #fffaf4;
-  transform: translateY(-1px);
 }
 
 .modalContent :global(.recipe-form-buttons button:disabled) {
   opacity: 0.4;
   cursor: not-allowed;
   transform: none;
+}
+
+.modalContent :global(.recipe-form-buttons button:first-child) {
+  background: #655540;
+  color: #fffaf4;
+  border: none;
+}
+
+.modalContent :global(.recipe-form-buttons button:first-child:hover:not(:disabled)) {
+  background: #7a5a38;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(165, 120, 69, 0.35);
+}
+
+.modalContent :global(.recipe-form-buttons button:last-child) {
+  background: transparent;
+  color: #7a5a38;
+  border: 1px solid #d4b896;
+}
+
+.modalContent :global(.recipe-form-buttons button:last-child:hover:not(:disabled)) {
+  background: #f5e9d8;
+  border-color: #b88d5c;
+  color: #2b1c0a;
+  transform: translateY(-1px);
+}
+
+.modalContent :global(.recipes-title h2) {
+  font-family: 'Italianno', cursive;
+  font-size: 2rem;
+  color: #7a5a38;
+  margin: 0 0 0.5rem 0;
+  text-align: center;
 }
 
 /* Focus visible (accessibilité) */
