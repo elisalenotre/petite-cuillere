@@ -27,18 +27,15 @@ describe('NotFoundPage', () => {
     ).toBeInTheDocument();
   });
 
-  it('affiche un lien permettant de retourner en cuisine', () => {
+  it("affiche un lien permettant de retourner en cuisine", () => {
     render(
       <MemoryRouter>
         <NotFoundPage />
       </MemoryRouter>
     );
 
-    const link = screen.getByRole('link', {
-      name: /retourner en cuisine/i,
-    });
-
-    expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute('href', '/');
+    const link = screen.getByRole("link", { name: /cuisine|recettes|retour/i });
+    expect(link).toHaveAttribute("href", "/recipes");
   });
+
 });

@@ -1,38 +1,36 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AuthPage } from '../pages/AuthPage/AuthPage';
+import { Routes, Route, Navigate } from "react-router-dom";
+import { AuthPage } from "../pages/AuthPage/AuthPage";
+import RecipesPage from "../pages/RecipesPage/RecipesPage";
+import { NotFoundPage } from "../pages/NotFoundPage/NotFoundPage";
+import { RequireAuth } from "../components/auth/RequireAuth/RequireAuth";
+import RecipesDetails from "../pages/RecipesDetailsPage/RecipesDetails";
 
-// import { RecipesPage } from '../pages/RecipesPage/RecipesPage';
-// import { RecipeDetailPage } from '../pages/RecipeDetailPage/RecipeDetailPage';
-import { NotFoundPage } from '../pages/NotFoundPage/NotFoundPage';
-import { RequireAuth } from '../components/auth/RequireAuth';
-
-export function AppRouter() {
+export default function AppRouter() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/auth" element={<AuthPage />} />
+    <Routes>
+      <Route path="/auth" element={<AuthPage />} />
 
+      <Route
+        path="/recipes"
+        element={
+          <RequireAuth>
+            <RecipesPage />
+          </RequireAuth>
+        }
+      />
+
+         {/* ⬅️ Ajoutez cette route */}
         <Route
-          path="/"
+          path="/recipes/:id"
           element={
-            <RequireAuth children={undefined}>
-                {/* <RecipesPage /> */}
+            <RequireAuth>
+              <RecipesDetails />  
             </RequireAuth>
           }
         />
 
-        <Route
-        //   path="/recettes/:id"
-        //   element={
-        //     <RequireAuth>
-        //       <RecipeDetailPage />
-        //     </RequireAuth>
-        //   }
-        />
-
-        {/* route 404 */}
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </BrowserRouter>
+      <Route path="/" element={<Navigate to="/recipes" replace />} />
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
   );
 }
