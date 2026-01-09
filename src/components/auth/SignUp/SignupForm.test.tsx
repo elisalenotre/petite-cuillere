@@ -1,99 +1,98 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi, type Mock } from 'vitest';
-import { LoginForm } from './LoginForm';
-import { useAuth } from '../../contexts/AuthContext';
+import { SignupForm } from './SignupForm';
+import { useAuth } from '../../../contexts/AuthContext';
 
 // Mock du hook useAuth
-vi.mock('../../contexts/AuthContext', () => ({
+vi.mock('../../../contexts/AuthContext', () => ({
   useAuth: vi.fn(),
 }));
 
 const mockedUseAuth = useAuth as unknown as Mock;
-const signInWithEmail = vi.fn();
+const signUpWithEmail = vi.fn();
 
 beforeEach(() => {
-  signInWithEmail.mockReset();
+  signUpWithEmail.mockReset();
   mockedUseAuth.mockReturnValue({
-    signInWithEmail,
+    signUpWithEmail,
   });
 });
 
-describe('LoginForm', () => {
-  it('affiche les champs et le bouton de connexion', () => {
-    render(<LoginForm />);
+describe('SignupForm', () => {
+  it("affiche les champs et le bouton 'Créer un compte'", () => {
+    render(<SignupForm />);
 
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/mot de passe/i)).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: /se connecter/i })
+      screen.getByRole('button', { name: /créer un compte/i })
     ).toBeInTheDocument();
   });
 
-  it('appelle signInWithEmail avec les bonnes valeurs lors de la soumission', async () => {
+  it('appelle signUpWithEmail avec les bonnes valeurs lors de la soumission', async () => {
     const user = userEvent.setup();
-    render(<LoginForm />);
+    render(<SignupForm />);
 
     await user.type(
       screen.getByLabelText(/email/i),
-      'test@example.com'
+      'new@example.com'
     );
     await user.type(
       screen.getByLabelText(/mot de passe/i),
-      'password123'
+      'newpass'
     );
 
     await user.click(screen.getByTestId('auth-submit-button'));
 
-    expect(signInWithEmail).toHaveBeenCalledTimes(1);
-    expect(signInWithEmail).toHaveBeenCalledWith(
-      'test@example.com',
-      'password123'
+    expect(signUpWithEmail).toHaveBeenCalledTimes(1);
+    expect(signUpWithEmail).toHaveBeenCalledWith(
+      'new@example.com',
+      'newpass'
     );
   });
 
-  it('affiche un message de succès quand la connexion réussit', async () => {
+  it("affiche un message de succès quand l'inscription réussit", async () => {
     const user = userEvent.setup();
-    // renvoie une promesse résolue
-    signInWithEmail.mockResolvedValueOnce(undefined);
+    signUpWithEmail.mockResolvedValueOnce(undefined);
 
-    render(<LoginForm />);
+    render(<SignupForm />);
 
     await user.type(
       screen.getByLabelText(/email/i),
-      'test@example.com'
+      'new@example.com'
     );
     await user.type(
       screen.getByLabelText(/mot de passe/i),
-      'password123'
+      'newpass'
     );
 
     await user.click(screen.getByTestId('auth-submit-button'));
 
     expect(
-      await screen.findByText(/connexion réussie ! vous pouvez cuisiner !/i)
+      await screen.findByText(/inscription réussie ! vérifie tes mails/i)
     ).toBeInTheDocument();
   });
 
-  it("affiche un message d'erreur quand signInWithEmail échoue", async () => {
+  it("affiche un message d'erreur quand signUpWithEmail échoue", async () => {
     const user = userEvent.setup();
-    signInWithEmail.mockRejectedValueOnce(new Error('Erreur de test'));
+    signUpWithEmail.mockRejectedValueOnce(new Error('Erreur signup'));
 
-    render(<LoginForm />);
+    render(<SignupForm />);
 
     await user.type(
       screen.getByLabelText(/email/i),
-      'test@example.com'
+      'new@example.com'
     );
     await user.type(
       screen.getByLabelText(/mot de passe/i),
-      'password123'
+      'newpass'
     );
 
     await user.click(screen.getByTestId('auth-submit-button'));
 
     expect(
-      await screen.findByText(/erreur de test/i)
+      await screen.findByText(/erreur signup/i)
     ).toBeInTheDocument();
   });
 });

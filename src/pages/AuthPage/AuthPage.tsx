@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { LoginForm } from '../../components/auth/LoginForm';
-import { SignupForm } from '../../components/auth/SignupForm';
-import './AuthPage.css';
+import { LoginForm } from '../../components/auth/Login/LoginForm';
+import { SignupForm } from '../../components/auth/SignUp/SignupForm';
+import styles from './AuthPage.module.css';
 import spoonLogo from '../../assets/spoon.svg';
 
 export function AuthPage() {
-  const { signInWithGoogle, signOut, loading, user } = useAuth();
+  const { signInWithGoogle, signInWithGitHub, signOut, loading, user } = useAuth();
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [globalError, setGlobalError] = useState<string | null>(null);
 
@@ -15,7 +15,16 @@ export function AuthPage() {
     try {
       await signInWithGoogle();
     } catch {
-      setGlobalError("Oups, la connexion avec Google a échoué.");
+      setGlobalError('Oups, la connexion avec Google a échoué.');
+    }
+  };
+
+  const handleGitHub = async () => {
+    setGlobalError(null);
+    try {
+      await signInWithGitHub();
+    } catch {
+      setGlobalError('Oups, la connexion avec GitHub a échoué.');
     }
   };
 
@@ -24,27 +33,29 @@ export function AuthPage() {
     try {
       await signOut();
     } catch {
-      setGlobalError("Impossible de se déconnecter.");
+      setGlobalError('Impossible de se déconnecter.');
     }
   };
 
   if (loading) {
-    return <p className="auth-loading">Chargement de la session... Nous cuisinons...</p>;
+    return <p className={styles['auth-loading']}>Chargement de la session... Nous cuisinons...</p>;
   }
 
   if (user) {
     return (
-      <main className="auth-page">
-        <div className="auth-layout">
-          <header className="auth-header">
-            <img src={spoonLogo} alt="" className="auth-logo" />
-            <h1 className="auth-title">Petite Cuillère</h1>
+      <main className={styles['auth-page']}>
+        <div className={styles['auth-layout']}>
+          <header className={styles['auth-header']}>
+            <img src={spoonLogo} alt="" className={styles['auth-logo']} />
+            <h1 className={styles['auth-title']}>Petite Cuillère</h1>
           </header>
 
-          <section className="auth-card auth-card--logged">
+          <section className={`${styles['auth-card']} ${styles['auth-card--logged']}`}>
             <p>Tu es connecté·e en tant que {user.email}</p>
-            {globalError && <p className="auth-global-error">{globalError}</p>}
-            <button onClick={handleLogout} className="auth-logout-btn">
+
+            {globalError && <p className={styles['auth-global-error']}>{globalError}</p>}
+
+            <button onClick={handleLogout} className={styles['auth-logout-btn']}>
               Se déconnecter
             </button>
           </section>
@@ -54,27 +65,30 @@ export function AuthPage() {
   }
 
   return (
-    <main className="auth-page">
-      <div className="auth-layout">
-        <header className="auth-header">
-          <img src={spoonLogo} alt="" className="auth-logo" />
-          <h1 className="auth-title">Petite Cuillère</h1>
+    <main className={styles['auth-page']}>
+      <div className={styles['auth-layout']}>
+        <header className={styles['auth-header']}>
+          <img src={spoonLogo} alt="" className={styles['auth-logo']} />
+          <h1 className={styles['auth-title']}>Petite Cuillère</h1>
         </header>
 
-        <section className="auth-card">
-          {globalError && ( <p className="auth-global-error">{globalError}</p> )}
-          
-          <div className="auth-tabs">
+        <section className={styles['auth-card']}>
+          {globalError && <p className={styles['auth-global-error']}>{globalError}</p>}
+
+          <div className={styles.authTabs} data-mode={mode}>
+            <span className={styles.tabIndicator} aria-hidden="true" />
+
             <button
               type="button"
-              className={mode === 'login' ? 'active' : ''}
+              className={`${styles.tabButton} ${mode === 'login' ? styles.tabActive : ''}`}
               onClick={() => setMode('login')}
             >
               Se connecter
             </button>
+
             <button
               type="button"
-              className={mode === 'signup' ? 'active' : ''}
+              className={`${styles.tabButton} ${mode === 'signup' ? styles.tabActive : ''}`}
               onClick={() => setMode('signup')}
             >
               S'inscrire
@@ -83,17 +97,19 @@ export function AuthPage() {
 
           {mode === 'login' ? <LoginForm /> : <SignupForm />}
 
-          <div className="auth-separator">
+          <div className={styles['auth-separator']}>
             <span>ou</span>
           </div>
 
-          <button
-            type="button"
-            className="auth-google-btn"
-            onClick={handleGoogle}
-          >
-            Continuer avec Google
-          </button>
+          <div className={styles['auth-oauth']}>
+            <button type="button" className={styles['auth-google-btn']} onClick={handleGoogle}>
+              Continuer avec Google
+            </button>
+
+            <button type="button" className={styles['auth-github-btn']} onClick={handleGitHub}>
+              Continuer avec GitHub
+            </button>
+          </div>
         </section>
       </div>
     </main>
