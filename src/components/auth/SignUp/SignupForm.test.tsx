@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi, type Mock } from 'vitest';
 import { SignupForm } from './SignupForm';
+import { MemoryRouter } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 
 // Mock du hook useAuth
@@ -21,7 +22,11 @@ beforeEach(() => {
 
 describe('SignupForm', () => {
   it("affiche les champs et le bouton 'Créer un compte'", () => {
-    render(<SignupForm />);
+    render(
+      <MemoryRouter>
+        <SignupForm />
+      </MemoryRouter>
+    );
 
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/mot de passe/i)).toBeInTheDocument();
@@ -32,7 +37,11 @@ describe('SignupForm', () => {
 
   it('appelle signUpWithEmail avec les bonnes valeurs lors de la soumission', async () => {
     const user = userEvent.setup();
-    render(<SignupForm />);
+    render(
+      <MemoryRouter>
+        <SignupForm />
+      </MemoryRouter>
+    );
 
     await user.type(
       screen.getByLabelText(/email/i),
@@ -56,7 +65,20 @@ describe('SignupForm', () => {
     const user = userEvent.setup();
     signUpWithEmail.mockResolvedValueOnce(undefined);
 
-    render(<SignupForm />);
+    // Mock supabase pour éviter un appel réseau et forcer 'session' à null
+    vi.mock('../../../supabase', () => ({
+      supabase: {
+        auth: {
+          getSession: vi.fn().mockResolvedValue({ data: { session: null } }),
+        },
+      },
+    }));
+
+    render(
+      <MemoryRouter>
+        <SignupForm />
+      </MemoryRouter>
+    );
 
     await user.type(
       screen.getByLabelText(/email/i),
@@ -70,7 +92,7 @@ describe('SignupForm', () => {
     await user.click(screen.getByTestId('auth-submit-button'));
 
     expect(
-      await screen.findByText(/inscription réussie ! vérifie tes mails/i)
+      await screen.findByText(/regardez vos mails et confirmez votre adresse email/i)
     ).toBeInTheDocument();
   });
 
@@ -78,7 +100,11 @@ describe('SignupForm', () => {
     const user = userEvent.setup();
     signUpWithEmail.mockRejectedValueOnce(new Error('Erreur signup'));
 
-    render(<SignupForm />);
+    render(
+      <MemoryRouter>
+        <SignupForm />
+      </MemoryRouter>
+    );
 
     await user.type(
       screen.getByLabelText(/email/i),

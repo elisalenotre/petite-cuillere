@@ -93,7 +93,7 @@ describe('LoginForm', () => {
     await user.click(screen.getByTestId('auth-submit-button'));
 
     expect(
-      await screen.findByText(/erreur de test/i)
+      await screen.findByText(/une erreur est survenue lors de la connexion/i)
     ).toBeInTheDocument();
   });
 });
