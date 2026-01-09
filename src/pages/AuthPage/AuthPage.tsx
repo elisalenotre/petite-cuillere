@@ -30,16 +30,16 @@ export function AuthPage() {
       setGlobalError('Oups, la connexion avec GitHub a échoué.');
     }
   };
-  if (loading) {
-    return <p className={styles['auth-loading']}>Chargement de la session... Nous cuisinons...</p>;
-  }
-
   useEffect(() => {
     if (!loading && user) {
       const from = (location.state as any)?.from?.pathname as string | undefined;
       navigate(from ?? '/recipes', { replace: true });
     }
   }, [loading, user, location, navigate]);
+
+  if (loading) {
+    return <p className={styles['auth-loading']}>Chargement de la session... Nous cuisinons...</p>;
+  }
 
   if (user) {
     return <p className={styles['auth-loading']}>Redirection en cours... Nous cuisinons...</p>;
