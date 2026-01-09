@@ -29,15 +29,16 @@ export function SignupForm() {
       await signUpWithEmail(email, password);
       const { data } = await supabase.auth.getSession();
       if (data.session) {
-        const from = (location.state as any)?.from?.pathname as string | undefined;
+        const from = (location.state as { from?: { pathname?: string } } | null)?.from?.pathname as string | undefined;
         navigate(from ?? '/recipes', { replace: true });
       } else {
         setFormSuccess(
           'Regardez vos mails et confirmez votre adresse email pour pouvoir commencer à cuisiner, chef.fe'
         );
       }
-    } catch (error: any) {
-      setFormError(error.message ?? 'Une erreur est survenue');
+    } catch (error: unknown) {
+      const message = typeof error === 'string' ? error : (error as { message?: string }).message;
+      setFormError(message ?? 'Une erreur est survenue');
     } finally {
       setSubmitting(false);
     }

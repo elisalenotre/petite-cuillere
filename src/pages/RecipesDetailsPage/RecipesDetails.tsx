@@ -32,7 +32,7 @@ export default function RecipesDetails() {
         const data = await getRecipeById(id);
         setRecipe(data);
         setErrorMsg(null);
-      } catch (e) {
+      } catch {
         setErrorMsg("Erreur lors du chargement de la recette.");
       }
 
@@ -52,6 +52,7 @@ export default function RecipesDetails() {
 
     const isOwner = currentUserId && recipe && currentUserId === recipe.user_id;
     if (isOwner) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowEditModal(true);
     }
   }, [loading, recipe, currentUserId, location.search]);
@@ -77,7 +78,7 @@ export default function RecipesDetails() {
     try {
       await deleteRecipe(id);
       navigate("/recipes");
-    } catch (err) {
+    } catch {
       setErrorMsg("Erreur lors de la suppression de la recette.");
       alert("Erreur lors de la suppression de la recette");
     }

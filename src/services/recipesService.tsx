@@ -1,4 +1,5 @@
 import { supabase } from '../supabase';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Recipe } from '../types/recipes';
 
 type CategoryInput = {
@@ -190,7 +191,7 @@ export type ListParams = {
   sort?: "alpha-asc" | "alpha-desc" | "date-asc" | "date-desc";
 };
 
-export async function getRecipesWithClient(client: any, params: ListParams): Promise<{ recipes: Recipe[]; total: number }> {
+export async function getRecipesWithClient(client: SupabaseClient, params: ListParams): Promise<{ recipes: Recipe[]; total: number }> {
   const { page, pageSize, search = "", filters = {}, sort = "date-desc" } = params;
 
   const from = (page - 1) * pageSize;
@@ -199,7 +200,7 @@ export async function getRecipesWithClient(client: any, params: ListParams): Pro
   const hasCategoryFilter = !!filters.regime || !!filters.temps || !!filters.tech_cuisson || !!filters.difficulty;
   const selectClause = hasCategoryFilter ? "*, categories!inner(*)" : "*, categories(*)";
 
-  let query: any = client
+  let query = client
     .from("recettes")
     .select(selectClause, { count: "exact" });
 
@@ -261,7 +262,7 @@ export async function getRecipesWithClient(client: any, params: ListParams): Pro
 
   let rows = (data ?? []) as Recipe[];
   if (needsLocalSort && rows.length) {
-    rows = [...rows].sort((a: any, b: any) => {
+    rows = [...rows].sort((a: Recipe, b: Recipe) => {
       switch (sort) {
         case "alpha-asc":
           return (a.title ?? "").localeCompare(b.title ?? "");
@@ -280,5 +281,5 @@ export async function getRecipesWithClient(client: any, params: ListParams): Pro
 }
 
 export async function getRecipes(params: ListParams): Promise<{ recipes: Recipe[]; total: number }> {
-  return getRecipesWithClient(supabase as any, params);
+  return getRecipesWithClient(supabase, params);
 }

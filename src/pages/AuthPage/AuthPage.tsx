@@ -34,7 +34,7 @@ export function AuthPage() {
   };
   useEffect(() => {
     if (!loading && user) {
-      const from = (location.state as any)?.from?.pathname as string | undefined;
+      const from = (location.state as { from?: { pathname?: string } } | null)?.from?.pathname as string | undefined;
       navigate(from ?? '/recipes', { replace: true });
     }
   }, [loading, user, location, navigate]);

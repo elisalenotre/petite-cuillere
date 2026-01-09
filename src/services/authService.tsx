@@ -3,9 +3,9 @@
 
 import { supabase } from '../supabase';
 
-function mapAuthError(error: any): string {
-  const status = (error?.status ?? error?.code) as number | string | undefined;
-  const msg = String(error?.message ?? '').toLowerCase();
+function mapAuthError(error: unknown): string {
+  const status = (error as { status?: number; code?: number | string })?.status ?? (error as { status?: number; code?: number | string })?.code;
+  const msg = String((error as { message?: string })?.message ?? '').toLowerCase();
 
   if (typeof status === 'number') {
     switch (status) {

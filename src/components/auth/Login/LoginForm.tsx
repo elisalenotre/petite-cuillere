@@ -28,8 +28,11 @@ export function LoginForm() {
   };
 
   // Mettre les messages d'erreur appropriés selon le type d'erreur
-  const getErrorMessage = (error: any) => {
-    switch (error.message) {
+  const getErrorMessage = (error: unknown) => {
+    const message = typeof error === 'string'
+      ? error
+      : (error as { message?: string }).message || '';
+    switch (message) {
       case 'Invalid login credentials':
         return 'Email ou mot de passe incorrect';
       case 'Email not confirmed':
@@ -55,7 +58,7 @@ export function LoginForm() {
     try {
       await signInWithEmail(email, password);
       setFormSuccess('Connexion réussie ! Vous pouvez cuisiner !');
-    } catch (error: any) {
+    } catch (error: unknown) {
       setFormError(getErrorMessage(error));
     } finally {
       setSubmitting(false);

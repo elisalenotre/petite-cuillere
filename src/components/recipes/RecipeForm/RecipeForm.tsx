@@ -87,8 +87,9 @@ export default function RecipeForm({ onClose, onRecipeAdded, existingRecipe }: P
         resetForm();
         onClose();
       }
-    } catch (err: any) {
-      setFormError(err?.message || "Une erreur inattendue s'est produite.");
+    } catch (err: unknown) {
+      const message = typeof err === 'string' ? err : (err as { message?: string }).message;
+      setFormError(message || "Une erreur inattendue s'est produite.");
       setSubmitting(false);
     } finally {
       setSubmitting(false);

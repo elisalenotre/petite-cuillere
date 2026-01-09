@@ -44,7 +44,7 @@ export default function RecipesPage() {
       // Utilise le service si disponible, sinon fallback simple (utile en tests où le module est partiellement mocké)
       const listFn = typeof recipesService.getRecipesWithClient === "function"
         ? recipesService.getRecipesWithClient
-        : async (client: any, params: { page: number; pageSize: number }) => {
+        : async (client: typeof supabase, params: { page: number; pageSize: number }) => {
             const from = (params.page - 1) * params.pageSize;
             const to = from + params.pageSize - 1;
             const { data, error, count } = await client
@@ -65,17 +65,19 @@ export default function RecipesPage() {
       setRecipes(rows);
       setErrorMsg(null);
       setTotal(total);
-    } catch (e) {
+    } catch {
       setErrorMsg("Erreur lors du chargement des recettes.");
     }
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadRecipes();
   }, [page, search, selectedFilters, sort]);
 
   // Remise en page 1 lors des changements de filtres/tri
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPage(1);
   }, [selectedFilters, sort]);
 
@@ -92,7 +94,7 @@ export default function RecipesPage() {
       setRecipes((prev) =>
         prev.filter((r) => r.recettes_id !== recettes_id)
       );
-    } catch (error) {
+    } catch {
       setErrorMsg("Erreur lors de la suppression.");
       alert("Erreur lors de la suppression");
     }
