@@ -1,88 +1,67 @@
+import { describe, it, vi, afterEach, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import { vi, type Mock } from 'vitest';
 import { RequireAuth } from './RequireAuth';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useLocation } from 'react-router-dom';
 
-// On mocke le hook useAuth
-vi.mock('../../contexts/AuthContext', () => ({
-  useAuth: vi.fn(),
-}));
-
-// Mocker Navigate de react-router-dom
+// Mock react-router-dom
 vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual<typeof import('react-router-dom')>(
-    'react-router-dom'
-  );
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
   return {
     ...actual,
-    Navigate: ({ to }: { to: string }) => (
-      <div>REDIRECT_TO:{to}</div>
-    ),
+    useLocation: vi.fn(() => ({ pathname: '/private' })),
+    Navigate: ({ to }: { to: string }) => <div>Navigate to {to}</div>,
   };
 });
 
-const mockedUseAuth = useAuth as unknown as Mock;
-
-beforeEach(() => {
-  mockedUseAuth.mockReset();
-});
+// Mock AuthContext
+const mockUseAuth = vi.fn();
+vi.mock('../../../contexts/AuthContext', () => ({
+  useAuth: () => mockUseAuth(),
+}));
 
 describe('RequireAuth', () => {
-  it("affiche un message de chargement quand 'loading' est true", () => {
-    mockedUseAuth.mockReturnValue({
-      user: null,
-      loading: true,
-    });
-
-    render(
-      <MemoryRouter>
-        <RequireAuth>
-          <div>Contenu privé</div>
-        </RequireAuth>
-      </MemoryRouter>
-    );
-
-    expect(
-      screen.getByText(/vérification de la connexion/i)
-    ).toBeInTheDocument();
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
-  it("redirige vers /auth quand aucun utilisateur n'est connecté", () => {
-    mockedUseAuth.mockReturnValue({
-      user: null,
-      loading: false,
-    });
-
+  it('affiche le message de chargement si loading est true', () => {
+    mockUseAuth.mockReturnValue({ user: null, loading: true });
     render(
-      <MemoryRouter>
-        <RequireAuth>
-          <div>Contenu privé</div>
-        </RequireAuth>
-      </MemoryRouter>
+      <RequireAuth>
+        <div>Contenu protégé</div>
+      </RequireAuth>
     );
-
-    expect(
-      screen.getByText(/redirect_to:\/auth/i)
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Vérification de la connexion/i)).toBeInTheDocument();
   });
 
-  it('rend les enfants quand un utilisateur est connecté', () => {
-    mockedUseAuth.mockReturnValue({
-      user: { id: '123' },
-      loading: false,
-    });
-
+  it('redirige vers /auth si user est null et loading est false', () => {
+    mockUseAuth.mockReturnValue({ user: null, loading: false });
     render(
-      <MemoryRouter>
-        <RequireAuth>
-          <div>Contenu privé</div>
-        </RequireAuth>
-      </MemoryRouter>
+      <RequireAuth>
+        <div>Contenu protégé</div>
+      </RequireAuth>
     );
+    expect(screen.getByText(/Navigate to \/auth/i)).toBeInTheDocument();
+  });
 
-    expect(
-      screen.getByText(/contenu privé/i)
-    ).toBeInTheDocument();
+  it('affiche les enfants si user est défini et loading est false', () => {
+    mockUseAuth.mockReturnValue({ user: { id: 1, name: 'Elisa' }, loading: false });
+    render(
+      <RequireAuth>
+        <div>Contenu protégé</div>
+      </RequireAuth>
+    );
+    expect(screen.getByText(/Contenu protégé/i)).toBeInTheDocument();
+  });
+
+  it('passe bien la location courante dans le state de Navigate', () => {
+    (useLocation as jest.Mock).mockReturnValue({ pathname: '/test-location' });
+    mockUseAuth.mockReturnValue({ user: null, loading: false });
+    render(
+      <RequireAuth>
+        <div>Contenu protégé</div>
+      </RequireAuth>
+    );
+    expect(screen.getByText(/Navigate to \/auth/i)).toBeInTheDocument();
   });
 });

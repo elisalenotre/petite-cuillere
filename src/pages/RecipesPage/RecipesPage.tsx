@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Recipe } from "../../types/recipes";
 
-import SearchBar from "../../components/recipes/SearchBar/searchBar";
 import RecipesList from "../../components/recipes/RecipeList/RecipesList";
 import Pagination from "../../components/recipes/Pagination/Pagination";
 import Filters from "../../components/recipes/Filters/Filters";
@@ -12,6 +11,7 @@ import styles from "./RecipesPage.module.css";
 import { deleteRecipe } from "../../services/recipesService";
 
 import type { SortValue } from "../../components/recipes/Filters/Filters";
+import SearchBar from "../../components/recipes/SearchBar/searchBar";
 
 export default function RecipesPage() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -60,7 +60,7 @@ export default function RecipesPage() {
   // Suppression d'une recette
   // -----------------------------
   async function handleDelete(recettes_id: string) {
-    const confirmDelete = window.confirm("Supprimer cette recette ?");
+    const confirmDelete = window.confirm("Souhaitez vous supprimer cette recette, chef.fe ?");
     if (!confirmDelete) return;
 
     try {

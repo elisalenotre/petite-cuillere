@@ -1,7 +1,7 @@
 // ------- Page d'authentification affichée pour la connexion ou l'inscription --------
 // Affiche un formulaire de connexion, d'inscription, ou l'état connecté selon l'utilisateur.
 
-import { type FormEvent, useState } from 'react';
+import { type FormEvent, useState, useCallback, type ChangeEvent, useEffect } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 
 export function LoginForm() {
@@ -14,6 +14,31 @@ export function LoginForm() {
   const [formError, setFormError] = useState<string | null>(null);
   const [formSuccess, setFormSuccess] = useState<string | null>(null);
 
+  // Validation du formulaire
+  const validateForm = () => {
+    if (!email.includes('@')) {
+      setFormError('Email invalide');
+      return false;
+    }
+    if (password.length < 6) {
+      setFormError('Le mot de passe doit contenir au moins 6 caractères');
+      return false;
+    }
+    return true;
+  };
+
+  // Mettre les messages d'erreur appropriés selon le type d'erreur
+  const getErrorMessage = (error: any) => {
+    switch (error.message) {
+      case 'Invalid login credentials':
+        return 'Email ou mot de passe incorrect';
+      case 'Email not confirmed':
+        return 'Veuillez vérifier votre email';
+      default:
+        return 'Une erreur est survenue lors de la connexion';
+    }
+  };
+
   // Gestion de la soumission du formulaire
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -21,15 +46,33 @@ export function LoginForm() {
     setFormSuccess(null);
     setSubmitting(true);
 
+    // Validation du formulaire avant l'envoi
+    if (!validateForm()) {
+      setSubmitting(false);
+      return;
+    }
+
     try {
       await signInWithEmail(email, password);
       setFormSuccess('Connexion réussie ! Vous pouvez cuisiner !');
     } catch (error: any) {
-      setFormError(error.message ?? 'Une erreur est survenue');
+      setFormError(getErrorMessage(error));
     } finally {
       setSubmitting(false);
     }
   };
+
+  // Éviter les re-renders inutiles
+  const handleEmailChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  }, []);
+
+  // Nettoyage des états sensibles
+  useEffect(() => {
+    return () => {
+      setPassword('');
+    };
+  }, []);
 
   return (
     <form className="auth-form" onSubmit={handleSubmit}>
@@ -39,7 +82,7 @@ export function LoginForm() {
         <input
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={handleEmailChange}
           required
           autoComplete="email"
           placeholder='RemiRatatouille@email.com'

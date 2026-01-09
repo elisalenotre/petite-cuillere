@@ -8,8 +8,6 @@ type Props = {
 };
 
 export default function RecipeCard({ recipe, onDelete, currentUserId }: Props) {
-  console.log("🔍 Recipe dans card:", recipe);
-  console.log("🆔 ID:", recipe.recettes_id);
 
   // Vérifier si l'utilisateur est le propriétaire
   const isOwner = currentUserId && currentUserId === recipe.user_id;
