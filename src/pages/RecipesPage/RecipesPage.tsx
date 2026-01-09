@@ -1,6 +1,6 @@
 // ------- Page des recettes --------
 // Liste, recherche, filtres, tri, pagination, ajout et suppression.
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import type { Recipe } from "../../types/recipes";
 
 import RecipesList from "../../components/recipes/RecipeList/RecipesList";
@@ -39,7 +39,7 @@ export default function RecipesPage() {
   // -----------------------------
   // Chargement des recettes
   // -----------------------------
-  async function loadRecipes() {
+  const loadRecipes = useCallback(async () => {
     try {
       // Utilise le service si disponible, sinon fallback simple (utile en tests où le module est partiellement mocké)
       const listFn = typeof recipesService.getRecipesWithClient === "function"
@@ -68,12 +68,12 @@ export default function RecipesPage() {
     } catch {
       setErrorMsg("Erreur lors du chargement des recettes.");
     }
-  }
+  }, [page, pageSize, search, selectedFilters, sort]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    loadRecipes();
-  }, [page, search, selectedFilters, sort]);
+    void loadRecipes();
+  }, [loadRecipes]);
 
   // Remise en page 1 lors des changements de filtres/tri
   useEffect(() => {
