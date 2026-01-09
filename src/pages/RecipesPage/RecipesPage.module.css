@@ -353,37 +353,67 @@
 .recipesPagination :global(.pagination-container) {
   display: flex;
   align-items: center;
-  gap: 1.6rem;
+  justify-content: space-between;
+  width: 100%;
 }
 
-.recipesPagination :global(.page-indicator) {
-  margin: 0 0.4rem;
-  font-weight: 500;
-  color: #7a5a38;
-  white-space: nowrap;
+.recipesPagination :global(.pagination-numbers) {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 0 2rem; /* espace entre les pilules et Précédent/Suivant */
 }
 
-.recipesPagination :global(button) {
+/* page-indicator retiré côté composant */
+
+/* Boutons pagination (précédent/suivant) plus légers */
+.recipesPagination :global(.pagination-btn) {
   padding: 0.6rem 1.2rem;
   border-radius: 999px;
-  border: 1px solid #b88d5c;
-  background: #fffaf4;
+  border: 1px solid #d4b896;
+  background: transparent;
   cursor: pointer;
   font-weight: 600;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
   color: #6c5333;
 }
 
-.recipesPagination :global(button:hover:not(:disabled)) {
-  background: #b88d5c;
-  color: #fffaf4;
-  transform: translateY(-1px);
+.recipesPagination :global(.pagination-btn:hover:not(:disabled)) {
+  background: #f5e9d8;
 }
 
-.recipesPagination :global(button:disabled) {
-  opacity: 0.4;
+.recipesPagination :global(.pagination-btn:disabled) {
+  opacity: 0.45;
   cursor: not-allowed;
-  transform: none;
+}
+
+/* Boutons numéros en pilule, style léger */
+.recipesPagination :global(.page-number) {
+  min-width: 40px;
+  height: 40px;
+  padding: 0 0.8rem;
+  border-radius: 999px;
+  border: 1px solid #d4b896;
+  background: transparent;
+  color: #6c5333;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.recipesPagination :global(.page-number:hover):not(.disabled) {
+  background: #f5e9d8;
+}
+
+.recipesPagination :global(.page-number.active) {
+  border-color: #a57845;
+  background: #fffaf4;
+  font-weight: 700;
+}
+
+.recipesPagination :global(.page-number.disabled) {
+  opacity: 0.5;
+  cursor: default;
 }
 
 /* RecipeForm */

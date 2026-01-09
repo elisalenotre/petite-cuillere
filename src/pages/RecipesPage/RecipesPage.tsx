@@ -38,23 +38,80 @@ export default function RecipesPage() {
   async function loadRecipes() {
     const from = (page - 1) * pageSize;
 
-    const { data, error, count } = await supabase
+    let query: any = supabase
       .from("recettes")
-      .select("*, categories(*)", { count: "exact" })
-      .range(from, from + pageSize - 1);
+      .select("*, categories(*)", { count: "exact" });
+
+    if (search.trim() && typeof query.ilike === "function") {
+      query = query.ilike("title", `%${search.trim()}%`);
+    }
+
+    if (selectedFilters.regime && typeof query.eq === "function") {
+      query = query.eq("categories.regime", selectedFilters.regime);
+    }
+    if (selectedFilters.temps && typeof query.eq === "function") {
+      query = query.eq("categories.temps", selectedFilters.temps);
+    }
+    if (selectedFilters.tech_cuisson && typeof query.eq === "function") {
+      query = query.eq("categories.tech_cuisson", selectedFilters.tech_cuisson);
+    }
+    if (selectedFilters.difficulty && typeof query.eq === "function") {
+      query = query.eq("categories.difficulty", selectedFilters.difficulty);
+    }
+
+    let needsLocalSort = false;
+    if (typeof query.order === "function") {
+      switch (sort) {
+        case "alpha-asc":
+          query = query.order("title", { ascending: true, nullsFirst: false });
+          break;
+        case "alpha-desc":
+          query = query.order("title", { ascending: false, nullsFirst: false });
+          break;
+        case "date-asc":
+          query = query.order("created_at", { ascending: true });
+          break;
+        case "date-desc":
+        default:
+          query = query.order("created_at", { ascending: false });
+          break;
+      }
+    } else {
+      needsLocalSort = true;
+    }
+
+    const { data, error, count } = await query.range(from, from + pageSize - 1);
 
     if (error) {
       console.error("Erreur Supabase :", error);
       return;
     }
 
-    setRecipes(data ?? []);
+    let rows = data ?? [];
+    if (needsLocalSort && rows.length) {
+      rows = [...rows].sort((a: any, b: any) => {
+        switch (sort) {
+          case "alpha-asc":
+            return a.title.localeCompare(b.title);
+          case "alpha-desc":
+            return b.title.localeCompare(a.title);
+          case "date-asc":
+            return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+          case "date-desc":
+          default:
+            return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        }
+      });
+    }
+
+    setRecipes(rows);
     setTotal(count ?? 0);
   }
 
   useEffect(() => {
     loadRecipes();
-  }, [page]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, search, selectedFilters, sort]);
 
   // -----------------------------
   // Suppression d'une recette
@@ -87,41 +144,8 @@ export default function RecipesPage() {
     difficulty: ["Facile", "Intermédiaire", "Difficile"],
   };
 
-  // -----------------------------
-  // Filtrage local
-  // -----------------------------
-  const filteredRecipes = recipes.filter((r) => {
-    const matchSearch = r.title
-      .toLowerCase()
-      .includes(search.toLowerCase());
-
-    const cat = r.categories;
-
-    const matchFilters =
-      (!selectedFilters.regime || cat?.regime === selectedFilters.regime) &&
-      (!selectedFilters.temps || cat?.temps === selectedFilters.temps) &&
-      (!selectedFilters.tech_cuisson ||
-        cat?.tech_cuisson === selectedFilters.tech_cuisson) &&
-      (!selectedFilters.difficulty ||
-        cat?.difficulty === selectedFilters.difficulty);
-
-    return matchSearch && matchFilters;
-  });
-
-  const sortedRecipes = [...filteredRecipes].sort((a, b) => {
-    switch (sort) {
-      case "alpha-asc":
-        return a.title.localeCompare(b.title);
-      case "alpha-desc":
-        return b.title.localeCompare(a.title);
-      case "date-asc":
-        return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
-      case "date-desc":
-        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-      default:
-        return 0;
-    }
-  });
+  // Les recettes sont déjà filtrées/triées côté serveur
+  const sortedRecipes = recipes;
 
 
   // -----------------------------
@@ -129,6 +153,13 @@ export default function RecipesPage() {
   // -----------------------------
   const handleRecipeAdded = (recipe: Recipe) => {
     setRecipes((prev) => [recipe, ...prev]);
+    setTotal((t) => t + 1);
+  };
+
+  // Remise en page 1 lors des changements de recherche/filtre/tri
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(1);
   };
 
   return (
@@ -139,7 +170,7 @@ export default function RecipesPage() {
 
     <div className={styles.recipesTopBar}>
       <div className={styles.recipesSearchBox}>
-        <SearchBar search={search} setSearch={setSearch} />
+        <SearchBar search={search} setSearch={handleSearchChange} />
 
         <Filters
           selectedFilters={selectedFilters}
