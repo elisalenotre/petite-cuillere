@@ -62,14 +62,14 @@ describe("RecipeCard", () => {
     expect(screen.queryByText("Facile")).not.toBeInTheDocument();
   });
 
-  it("a des liens corrects vers le détail et la page update (pour le propriétaire)", () => {
+  it("a des liens corrects vers le détail et l'édition (pour le propriétaire)", () => {
     setup(baseRecipe, "owner-1");
 
     const voirLink = screen.getByRole("link", { name: "Voir" });
     expect(voirLink).toHaveAttribute("href", "/recipes/abc-123");
 
     const modifLink = screen.getByRole("link", { name: "Modifier" });
-    expect(modifLink).toHaveAttribute("href", "/recipes/update/abc-123");
+    expect(modifLink).toHaveAttribute("href", "/recipes/abc-123?edit=1");
   });
 
   it("appelle onDelete avec l'id quand on clique sur Supprimer (pour le propriétaire)", async () => {

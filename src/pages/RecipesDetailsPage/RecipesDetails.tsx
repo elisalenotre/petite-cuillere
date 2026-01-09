@@ -1,6 +1,6 @@
 // ------- Page de détails d'une recette --------
 // Chargement, affichage et actions propriétaire (éditer/supprimer).
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
 import type { Recipe } from "../../types/recipes";
@@ -10,6 +10,7 @@ import styles from "./RecipesDetails.module.css";
 export default function RecipesDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -43,6 +44,20 @@ export default function RecipesDetails() {
 
     loadRecipe();
   }, [id]);
+
+  // Ouvrir automatiquement le modal si query ?edit=1 et que l'utilisateur est propriétaire
+  useEffect(() => {
+    if (loading) return;
+    if (!recipe) return;
+    const params = new URLSearchParams(location.search);
+    const wantsEdit = params.get('edit') === '1';
+    if (!wantsEdit) return;
+
+    const isOwner = currentUserId && recipe && currentUserId === recipe.user_id;
+    if (isOwner) {
+      setShowEditModal(true);
+    }
+  }, [loading, recipe, currentUserId, location.search]);
 
   // Fonction pour rafraîchir après modification
   const handleRecipeUpdated = (updatedRecipe: Recipe) => {

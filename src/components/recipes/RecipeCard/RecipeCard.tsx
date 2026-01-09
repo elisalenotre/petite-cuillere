@@ -46,7 +46,7 @@ export default function RecipeCard({ recipe, onDelete, currentUserId }: Props) {
           {/* Boutons "Modifier" et "Supprimer" uniquement pour le propriétaire */}
           {isOwner && (
             <>
-              <Link to={`/recipes/update/${recipe.recettes_id}`} title="Modifier">
+              <Link to={`/recipes/${recipe.recettes_id}?edit=1`} title="Modifier">
                 Modifier
               </Link>
               <button onClick={() => onDelete(recipe.recettes_id)} title="Supprimer">
