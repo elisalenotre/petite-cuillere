@@ -365,6 +365,10 @@
 }
 
 @media (max-width: 480px) {
+  .recipeDetailsContainer {
+    width: 100%;  
+  }
+
   .recipeDetailsTitle {
     font-size: 1.8rem;
   }
