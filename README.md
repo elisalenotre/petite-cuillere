@@ -215,10 +215,11 @@ erDiagram
   - Node version: `>=18`
 
 ### Scripts
-- `npm run dev` : lance Vite en développement
-- `npm run build` : build de production (TypeScript + Vite)
-- `npm run preview` : preview local du build
-- `npm run test` : lance Vitest en mode CLI
+- `npm run dev` : démarre Vite en mode développement
+- `npm run build` : génère le build de production (TypeScript + Vite)
+- `npm run preview` : lance un aperçu local du build
+- `npm run test` : exécute les tests avec Vitest en mode CLI
+- `npm run lint` : exécute ESLint en mode CLI
 
 ## Tests
 - Outils: Vitest + Testing Library + jsdom.
