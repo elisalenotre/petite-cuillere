@@ -1,7 +1,7 @@
 # Petite Cuillère 🥄
 
 ## Description
-**Petite Cuillère** est une application web de type *cookbook* permettant de gérer ses recettes personnelles.
+**Petite Cuillère** est une application web de type *cookbook* permettant de gérer ses recettes personnelles et retrouver les recettes des autres utilisateurs, passionnés de cuisine.
 Elle propose une authentification via Supabase, un CRUD complet sur les recettes, ainsi qu’un système de recherche, filtres, tri et pagination pour retrouver facilement ses plats.
 L’interface est pensée pour être claire, responsive et accessible.
 
@@ -15,13 +15,13 @@ L’interface est pensée pour être claire, responsive et accessible.
   - [x] OAuth (Google + GitHub)
 - [x] CRUD complet sur la ressource principale : **recipes**
   - [x] Create : ajout d’une recette
-  - [x] Read : liste + page détail
+  - [x] Read : liste des recettes + page détail d'une recette
   - [x] Update : modification d’une recette
   - [x] Delete : suppression d’une recette
 - [x] Recherche + filtrage + tri
   - [x] Recherche textuelle
   - [x] Filtres (régime, temps, technique de cuisson, difficulté)
-  - [x] Tri (date, alphabétique)
+  - [x] Tri (date, alphabétique, par auteur)
   - [x] Pagination
 - [x] UI/UX
   - [x] États de chargement, erreurs, messages de succès
@@ -44,13 +44,13 @@ L’interface est pensée pour être claire, responsive et accessible.
 
 ### Prérequis
 - Node.js 18+
-- npm ou yarn
-- Un projet Supabase (URL + Anon Key)
+- npm
+- Supabase (URL + Anon Key)
 
 ### Lancement en local
 1. Cloner le projet :
    ```bash
-   git clone <URL_DU_REPO>
+   git clone [https://github.com/elisalenotre/petite-cuillere.git]
    cd petite-cuillere
    ```
 2. Installer les dépendances
@@ -155,7 +155,7 @@ src/
 ## Guide de démo
 1. Connexion/Inscription : créer un compte, se connecter; vérifier persistance après rechargement.
 2. Liste des recettes : afficher la liste, observer les empty states si aucune recette.
-3. Recherche/Filtrage/Tri : saisir une requête, appliquer ≥2 filtres (ex. catégorie + durée), activer tri (alphabétique/date).
+3. Recherche/Filtrage/Tri : saisir une requête, appliquer ≥2 filtres (ex. catégorie + durée), activer tri (alphabétique/date/auteur).
 4. Détail : ouvrir une recette depuis la liste, vérifier les champs.
 5. Création/Édition : via `RecipeForm`, validation côté client; vérifier mise à jour de la liste.
 6. Suppression : supprimer une recette avec confirmation; vérifier rafraîchissement.
@@ -163,8 +163,8 @@ src/
 8. 404 : tester une route inconnue.
 
 ## Base de données & RLS
-- Tables : `users` (Supabase Auth), `recipes` (liée à `user_id`), `categories`.
-- Politiques RLS : configurées côté Supabase et **testées OK** — les utilisateurs ne voient que **leurs propres données**; données publiques limitées si applicable.
+- Tables : `users` (Supabase Auth), `recipes` (liée à `user_id` et `cat_id`), `categories`.
+- Politiques RLS : configurées côté Supabase.
 - Variables d’environnement requises : `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`.
 
 ### Schéma (Mermaid)
@@ -173,7 +173,7 @@ erDiagram
     users ||--o{ recipes : owns
     recipes }o--|| categories : belongs_to
 
-    users {
+    users (créée par Supabase) {
         uuid id PK
         string email
         timestamp created_at
@@ -181,19 +181,20 @@ erDiagram
 
     categories {
         uuid id PK
-        string name
-        string color
+        text cuisson 
+        text regime
+        text temps
+        text difficulty
     }
 
     recipes {
         uuid id PK
         uuid user_id FK
-        uuid category_id FK
-        string title
+        uuid cat_id FK
+        text title
+        text img
         text description
-        int duration_minutes
-        string difficulty
-        timestamp created_at
+        created_at timestampz
     }
 ```
 
@@ -202,7 +203,7 @@ erDiagram
   - SELECT: lecture publique
   - INSERT: `user_id = auth.uid()` (CHECK)
   - UPDATE: `user_id = auth.uid()` (USING + CHECK)
-  - DELETE: `user_id = auth.uid()`
+  - DELETE: `user_id = auth.uid()` (CHECK)
 - `categories`: lecture publique et écriture réservée à l’utilisateur propriétaire.
 
 ## Déploiement
@@ -228,9 +229,7 @@ erDiagram
 ## Accessibilité
 - Navigation clavier et focus visibles à assurer sur les parcours critiques.
 - Utilisation de labels et attributs ARIA sur formulaires.
-- Contrastes suffisants via CSS Modules.
+- Contrastes suffisants (vérifiés avec Lighthouse) via CSS Modules.
 
 ## Autrices
 Jihad DOUHI — jihad.douhipro@gmail.com & Elisa LENOTRE - elisalenotre6@gmail.com
-
-
