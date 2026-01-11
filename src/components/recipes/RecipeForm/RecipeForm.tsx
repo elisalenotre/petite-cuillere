@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { supabase } from "../../../supabase";
+import { createRecipe, updateRecipe } from "../../../services/recipesService";
 import type { Recipe } from "../../../types/recipes";
 
 type Props = {
@@ -26,7 +26,6 @@ export default function RecipeForm({ onClose, onRecipeAdded, existingRecipe }: P
   // Pré-remplir le formulaire si mode édition
   useEffect(() => {
     if (existingRecipe) {
-      console.log("🔍 Recette existante:", existingRecipe);
       setTitle(existingRecipe.title || "");
       setImg(existingRecipe.img || "");
       setDescription(existingRecipe.description || "");
@@ -62,142 +61,35 @@ export default function RecipeForm({ onClose, onRecipeAdded, existingRecipe }: P
     setSubmitting(true);
 
     try {
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
-
-      if (userError || !user) {
-        setFormError("Vous devez être connecté.");
-        setSubmitting(false);
-        return;
-      }
-
-      // Recherche ou création de catégorie
-      const { data: existingCat, error: existingCatError } = await supabase
-        .from("categories")
-        .select("cat_id")
-        .eq("regime", regime)
-        .eq("temps", temps)
-        .eq("tech_cuisson", techCuisson)
-        .eq("difficulty", difficulty)
-        .maybeSingle();
-
-      if (existingCatError) {
-        console.error("❌ Erreur recherche catégorie:", existingCatError);
-        setFormError("Erreur lors de la recherche de la catégorie.");
-        setSubmitting(false);
-        return;
-      }
-
-      let catId: string;
-
-      if (existingCat?.cat_id) {
-        catId = existingCat.cat_id;
-        console.log("✅ Catégorie existante trouvée:", catId);
-      } else {
-        const { data: newCat, error: catError } = await supabase
-          .from("categories")
-          .insert([
-            {
-              regime,
-              temps,
-              tech_cuisson: techCuisson,
-              difficulty,
-            },
-          ])
-          .select("cat_id")
-          .single();
-
-        if (catError) {
-          console.error("❌ Erreur création catégorie:", catError);
-          setFormError("Erreur lors de la création de la catégorie.");
-          setSubmitting(false);
-          return;
-        }
-
-        catId = newCat.cat_id;
-        console.log("✅ Nouvelle catégorie créée:", catId);
-      }
-
-      // Mode édition : UPDATE
       if (isEditing && existingRecipe) {
-        console.log("🔄 Mode édition - ID:", existingRecipe.recettes_id);
-        console.log("📝 Données à mettre à jour:", { title, img, description, catId });
-        
-        // Faire l'UPDATE
-        const { error: updateError } = await supabase
-          .from("recettes")
-          .update({
-            title,
-            img: img || null,
-            description: description || null,
-            cat_id: catId,
-          })
-          .eq("recettes_id", existingRecipe.recettes_id);
-
-        if (updateError) {
-          console.error("❌ Erreur UPDATE:", updateError);
-          setFormError("Erreur lors de la modification de la recette.");
-          setSubmitting(false);
-          return;
-        }
-
-        console.log("✅ UPDATE réussi");
-
-        // Récupérer la recette mise à jour avec les catégories
-        const { data: updatedRecipe, error: fetchError } = await supabase
-          .from("recettes")
-          .select("*, categories(*)")
-          .eq("recettes_id", existingRecipe.recettes_id)
-          .single();
-
-        console.log("📦 Recette mise à jour récupérée:", updatedRecipe);
-
-        if (fetchError || !updatedRecipe) {
-          console.error("❌ Erreur récupération:", fetchError);
-          setFormError("Erreur lors de la récupération de la recette.");
-          setSubmitting(false);
-          return;
-        }
-
-        console.log("✅ Recette mise à jour avec succès!");
-        onRecipeAdded(updatedRecipe as Recipe);
+        const updated = await updateRecipe(existingRecipe.recettes_id, {
+          title,
+          description: description || null,
+          imgUrl: img || null,
+          regime,
+          temps,
+          tech_cuisson: techCuisson,
+          difficulty,
+        });
+        onRecipeAdded(updated as Recipe);
         onClose();
-      }
-      // Mode création : INSERT
-      else {
-        console.log("➕ Mode création");
-        
-        const { data: newRecipe, error: recipeError } = await supabase
-          .from("recettes")
-          .insert([
-            {
-              title,
-              img: img || null,
-              description: description || null,
-              cat_id: catId,
-              user_id: user.id,
-            },
-          ])
-          .select("*, categories(*)")
-          .single();
-
-        if (recipeError) {
-          console.error("❌ Erreur création recette:", recipeError);
-          setFormError("Erreur lors de l'ajout de la recette.");
-          setSubmitting(false);
-          return;
-        }
-
-        console.log("✅ Recette créée:", newRecipe);
-        onRecipeAdded(newRecipe as Recipe);
+      } else {
+        const created = await createRecipe({
+          title,
+          description: description || null,
+          imgUrl: img || null,
+          regime,
+          temps,
+          tech_cuisson: techCuisson,
+          difficulty,
+        });
+        onRecipeAdded(created as Recipe);
         resetForm();
         onClose();
       }
-    } catch (err) {
-      console.error("❌ Erreur globale:", err);
-      setFormError("Une erreur inattendue s'est produite.");
+    } catch (err: unknown) {
+      const message = typeof err === 'string' ? err : (err as { message?: string }).message;
+      setFormError(message || "Une erreur inattendue s'est produite.");
       setSubmitting(false);
     } finally {
       setSubmitting(false);

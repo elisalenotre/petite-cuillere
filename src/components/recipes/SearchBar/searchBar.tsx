@@ -1,3 +1,5 @@
+// ------- Barre de recherche --------
+// Filtre les recettes par titre.
 type Props = {
   search: string;
   setSearch: (s: string) => void;

@@ -1,3 +1,6 @@
+// Initialisation du client Supabase (lecture des variables d'environnement Vite).
+// ------- Client Supabase --------
+// Initialise le client à partir des variables d'environnement Vite.
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;

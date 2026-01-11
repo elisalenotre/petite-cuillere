@@ -1,3 +1,5 @@
+// ------- Filtres et tri des recettes --------
+// Sélecteurs (régime, temps, technique, difficulté) et tri.
 import React from "react";
 
 export type SortValue = "date-desc" | "date-asc" | "alpha-asc" | "alpha-desc";
@@ -8,6 +10,7 @@ type Props = {
     temps: string;
     tech_cuisson: string;
     difficulty: string;
+    owner: string; // "" | "mine" | "others"
   };
   setSelectedFilters: React.Dispatch<
     React.SetStateAction<{
@@ -15,6 +18,7 @@ type Props = {
       temps: string;
       tech_cuisson: string;
       difficulty: string;
+      owner: string;
     }>
   >;
   options: {
@@ -37,6 +41,31 @@ export default function Filters({
 }: Props) {
   return (
     <div className="filters-wrapper">
+      {/* Auteur (propriétaire) */}
+      <select
+        aria-label="Filtre auteur"
+        value={selectedFilters.owner}
+        onChange={(e) =>
+          setSelectedFilters((prev) => ({ ...prev, owner: e.target.value }))
+        }
+      >
+        <option value="">Tous</option>
+        <option value="mine">Mes recettes</option>
+        <option value="others">Recettes des autres</option>
+      </select>
+
+      {/* TRI */}
+      <select
+        aria-label="Tri des recettes"
+        value={sort}
+        onChange={(e) => setSort(e.target.value as SortValue)}
+      >
+        <option value="date-desc">Les plus récentes</option>
+        <option value="date-asc">Les plus anciennes</option>
+        <option value="alpha-asc">A → Z</option>
+        <option value="alpha-desc">Z → A</option>
+      </select>
+
       {/* Régime */}
       <select
         aria-label="Filtre régime"
@@ -93,7 +122,10 @@ export default function Filters({
         aria-label="Filtre difficulté"
         value={selectedFilters.difficulty}
         onChange={(e) =>
-          setSelectedFilters((prev) => ({ ...prev, difficulty: e.target.value }))
+          setSelectedFilters((prev) => ({
+            ...prev,
+            difficulty: e.target.value,
+          }))
         }
       >
         <option value="">Difficulté</option>
@@ -102,18 +134,6 @@ export default function Filters({
             {d}
           </option>
         ))}
-      </select>
-
-      {/* TRI */}
-      <select
-        aria-label="Tri des recettes"
-        value={sort}
-        onChange={(e) => setSort(e.target.value as SortValue)}
-      >
-        <option value="date-desc">Les plus récentes</option>
-        <option value="date-asc">Les plus anciennes</option>
-        <option value="alpha-asc">A → Z</option>
-        <option value="alpha-desc">Z → A</option>
       </select>
     </div>
   );

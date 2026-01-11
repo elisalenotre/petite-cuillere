@@ -2,10 +2,14 @@
 // Affiche un formulaire d'inscription avec gestion des erreurs et succès.
 
 import { type FormEvent, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
+import { supabase } from '../../../supabase';
 
 export function SignupForm() {
   const { signUpWithEmail } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // États pour les champs du formulaire et messages d'état
   const [email, setEmail] = useState('');
@@ -23,11 +27,18 @@ export function SignupForm() {
 
     try {
       await signUpWithEmail(email, password);
-      setFormSuccess(
-        "Inscription réussie ! Vérifie tes mails pour confirmer ton compte et commencer à cuisiner."
-      );
-    } catch (error: any) {
-      setFormError(error.message ?? 'Une erreur est survenue');
+      const { data } = await supabase.auth.getSession();
+      if (data.session) {
+        const from = (location.state as { from?: { pathname?: string } } | null)?.from?.pathname as string | undefined;
+        navigate(from ?? '/recipes', { replace: true });
+      } else {
+        setFormSuccess(
+          'Regardez vos mails et confirmez votre adresse email pour pouvoir commencer à cuisiner, chef.fe'
+        );
+      }
+    } catch (error: unknown) {
+      const message = typeof error === 'string' ? error : (error as { message?: string }).message;
+      setFormError(message ?? 'Une erreur est survenue');
     } finally {
       setSubmitting(false);
     }

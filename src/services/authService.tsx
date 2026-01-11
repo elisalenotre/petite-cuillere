@@ -3,9 +3,9 @@
 
 import { supabase } from '../supabase';
 
-function mapAuthError(error: any): string {
-  const status = (error?.status ?? error?.code) as number | string | undefined;
-  const msg = String(error?.message ?? '').toLowerCase();
+function mapAuthError(error: unknown): string {
+  const status = (error as { status?: number; code?: number | string })?.status ?? (error as { status?: number; code?: number | string })?.code;
+  const msg = String((error as { message?: string })?.message ?? '').toLowerCase();
 
   if (typeof status === 'number') {
     switch (status) {
@@ -28,7 +28,7 @@ function mapAuthError(error: any): string {
     return 'Email ou mot de passe incorrect.';
   }
   if (msg.includes('email not confirmed')) {
-    return 'Votre email doit être confirmé avant connexion.';
+    return 'Regardez vos mails et confirmez votre adresse email pour pouvoir commencer à cuisiner, chef.fe';
   }
 
   return "Une erreur est survenue lors de l'authentification.";
@@ -38,8 +38,6 @@ function mapAuthError(error: any): string {
 export async function signUpWithEmailService(email: string, password: string) {
   const { error } = await supabase.auth.signUp({ email, password });
   if (error) {
-    // eslint-disable-next-line no-console
-    console.error('[Auth] signUp error:', { status: (error as any)?.status, message: error.message, name: error.name });
     throw new Error(mapAuthError(error));
   }
 }
@@ -48,8 +46,6 @@ export async function signUpWithEmailService(email: string, password: string) {
 export async function signInWithEmailService(email: string, password: string) {
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) {
-    // eslint-disable-next-line no-console
-    console.error('[Auth] signIn error:', { status: (error as any)?.status, message: error.message, name: error.name });
     throw new Error(mapAuthError(error));
   }
 }
@@ -58,8 +54,6 @@ export async function signInWithEmailService(email: string, password: string) {
 export async function signOutService() {
   const { error } = await supabase.auth.signOut();
   if (error) {
-    // eslint-disable-next-line no-console
-    console.error('[Auth] signOut error:', { status: (error as any)?.status, message: error.message, name: error.name });
     throw new Error(mapAuthError(error));
   }
 }

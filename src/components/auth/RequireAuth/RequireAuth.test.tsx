@@ -1,4 +1,4 @@
-import { describe, it, vi, afterEach, expect } from 'vitest';
+import { describe, it, vi, afterEach, expect, type Mock } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { RequireAuth } from './RequireAuth';
 import { useLocation } from 'react-router-dom';
@@ -55,7 +55,7 @@ describe('RequireAuth', () => {
   });
 
   it('passe bien la location courante dans le state de Navigate', () => {
-    (useLocation as jest.Mock).mockReturnValue({ pathname: '/test-location' });
+    (useLocation as unknown as Mock).mockReturnValue({ pathname: '/test-location' });
     mockUseAuth.mockReturnValue({ user: null, loading: false });
     render(
       <RequireAuth>
