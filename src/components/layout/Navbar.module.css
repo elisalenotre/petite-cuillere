@@ -105,3 +105,65 @@
   border: 1px solid var(--danger-weak);
   font-size: 0.75rem;
 }
+
+/* --- Responsive (réductions légères) --- */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0.6rem 1rem;
+  }
+
+  .navbarLogo {
+    width: 20px;
+  }
+
+  .navbarTitle {
+    font-size: 1.6rem;
+  }
+
+  .navbarRight {
+    gap: 0.6rem;
+  }
+
+  .navbarUser {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .navbarLogoutBtn {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.8rem;
+  }
+
+  .navbarError {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0.5rem 0.8rem;
+  }
+
+  .navbarLogo {
+    width: 18px;
+  }
+
+  .navbarTitle {
+    font-size: 1.4rem;
+  }
+
+  .navbarRight {
+    gap: 0.5rem;
+  }
+
+  .navbarUser {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.45rem;
+  }
+
+  .navbarLogoutBtn {
+    font-size: 0.78rem;
+    padding: 0.32rem 0.65rem;
+  }
+}
