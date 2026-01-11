@@ -173,7 +173,7 @@ erDiagram
     users ||--o{ recipes : owns
     recipes }o--|| categories : belongs_to
 
-    users (créée par Supabase) {
+    users créée par Supabase {
         uuid id PK
         string email
         timestamp created_at
