@@ -21,7 +21,6 @@ export default function AppRouter() {
         }
       />
 
-         {/* ⬅️ Ajoutez cette route */}
         <Route
           path="/recipes/:id"
           element={
