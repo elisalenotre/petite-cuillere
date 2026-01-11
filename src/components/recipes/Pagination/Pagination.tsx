@@ -1,3 +1,5 @@
+// ------- Composant de pagination --------
+// Navigation précédente/suivante et numéros de page avec ellipses.
 type Props = {
   page: number;
   setPage: (p: number) => void;
@@ -61,11 +63,7 @@ const Pagination = ({ page, setPage, total, pageSize }: Props) => {
             ))}
           </div>
         )}
-        
-        <span className="page-indicator">
-          Page {page} / {totalPages}
-        </span>
-        
+
         <button 
           className="pagination-btn next-btn"
           onClick={() => page < totalPages && setPage(page + 1)} 

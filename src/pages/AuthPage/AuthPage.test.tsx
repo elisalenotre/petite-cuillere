@@ -1,7 +1,20 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi, type Mock } from 'vitest';
 import { AuthPage } from './AuthPage';
+import { MemoryRouter } from 'react-router-dom';
+// Mock léger de useNavigate pour observer les redirections (évite les variables top-level)
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+  const navigateSpy = vi.fn();
+  (globalThis as any).__navigateMock = navigateSpy;
+  return {
+    ...actual,
+    useNavigate: () => navigateSpy,
+  };
+});
+
+const getNavigateMock = () => (globalThis as any).__navigateMock as Mock;
 import { useAuth } from '../../contexts/AuthContext';
 
 // Mock du hook useAuth
@@ -45,7 +58,11 @@ beforeEach(() => {
 describe('AuthPage', () => {
   // Affichage initial (login)
   it('affiche le formulaire de connexion par défaut', () => {
-    render(<AuthPage />);
+    render(
+      <MemoryRouter>
+        <AuthPage />
+      </MemoryRouter>
+    );
 
     // Champs requis
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
@@ -59,7 +76,11 @@ describe('AuthPage', () => {
   // Login
   it('permet de se connecter et appelle signInWithEmail avec les bonnes valeurs', async () => {
     const user = userEvent.setup();
-    render(<AuthPage />);
+    render(
+      <MemoryRouter>
+        <AuthPage />
+      </MemoryRouter>
+    );
 
     await user.type(screen.getByLabelText(/email/i), 'test@example.com');
     await user.type(screen.getByLabelText(/mot de passe/i), 'password123');
@@ -76,7 +97,11 @@ describe('AuthPage', () => {
   // Signup
   it("permet de s'inscrire et appelle signUpWithEmail", async () => {
     const user = userEvent.setup();
-    render(<AuthPage />);
+    render(
+      <MemoryRouter>
+        <AuthPage />
+      </MemoryRouter>
+    );
 
     await user.click(screen.getByRole('button', { name: /s'inscrire/i }));
 
@@ -102,14 +127,18 @@ describe('AuthPage', () => {
       signOut,
     });
 
-    render(<AuthPage />);
+    render(
+      <MemoryRouter>
+        <AuthPage />
+      </MemoryRouter>
+    );
 
     expect(screen.getByText(/chargement de la session/i)).toBeInTheDocument();
   });
 
   // User déjà connecté
-  it('affiche le message "déjà connecté" quand user est défini', () => {
-    mockedUseAuth.mockReturnValueOnce({
+  it('déclenche une redirection quand user est défini', async () => {
+    mockedUseAuth.mockReturnValue({
       user: { email: 'logged@example.com' } as any,
       session: {} as any,
       loading: false,
@@ -120,18 +149,26 @@ describe('AuthPage', () => {
       signOut,
     });
 
-    render(<AuthPage />);
+    render(
+      <MemoryRouter>
+        <AuthPage />
+      </MemoryRouter>
+    );
 
-    expect(
-      screen.getByText(/tu es connecté·e en tant que/i)
-    ).toBeInTheDocument();
-    expect(screen.getByText(/logged@example.com/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(getNavigateMock()).toHaveBeenCalled();
+    });
+    expect(getNavigateMock()).toHaveBeenCalledWith('/recipes', { replace: true });
   });
 
   // Login via Google
   it('appelle signInWithGoogle quand on clique sur le bouton Google', async () => {
     const user = userEvent.setup();
-    render(<AuthPage />);
+    render(
+      <MemoryRouter>
+        <AuthPage />
+      </MemoryRouter>
+    );
 
     const googleBtn = screen.getByRole('button', {
       name: /continuer avec google/i,
@@ -145,7 +182,11 @@ describe('AuthPage', () => {
   // Login via GitHub
   it('appelle signInWithGitHub quand on clique sur le bouton GitHub', async () => {
     const user = userEvent.setup();
-    render(<AuthPage />);
+    render(
+      <MemoryRouter>
+        <AuthPage />
+      </MemoryRouter>
+    );
 
     const githubBtn = screen.getByRole('button', {
       name: /continuer avec github/i,
@@ -156,11 +197,9 @@ describe('AuthPage', () => {
     expect(signInWithGitHub).toHaveBeenCalledTimes(1);
   });
 
-  // Logout
-  it("appelle signOut quand on clique sur 'Se déconnecter'", async () => {
-    const user = userEvent.setup();
-
-    mockedUseAuth.mockReturnValueOnce({
+  // Logout (non applicable): vérifie la redirection quand user est défini
+  it("déclenche la redirection et n'appelle pas signOut quand user est défini", async () => {
+    mockedUseAuth.mockReturnValue({
       user: { email: 'logged@example.com' } as any,
       session: {} as any,
       loading: false,
@@ -171,14 +210,16 @@ describe('AuthPage', () => {
       signOut,
     });
 
-    render(<AuthPage />);
+    render(
+      <MemoryRouter>
+        <AuthPage />
+      </MemoryRouter>
+    );
 
-    const logoutBtn = screen.getByRole('button', {
-      name: /se déconnecter/i,
+    await waitFor(() => {
+      expect(getNavigateMock()).toHaveBeenCalled();
     });
-
-    await user.click(logoutBtn);
-
-    expect(signOut).toHaveBeenCalledTimes(1);
+    expect(getNavigateMock()).toHaveBeenCalledWith('/recipes', { replace: true });
+    expect(signOut).not.toHaveBeenCalled();
   });
 });

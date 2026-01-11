@@ -1,3 +1,5 @@
+// ------- Carte de recette --------
+// Affiche une recette, ses catégories et actions (voir/modifier/supprimer).
 import { Link } from "react-router-dom";
 import type { Recipe } from "../../../types/recipes";
 
@@ -14,7 +16,14 @@ export default function RecipeCard({ recipe, onDelete, currentUserId }: Props) {
 
   return (
     <div className="recipe-card">
-      <img src={recipe.img || undefined} alt={recipe.title} />
+      {recipe.img ? (
+        <img src={recipe.img} alt={recipe.title} loading="lazy" />
+      ) : (
+        <div className="recipe-card-placeholder" aria-label="Image indisponible">
+          <span className="emoji" aria-hidden="true">🍽️</span>
+          <span>Pas encore d'image. A vous d'imaginer !</span>
+        </div>
+      )}
 
       <div className="recipe-card-content">
         <h2>{recipe.title}</h2>
@@ -37,7 +46,7 @@ export default function RecipeCard({ recipe, onDelete, currentUserId }: Props) {
           {/* Boutons "Modifier" et "Supprimer" uniquement pour le propriétaire */}
           {isOwner && (
             <>
-              <Link to={`/recipes/update/${recipe.recettes_id}`} title="Modifier">
+              <Link to={`/recipes/${recipe.recettes_id}?edit=1`} title="Modifier">
                 Modifier
               </Link>
               <button onClick={() => onDelete(recipe.recettes_id)} title="Supprimer">

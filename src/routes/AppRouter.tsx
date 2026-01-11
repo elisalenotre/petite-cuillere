@@ -1,3 +1,5 @@
+// ------- Routeur principal de l'application --------
+// Déclare les routes publiques, protégées et la page 404.
 import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthPage } from "../pages/AuthPage/AuthPage";
 import RecipesPage from "../pages/RecipesPage/RecipesPage";

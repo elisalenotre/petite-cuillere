@@ -21,9 +21,12 @@ describe("Pagination", () => {
     return render(<Pagination {...defaultProps} {...props} />);
   }
 
-  it("affiche l’indicateur Page x / y", () => {
+  it("affiche la bonne page active via les pilules", () => {
     setup({ page: 2, total: 60, pageSize: 10 }); // 6 pages
-    expect(screen.getByText("Page 2 / 6")).toBeInTheDocument();
+    const active = screen.getByRole("button", { name: "Page 2" });
+    expect(active).toHaveAttribute("aria-current", "page");
+    // Il n'y a plus d'indicateur texte "Page x / y"
+    expect(screen.queryByText(/Page\s+\d+\s+\/\s+\d+/)).not.toBeInTheDocument();
   });
 
   it("désactive 'Précédent' sur la première page", async () => {

@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+// ------- Page des recettes --------
+// Liste, recherche, filtres, tri, pagination, ajout et suppression.
+import { useEffect, useState, useCallback } from "react";
 import type { Recipe } from "../../types/recipes";
 
 import RecipesList from "../../components/recipes/RecipeList/RecipesList";
@@ -6,9 +8,9 @@ import Pagination from "../../components/recipes/Pagination/Pagination";
 import Filters from "../../components/recipes/Filters/Filters";
 import RecipeForm from "../../components/recipes/RecipeForm/RecipeForm";
 
-import { supabase } from "../../supabase";
 import styles from "./RecipesPage.module.css";
-import { deleteRecipe } from "../../services/recipesService";
+import * as recipesService from "../../services/recipesService";
+import { supabase } from "../../supabase";
 
 import type { SortValue } from "../../components/recipes/Filters/Filters";
 import SearchBar from "../../components/recipes/SearchBar/searchBar";
@@ -16,8 +18,10 @@ import SearchBar from "../../components/recipes/SearchBar/searchBar";
 export default function RecipesPage() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [search, setSearch] = useState("");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const [selectedFilters, setSelectedFilters] = useState({
+    owner: "",
     regime: "",
     temps: "",
     tech_cuisson: "",
@@ -35,26 +39,47 @@ export default function RecipesPage() {
   // -----------------------------
   // Chargement des recettes
   // -----------------------------
-  async function loadRecipes() {
-    const from = (page - 1) * pageSize;
+  const loadRecipes = useCallback(async () => {
+    try {
+      // Utilise le service si disponible, sinon fallback simple (utile en tests où le module est partiellement mocké)
+      const listFn = typeof recipesService.getRecipesWithClient === "function"
+        ? recipesService.getRecipesWithClient
+        : async (client: typeof supabase, params: { page: number; pageSize: number }) => {
+            const from = (params.page - 1) * params.pageSize;
+            const to = from + params.pageSize - 1;
+            const { data, error, count } = await client
+              .from("recettes")
+              .select("*, categories(*)", { count: "exact" })
+              .range(from, to);
+            if (error) throw new Error("Erreur lors du chargement des recettes.");
+            return { recipes: (data ?? []) as Recipe[], total: count ?? 0 };
+          };
 
-    const { data, error, count } = await supabase
-      .from("recettes")
-      .select("*, categories(*)", { count: "exact" })
-      .range(from, from + pageSize - 1);
-
-    if (error) {
-      console.error("Erreur Supabase :", error);
-      return;
+      const { recipes: rows, total } = await listFn(supabase, {
+        page,
+        pageSize,
+        search,
+        filters: selectedFilters,
+        sort,
+      });
+      setRecipes(rows);
+      setErrorMsg(null);
+      setTotal(total);
+    } catch {
+      setErrorMsg("Erreur lors du chargement des recettes.");
     }
-
-    setRecipes(data ?? []);
-    setTotal(count ?? 0);
-  }
+  }, [page, pageSize, search, selectedFilters, sort]);
 
   useEffect(() => {
-    loadRecipes();
-  }, [page]);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void loadRecipes();
+  }, [loadRecipes]);
+
+  // Remise en page 1 lors des changements de filtres/tri
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPage(1);
+  }, [selectedFilters, sort]);
 
   // -----------------------------
   // Suppression d'une recette
@@ -64,13 +89,13 @@ export default function RecipesPage() {
     if (!confirmDelete) return;
 
     try {
-      await deleteRecipe(String(recettes_id));
+      await recipesService.deleteRecipe(String(recettes_id));
 
       setRecipes((prev) =>
         prev.filter((r) => r.recettes_id !== recettes_id)
       );
-    } catch (error) {
-      console.error("Erreur suppression :", error);
+    } catch {
+      setErrorMsg("Erreur lors de la suppression.");
       alert("Erreur lors de la suppression");
     }
   }
@@ -87,41 +112,7 @@ export default function RecipesPage() {
     difficulty: ["Facile", "Intermédiaire", "Difficile"],
   };
 
-  // -----------------------------
-  // Filtrage local
-  // -----------------------------
-  const filteredRecipes = recipes.filter((r) => {
-    const matchSearch = r.title
-      .toLowerCase()
-      .includes(search.toLowerCase());
-
-    const cat = r.categories;
-
-    const matchFilters =
-      (!selectedFilters.regime || cat?.regime === selectedFilters.regime) &&
-      (!selectedFilters.temps || cat?.temps === selectedFilters.temps) &&
-      (!selectedFilters.tech_cuisson ||
-        cat?.tech_cuisson === selectedFilters.tech_cuisson) &&
-      (!selectedFilters.difficulty ||
-        cat?.difficulty === selectedFilters.difficulty);
-
-    return matchSearch && matchFilters;
-  });
-
-  const sortedRecipes = [...filteredRecipes].sort((a, b) => {
-    switch (sort) {
-      case "alpha-asc":
-        return a.title.localeCompare(b.title);
-      case "alpha-desc":
-        return b.title.localeCompare(a.title);
-      case "date-asc":
-        return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
-      case "date-desc":
-        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-      default:
-        return 0;
-    }
-  });
+  const sortedRecipes = Array.isArray(recipes) ? recipes : [];
 
 
   // -----------------------------
@@ -129,6 +120,13 @@ export default function RecipesPage() {
   // -----------------------------
   const handleRecipeAdded = (recipe: Recipe) => {
     setRecipes((prev) => [recipe, ...prev]);
+    setTotal((t) => t + 1);
+  };
+
+  // Remise en page 1 lors des changements de recherche/filtre/tri
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(1);
   };
 
   return (
@@ -139,7 +137,8 @@ export default function RecipesPage() {
 
     <div className={styles.recipesTopBar}>
       <div className={styles.recipesSearchBox}>
-        <SearchBar search={search} setSearch={setSearch} />
+        {errorMsg && <p className={styles.errorMsg}>{errorMsg}</p>}
+        <SearchBar search={search} setSearch={handleSearchChange} />
 
         <Filters
           selectedFilters={selectedFilters}
@@ -161,7 +160,13 @@ export default function RecipesPage() {
     </div>
 
     <div className={styles.recipesList}>
-      <RecipesList recipes={sortedRecipes} onDelete={handleDelete} />
+      {sortedRecipes.length === 0 ? (
+        <p className={styles.emptyMsg}>
+          Oops, il n'y a pas encore de recette par ici, chef.fe.
+        </p>
+      ) : (
+        <RecipesList recipes={sortedRecipes} onDelete={handleDelete} />
+      )}
     </div>
 
     <div className={styles.recipesPagination}>

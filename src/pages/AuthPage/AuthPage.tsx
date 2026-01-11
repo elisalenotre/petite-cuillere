@@ -1,4 +1,7 @@
-import { useState } from 'react';
+// ------- Page d'authentification --------
+// Onglets connexion/inscription, OAuth et redirection si connecté.
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { LoginForm } from '../../components/auth/Login/LoginForm';
 import { SignupForm } from '../../components/auth/SignUp/SignupForm';
@@ -6,7 +9,9 @@ import styles from './AuthPage.module.css';
 import spoonLogo from '../../assets/spoon.svg';
 
 export function AuthPage() {
-  const { signInWithGoogle, signInWithGitHub, signOut, loading, user } = useAuth();
+  const { signInWithGoogle, signInWithGitHub, loading, user } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [globalError, setGlobalError] = useState<string | null>(null);
 
@@ -27,41 +32,19 @@ export function AuthPage() {
       setGlobalError('Oups, la connexion avec GitHub a échoué.');
     }
   };
-
-  const handleLogout = async () => {
-    setGlobalError(null);
-    try {
-      await signOut();
-    } catch {
-      setGlobalError('Impossible de se déconnecter.');
+  useEffect(() => {
+    if (!loading && user) {
+      const from = (location.state as { from?: { pathname?: string } } | null)?.from?.pathname as string | undefined;
+      navigate(from ?? '/recipes', { replace: true });
     }
-  };
+  }, [loading, user, location, navigate]);
 
   if (loading) {
     return <p className={styles['auth-loading']}>Chargement de la session... Nous cuisinons...</p>;
   }
 
   if (user) {
-    return (
-      <main className={styles['auth-page']}>
-        <div className={styles['auth-layout']}>
-          <header className={styles['auth-header']}>
-            <img src={spoonLogo} alt="" className={styles['auth-logo']} />
-            <h1 className={styles['auth-title']}>Petite Cuillère</h1>
-          </header>
-
-          <section className={`${styles['auth-card']} ${styles['auth-card--logged']}`}>
-            <p>Tu es connecté·e en tant que {user.email}</p>
-
-            {globalError && <p className={styles['auth-global-error']}>{globalError}</p>}
-
-            <button onClick={handleLogout} className={styles['auth-logout-btn']}>
-              Se déconnecter
-            </button>
-          </section>
-        </div>
-      </main>
-    );
+    return <p className={styles['auth-loading']}>Redirection en cours... Nous cuisinons...</p>;
   }
 
   return (

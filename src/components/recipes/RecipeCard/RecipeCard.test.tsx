@@ -10,6 +10,7 @@ const baseRecipe = {
   recettes_id: "abc-123",
   title: "Pâtes pesto",
   img: "https://example.com/pates.jpg",
+  user_id: "owner-1",
   categories: {
     tech_cuisson: "Poêle",
     regime: "Vegan",
@@ -18,12 +19,12 @@ const baseRecipe = {
   },
 } as any;
 
-function setup(recipe = baseRecipe) {
+function setup(recipe = baseRecipe, currentUserId: string | null = "owner-1") {
   const onDelete = vi.fn();
 
   render(
     <MemoryRouter>
-      <RecipeCard recipe={recipe} onDelete={onDelete} currentUserId={null} />
+      <RecipeCard recipe={recipe} onDelete={onDelete} currentUserId={currentUserId} />
     </MemoryRouter>
   );
 
@@ -61,18 +62,18 @@ describe("RecipeCard", () => {
     expect(screen.queryByText("Facile")).not.toBeInTheDocument();
   });
 
-  it("a des liens corrects vers le détail et la page update", () => {
-    setup();
+  it("a des liens corrects vers le détail et l'édition (pour le propriétaire)", () => {
+    setup(baseRecipe, "owner-1");
 
     const voirLink = screen.getByRole("link", { name: "Voir" });
     expect(voirLink).toHaveAttribute("href", "/recipes/abc-123");
 
     const modifLink = screen.getByRole("link", { name: "Modifier" });
-    expect(modifLink).toHaveAttribute("href", "/recipes/update/abc-123");
+    expect(modifLink).toHaveAttribute("href", "/recipes/abc-123?edit=1");
   });
 
-  it("appelle onDelete avec l'id quand on clique sur Supprimer", async () => {
-    const { onDelete } = setup();
+  it("appelle onDelete avec l'id quand on clique sur Supprimer (pour le propriétaire)", async () => {
+    const { onDelete } = setup(baseRecipe, "owner-1");
 
     const user = userEvent.setup();
     const deleteBtn = screen.getByRole("button", { name: "Supprimer" });
@@ -87,8 +88,8 @@ describe("RecipeCard", () => {
     const recipeNoImg = { ...baseRecipe, img: "" } as any;
     setup(recipeNoImg);
 
-    const img = screen.getByRole("img", { name: "Pâtes pesto" });
-    // selon le navigateur/JSDOM ça peut être "" ou ne pas exister, on vérifie juste que ça rend
-    expect(img).toBeInTheDocument();
+    // Avec placeholder accessible
+    const placeholder = screen.getByLabelText(/image indisponible/i);
+    expect(placeholder).toBeInTheDocument();
   });
 });
