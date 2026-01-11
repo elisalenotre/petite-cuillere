@@ -63,7 +63,7 @@ export async function signInWithGoogleService() {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: "/recipes",
+      redirectTo: new URL('/recipes', window.location.origin).toString(),
     },
   });
   if (error) throw error;
@@ -74,7 +74,7 @@ export async function signInWithGitHubService() {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'github',
     options: {
-      redirectTo: "/recipes",
+      redirectTo: new URL('/recipes', window.location.origin).toString(),
     },
   });
   if (error) throw error;
