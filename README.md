@@ -57,7 +57,7 @@ L’interface est pensée pour être claire, responsive et accessible.
    ```bash
    npm install
    ```
-3. Créer un fichier .env.local à la racine du projet
+3. Créer un fichier .env à la racine du projet
    ```bash
    VITE_SUPABASE_URL=your_supabase_url
    VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
