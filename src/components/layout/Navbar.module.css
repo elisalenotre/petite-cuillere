@@ -68,10 +68,22 @@
   gap: 0.75rem;
 }
 
+.navbarUser {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: var(--text-accent);
+  border: 1px solid var(--border);
+}
+
 .navbarLogoutBtn {
   border-radius: 999px;
   border: 1px solid var(--border);
-  background: var(--surface-2);
+  background: var(--bg-strong);
+  color: var(--surface);
   padding: 0.4rem 0.9rem;
   font-size: 0.85rem;
   cursor: pointer;
@@ -79,7 +91,7 @@
 }
 
 .navbarLogoutBtn:hover {
-  background: var(--surface-2);
+  background: #7a5a38;
   border: 1px solid rgba(128, 93, 49, 0.35);
   box-shadow: 0 6px 12px rgba(150, 115, 66, 0.18);
   transform: translateY(-1px);

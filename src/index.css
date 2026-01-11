@@ -7,11 +7,11 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  /* Palette & thème léger */
+  /* Palette & thème */
   --bg: #faf0e3;
+  --bg-strong: #655540;
   --surface: #fffaf4;
-  --surface-2: #fffdf9;
+  --surface-2: #f9f0e8;
   --text-primary: #6c5333;
   --text-accent: #7a5a38;
   --border: #e2cfae;

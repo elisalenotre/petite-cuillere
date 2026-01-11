@@ -295,7 +295,7 @@
 
 /* Primaire (Ajouter/Modifier) */
 .modalContent :global(.recipe-form-buttons button:first-child) {
-  background: var(--text-accent);
+  background: var(--bg-strong);
   color: var(--surface);
   border: none;
 }
