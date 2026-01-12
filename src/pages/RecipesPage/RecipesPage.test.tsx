@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import RecipesPage from "./RecipesPage";
 
 // --------------------
-// Mocks des composants enfants (on teste la page, pas les enfants)
+// Mocks des composants enfants (on teste jsute page, pas les enfants)
 // --------------------
 vi.mock("../../components/recipes/SearchBar/SearchBar", () => ({
   default: ({ search, setSearch }: any) => (
@@ -110,11 +110,9 @@ const recipesPage2 = [
 
 describe("RecipesPage", () => {
   beforeEach(() => {
-    // IMPORTANT: reset les once (sinon décalage entre tests)
     rangeMock.mockReset();
     deleteRecipeMock.mockReset();
 
-    // optionnel mais clean
     fromMock.mockClear();
     selectMock.mockClear();
 
@@ -169,7 +167,6 @@ describe("RecipesPage", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "delete-1" }));
 
-    // Le wording de la confirmation peut varier; on vérifie juste l'appel
     expect(window.confirm).toHaveBeenCalled();
 
     await waitFor(() => {
@@ -208,7 +205,6 @@ describe("RecipesPage", () => {
     fireEvent.click(screen.getByRole("button", { name: "delete-1" }));
 
     expect(deleteRecipeMock).not.toHaveBeenCalled();
-    // toujours présent
     expect(screen.getByText("Ramen")).toBeInTheDocument();
   });
 });

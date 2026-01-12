@@ -3,7 +3,6 @@ import { render, screen } from "@testing-library/react";
 import type { Recipe } from "../../../types/recipes";
 import RecipesList from "./RecipesList";
 
-// ✅ on mock RecipeCard pour tester RecipesList isolément
 const RecipeCardMock = vi.fn(
   ({ recipe }: {
       [x: string]: any; recipe: Recipe 
@@ -62,14 +61,11 @@ describe("RecipesList", () => {
 
     render(<RecipesList recipes={recipes} onDelete={onDelete} />);
 
-    // ✅ RecipeCard a été appelé 2 fois
     expect(RecipeCardMock).toHaveBeenCalledTimes(2);
 
-    // ✅ 1er appel : bonne recette + onDelete
     expect(RecipeCardMock.mock.calls[0][0].recipe.recettes_id).toBe("r1");
     expect(RecipeCardMock.mock.calls[0][0].onDelete).toBe(onDelete);
 
-    // ✅ 2e appel : bonne recette + onDelete
     expect(RecipeCardMock.mock.calls[1][0].recipe.recettes_id).toBe("r2");
     expect(RecipeCardMock.mock.calls[1][0].onDelete).toBe(onDelete);
   });

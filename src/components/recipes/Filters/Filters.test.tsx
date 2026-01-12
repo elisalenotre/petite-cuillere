@@ -40,7 +40,6 @@ function Wrapper({
 
   const [sort, setSort] = useState<SortValue>(initialSort);
 
-  // optionnel: pour vérifier que setSort est bien appelé (sans mocker l'updater)
   const handleSort = (v: React.SetStateAction<SortValue>) => {
     const next = typeof v === "function" ? (v as any)(sort) : v;
     onSortSpy?.(next);

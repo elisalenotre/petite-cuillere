@@ -65,7 +65,7 @@ export function LoginForm() {
     }
   };
 
-  // Éviter les re-renders inutiles
+  // Éviter les re-renders inutiles acvec useCallback (bonne pratique mais pas vrmt nécessaire ici)
   const handleEmailChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   }, []);

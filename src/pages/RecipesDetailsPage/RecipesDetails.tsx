@@ -42,7 +42,6 @@ export default function RecipesDetails() {
     loadRecipe();
   }, [id]);
 
-  // Ouvrir automatiquement le modal si query ?edit=1 et que l'utilisateur est propriétaire
   useEffect(() => {
     if (loading) return;
     if (!recipe) return;

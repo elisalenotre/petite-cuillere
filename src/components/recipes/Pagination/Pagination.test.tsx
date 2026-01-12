@@ -14,18 +14,17 @@ describe("Pagination", () => {
     const defaultProps = {
       page: 1,
       setPage,
-      total: 60,   // total items
-      pageSize: 10 // => totalPages = 6
+      total: 60,   
+      pageSize: 10,
     };
 
     return render(<Pagination {...defaultProps} {...props} />);
   }
 
   it("affiche la bonne page active via les pilules", () => {
-    setup({ page: 2, total: 60, pageSize: 10 }); // 6 pages
+    setup({ page: 2, total: 60, pageSize: 10 });
     const active = screen.getByRole("button", { name: "Page 2" });
     expect(active).toHaveAttribute("aria-current", "page");
-    // Il n'y a plus d'indicateur texte "Page x / y"
     expect(screen.queryByText(/Page\s+\d+\s+\/\s+\d+/)).not.toBeInTheDocument();
   });
 
@@ -74,20 +73,16 @@ describe("Pagination", () => {
   });
 
   it("affiche toutes les pages quand totalPages <= 5", () => {
-    // totalPages = 5
     setup({ page: 1, total: 50, pageSize: 10 });
 
-    // boutons 1..5 présents
     for (let i = 1; i <= 5; i++) {
       expect(screen.getByRole("button", { name: `Page ${i}` })).toBeInTheDocument();
     }
 
-    // pas de "..."
     expect(screen.queryByRole("button", { name: "Page ..." })).not.toBeInTheDocument();
   });
 
   it("affiche '...' quand totalPages > 5 et page au début (page <= 3)", () => {
-    // totalPages = 10, page=2 => [1,2,3,4,'...',10]
     setup({ page: 2, total: 100, pageSize: 10 });
 
     expect(screen.getByRole("button", { name: "Page 1" })).toBeInTheDocument();
@@ -102,7 +97,6 @@ describe("Pagination", () => {
   });
 
   it("affiche '...' quand on est au milieu", () => {
-    // totalPages = 10, page=5 => [1,'...',4,5,6,'...',10]
     setup({ page: 5, total: 100, pageSize: 10 });
 
     expect(screen.getByRole("button", { name: "Page 1" })).toBeInTheDocument();
@@ -111,14 +105,12 @@ describe("Pagination", () => {
     expect(screen.getByRole("button", { name: "Page 6" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Page 10" })).toBeInTheDocument();
 
-    // 2 fois "..."
     const dots = screen.getAllByRole("button", { name: "Page ..." });
     expect(dots).toHaveLength(2);
     dots.forEach((d) => expect(d).toBeDisabled());
   });
 
   it("clic sur un numéro de page appelle setPage(pageNum)", async () => {
-    // totalPages = 6 => pages visibles 1..6
     setup({ page: 1, total: 60, pageSize: 10 });
 
     const user = userEvent.setup();

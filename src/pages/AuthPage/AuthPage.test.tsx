@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { vi, type Mock } from 'vitest';
 import { AuthPage } from './AuthPage';
 import { MemoryRouter } from 'react-router-dom';
-// Mock léger de useNavigate pour observer les redirections (évite les variables top-level)
+
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
   const navigateSpy = vi.fn();
@@ -31,7 +31,6 @@ const signInWithGoogle = vi.fn();
 const signInWithGitHub = vi.fn();
 const signOut = vi.fn();
 
-// Setup par défaut pour chaque test
 function setupDefaultAuthMock() {
   mockedUseAuth.mockReturnValue({
     user: null,
@@ -197,7 +196,6 @@ describe('AuthPage', () => {
     expect(signInWithGitHub).toHaveBeenCalledTimes(1);
   });
 
-  // Logout (non applicable): vérifie la redirection quand user est défini
   it("déclenche la redirection et n'appelle pas signOut quand user est défini", async () => {
     mockedUseAuth.mockReturnValue({
       user: { email: 'logged@example.com' } as any,

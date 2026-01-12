@@ -23,12 +23,10 @@ describe("RecipeForm", () => {
 	it("affiche le formulaire d'ajout avec les champs requis", () => {
 		render(<RecipeForm onClose={onClose} onRecipeAdded={onRecipeAdded} />);
 
-		// Titre de la section
 		expect(
 			screen.getByRole("heading", { name: /ajouter une recette/i })
 		).toBeInTheDocument();
 
-		// Champs
 		expect(screen.getByLabelText(/titre/i)).toBeInTheDocument();
 		expect(screen.getByLabelText(/image/i)).toBeInTheDocument();
 		expect(screen.getByLabelText(/déroulé/i)).toBeInTheDocument();
@@ -37,7 +35,6 @@ describe("RecipeForm", () => {
 		expect(screen.getByLabelText(/technique/i)).toBeInTheDocument();
 		expect(screen.getByLabelText(/difficulté/i)).toBeInTheDocument();
 
-		// Boutons
 		expect(screen.getByRole("button", { name: /ajouter/i })).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: /annuler/i })).toBeInTheDocument();
 	});
@@ -104,11 +101,9 @@ describe("RecipeForm", () => {
 			difficulty: "Facile",
 		});
 
-		// onRecipeAdded reçoit la recette retournée par le service
 		expect(onRecipeAdded).toHaveBeenCalledTimes(1);
 		expect(onRecipeAdded).toHaveBeenCalledWith(mockedRecipe);
 
-		// Le formulaire ferme
 		expect(onClose).toHaveBeenCalledTimes(1);
 	});
 
@@ -141,12 +136,10 @@ describe("RecipeForm", () => {
 			/>
 		);
 
-		// Le titre d'édition est visible
 		expect(
 			screen.getByRole("heading", { name: /modifier la recette/i })
 		).toBeInTheDocument();
 
-		// Les champs sont pré-remplis (on modifie le titre pour tester)
 		const titleInput = screen.getByLabelText(/titre/i);
 		await user.clear(titleInput);
 		await user.type(titleInput, "Quiche revisitée");

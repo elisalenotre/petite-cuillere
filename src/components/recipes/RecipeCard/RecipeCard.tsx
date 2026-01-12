@@ -6,7 +6,7 @@ import type { Recipe } from "../../../types/recipes";
 type Props = {
   recipe: Recipe;
   onDelete: (id: string) => void;
-  currentUserId: string | null; // Ajout du userId
+  currentUserId: string | null;
 };
 
 export default function RecipeCard({ recipe, onDelete, currentUserId }: Props) {

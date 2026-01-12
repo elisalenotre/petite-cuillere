@@ -4,8 +4,6 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import RecipeCard from "./RecipeCard";
 
-// Si ton type Recipe a d'autres champs obligatoires, complète ici.
-// L'idée : mettre juste ce qu'il faut pour le composant.
 const baseRecipe = {
   recettes_id: "abc-123",
   title: "Pâtes pesto",
@@ -55,7 +53,6 @@ describe("RecipeCard", () => {
     const recipeNoCat = { ...baseRecipe, categories: null } as any;
     setup(recipeNoCat);
 
-    // On vérifie l'absence de textes catégories
     expect(screen.queryByText("Poêle")).not.toBeInTheDocument();
     expect(screen.queryByText("Vegan")).not.toBeInTheDocument();
     expect(screen.queryByText("Rapide")).not.toBeInTheDocument();
@@ -88,7 +85,6 @@ describe("RecipeCard", () => {
     const recipeNoImg = { ...baseRecipe, img: "" } as any;
     setup(recipeNoImg);
 
-    // Avec placeholder accessible
     const placeholder = screen.getByLabelText(/image indisponible/i);
     expect(placeholder).toBeInTheDocument();
   });

@@ -10,7 +10,7 @@ type Props = {
     temps: string;
     tech_cuisson: string;
     difficulty: string;
-    owner: string; // "" | "mine" | "others"
+    owner: string;
   };
   setSelectedFilters: React.Dispatch<
     React.SetStateAction<{

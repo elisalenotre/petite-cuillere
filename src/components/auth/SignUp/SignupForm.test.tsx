@@ -65,7 +65,7 @@ describe('SignupForm', () => {
     const user = userEvent.setup();
     signUpWithEmail.mockResolvedValueOnce(undefined);
 
-    // Mock supabase pour éviter un appel réseau et forcer 'session' à null
+    // Mock supabase pour éviter un appel réseau réel
     vi.mock('../../../supabase', () => ({
       supabase: {
         auth: {

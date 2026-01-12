@@ -13,7 +13,7 @@ vi.mock("../../contexts/AuthContext", () => ({
   }),
 }));
 
-// 2) Mock du svg (si ton setup ne gère pas les assets en test)
+// 2) Mock du svg import
 vi.mock("../../assets/spoon.svg", () => ({
   default: "spoon.svg",
 }));
@@ -38,7 +38,6 @@ describe("Navbar", () => {
     expect(brandLink).toBeInTheDocument();
     expect(brandLink).toHaveAttribute("href", "/recipes");
 
-    // Le titre est visible
     expect(screen.getByText(/petite cuillère/i)).toBeInTheDocument();
   });
 

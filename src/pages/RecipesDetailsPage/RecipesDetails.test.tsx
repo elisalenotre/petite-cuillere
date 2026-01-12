@@ -67,7 +67,6 @@ describe('RecipesDetailsPage', () => {
     currentUser = null;
     singleResult = { data: null, error: null };
     deleteResult = { error: null };
-    // reset navigate spy calls
     getNavigateMock()?.mockReset?.();
   });
 

@@ -46,7 +46,7 @@ const Pagination = ({ page, setPage, total, pageSize }: Props) => {
           ← Précédent
         </button>
         
-        {/* Numéros de page (optionnel) */}
+        {/* Numéros de page*/}
         {totalPages > 1 && (
           <div className="pagination-numbers">
             {getPageNumbers().map((pageNum, index) => (

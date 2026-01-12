@@ -41,7 +41,7 @@ export default function RecipesPage() {
   // -----------------------------
   const loadRecipes = useCallback(async () => {
     try {
-      // Utilise le service si disponible, sinon fallback simple (utile en tests où le module est partiellement mocké)
+
       const listFn = typeof recipesService.getRecipesWithClient === "function"
         ? recipesService.getRecipesWithClient
         : async (client: typeof supabase, params: { page: number; pageSize: number }) => {

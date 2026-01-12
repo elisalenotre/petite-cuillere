@@ -180,7 +180,7 @@ export type ListFilters = {
   temps?: string;
   tech_cuisson?: string;
   difficulty?: string;
-  owner?: string; // "mine" | "others" | ""
+  owner?: string;
 };
 
 export type ListParams = {
@@ -221,7 +221,6 @@ export async function getRecipesWithClient(client: SupabaseClient, params: ListP
     query = query.eq("categories.difficulty", filters.difficulty);
   }
 
-  // Filtre propriétaire (mine/others) basé sur l'utilisateur courant
   if (filters.owner && typeof client?.auth?.getUser === "function") {
     const { data } = await client.auth.getUser();
     const uid = data?.user?.id;
