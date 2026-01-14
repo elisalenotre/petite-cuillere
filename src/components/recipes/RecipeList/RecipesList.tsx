@@ -6,16 +6,17 @@ import RecipeCard from "../RecipeCard/RecipeCard";
 type Props = {
   recipes: Recipe[];
   onDelete: (id: string) => void;
+  currentUserId?: string | null;
 };
 
-export default function RecipesList({ recipes, onDelete }: Props) {
+export default function RecipesList({ recipes, onDelete, currentUserId = null }: Props) {
   return (
     <>
       {recipes.map((recipe) => (
         <RecipeCard
           key={recipe.recettes_id}
           recipe={recipe}
-          onDelete={onDelete} currentUserId={null}        
+          onDelete={onDelete} currentUserId={currentUserId}
           />
       ))}
     </>

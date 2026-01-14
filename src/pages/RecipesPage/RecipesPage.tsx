@@ -11,11 +11,13 @@ import RecipeForm from "../../components/recipes/RecipeForm/RecipeForm";
 import styles from "./RecipesPage.module.css";
 import * as recipesService from "../../services/recipesService";
 import { supabase } from "../../supabase";
+import { useAuth } from "../../contexts/AuthContext";
 
 import type { SortValue } from "../../components/recipes/Filters/Filters";
 import SearchBar from "../../components/recipes/SearchBar/searchBar";
 
 export default function RecipesPage() {
+  const { user } = useAuth();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [search, setSearch] = useState("");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -165,7 +167,7 @@ export default function RecipesPage() {
           Oops, il n'y a pas encore de recette par ici, chef.fe.
         </p>
       ) : (
-        <RecipesList recipes={sortedRecipes} onDelete={handleDelete} />
+        <RecipesList recipes={sortedRecipes} onDelete={handleDelete} currentUserId={user?.id ?? null} />
       )}
     </div>
 

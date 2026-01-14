@@ -1,6 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import RecipesPage from "./RecipesPage";
+// Mock du contexte d'auth pour éviter l'erreur useAuth sans provider
+vi.mock("../../contexts/AuthContext", () => ({
+  useAuth: () => ({
+    user: null,
+    session: null,
+    loading: false,
+    signUpWithEmail: vi.fn(),
+    signInWithEmail: vi.fn(),
+    signOut: vi.fn(),
+    signInWithGoogle: vi.fn(),
+    signInWithGitHub: vi.fn(),
+  }),
+}));
 
 // --------------------
 // Mocks des composants enfants (on teste jsute page, pas les enfants)
