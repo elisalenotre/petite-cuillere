@@ -62,6 +62,8 @@ export default function RecipesDetails() {
     // Forcer un nouveau rendu avec un nouvel objet
     setRecipe({ ...updatedRecipe });
     setShowEditModal(false);
+    // Retirer le paramètre ?edit=1 pour éviter la réouverture automatique du modal
+    navigate(location.pathname, { replace: true });
   };
 
   // Fonction pour supprimer la recette
@@ -182,7 +184,10 @@ export default function RecipesDetails() {
         <div className={styles.modalBackdrop}>
           <div className={styles.modalContent}>
             <RecipeForm
-              onClose={() => setShowEditModal(false)}
+              onClose={() => {
+                setShowEditModal(false);
+                navigate(location.pathname, { replace: true });
+              }}
               onRecipeAdded={handleRecipeUpdated} 
               existingRecipe={recipe}
             />
