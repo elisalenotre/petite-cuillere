@@ -1,0 +1,211 @@
+/* ===================================
+   VARIABLES CSS - DARK/LIGHT MODE
+   Style "Petite Cuillère" 
+   =================================== */
+
+/* MODE CLAIR (par défaut) */
+body[data-theme="light"] {
+  /* Couleurs de fond */
+  --bg-color: #fffaf4;
+  --bg-secondary: #f5e9d8;
+  --bg-tertiary: #f7efe3;
+  
+  /* Texte */
+  --text-color: #6c5333;
+  --text-secondary: #a78b6d;
+  --text-accent: #7a5a38;
+  --text-dark: #2b1c0a;
+  
+  /* Bordures */
+  --border-color: #e2cfae;
+  --border-accent: #d4b896;
+  --border-strong: #b88d5c;
+  
+  /* Cartes et surfaces */
+  --card-bg: #fffaf4;
+  --card-shadow: rgba(108, 83, 51, 0.08);
+  --card-hover-shadow: rgba(108, 83, 51, 0.15);
+  
+  /* Boutons principaux */
+  --button-bg: #655540;
+  --button-bg-hover: #7a5a38;
+  --button-text: #fffaf4;
+  --button-shadow: rgba(165, 120, 69, 0.35);
+  
+  /* Boutons secondaires */
+  --button-secondary-bg: transparent;
+  --button-secondary-border: #a57845;
+  --button-secondary-text: #2b1c0a;
+  --button-secondary-hover: rgba(165, 120, 69, 0.1);
+  
+  /* Bouton danger */
+  --button-danger-bg: #a13f3f;
+  --button-danger-hover: #b55c5c;
+  
+  /* Inputs */
+  --input-bg: #fffaf4;
+  --input-border: #6c5333;
+  --input-focus-border: #b88d5c;
+  --input-focus-shadow: rgba(184, 141, 92, 0.2);
+  --input-placeholder: #a78b6d;
+  
+  /* Navbar */
+  --navbar-bg: #fffaf4;
+  --navbar-shadow: rgba(108, 83, 51, 0.1);
+  
+  /* Tags/Pills */
+  --tag-bg: #f5e9d8;
+  --tag-border: #e2cfae;
+  --tag-text: #6c5333;
+  
+  /* Filtres */
+  --filter-bg: #f5e9d8;
+  --filter-select-bg: #fffdf9;
+  --filter-select-hover: #fff7eb;
+  
+  /* Messages */
+  --error-bg: #fdecec;
+  --error-border: #e7b1b1;
+  --error-text: #7a1f1f;
+  
+  --empty-bg: #fffdf9;
+  --empty-border: #e2cfae;
+  --empty-text: #6c5333;
+}
+
+/* MODE SOMBRE */
+body[data-theme="dark"] {
+  /* Couleurs de fond */
+  --bg-color: #1a1410;
+  --bg-secondary: #2b2318;
+  --bg-tertiary: #3a3126;
+  
+  /* Texte */
+  --text-color: #e8d7c3;
+  --text-secondary: #b8a794;
+  --text-accent: #d4b896;
+  --text-dark: #f5e9d8;
+  
+  /* Bordures */
+  --border-color: #4a3f2f;
+  --border-accent: #5a4d3a;
+  --border-strong: #7a6a52;
+  
+  /* Cartes et surfaces */
+  --card-bg: #2b2318;
+  --card-shadow: rgba(0, 0, 0, 0.3);
+  --card-hover-shadow: rgba(0, 0, 0, 0.5);
+  
+  /* Boutons principaux */
+  --button-bg: #8b7355;
+  --button-bg-hover: #a38768;
+  --button-text: #1a1410;
+  --button-shadow: rgba(139, 115, 85, 0.4);
+  
+  /* Boutons secondaires */
+  --button-secondary-bg: transparent;
+  --button-secondary-border: #8b7355;
+  --button-secondary-text: #e8d7c3;
+  --button-secondary-hover: rgba(139, 115, 85, 0.2);
+  
+  /* Bouton danger */
+  --button-danger-bg: #c95555;
+  --button-danger-hover: #d97070;
+  
+  /* Inputs */
+  --input-bg: #2b2318;
+  --input-border: #5a4d3a;
+  --input-focus-border: #8b7355;
+  --input-focus-shadow: rgba(139, 115, 85, 0.3);
+  --input-placeholder: #7a6a52;
+  
+  /* Navbar */
+  --navbar-bg: #1a1410;
+  --navbar-shadow: rgba(0, 0, 0, 0.5);
+  
+  /* Tags/Pills */
+  --tag-bg: #3a3126;
+  --tag-border: #5a4d3a;
+  --tag-text: #d4b896;
+  
+  /* Filtres */
+  --filter-bg: #2b2318;
+  --filter-select-bg: #3a3126;
+  --filter-select-hover: #4a3f2f;
+  
+  /* Messages */
+  --error-bg: #3d2020;
+  --error-border: #6b3535;
+  --error-text: #e8a8a8;
+  
+  --empty-bg: #2b2318;
+  --empty-border: #4a3f2f;
+  --empty-text: #b8a794;
+}
+
+/* ===================================
+   APPLICATION DES VARIABLES
+   =================================== */
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Titres */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-accent);
+}
+
+/* Liens */
+a {
+  color: var(--text-accent);
+}
+
+a:hover {
+  color: var(--button-bg-hover);
+}
+
+/* Cartes */
+.recipe-card,
+.card {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+  box-shadow: 0 4px 12px var(--card-shadow);
+}
+
+/* Inputs génériques */
+input,
+textarea,
+select {
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  border-color: var(--input-border);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--input-placeholder);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 2px var(--input-focus-shadow);
+}
+
+/* Boutons génériques */
+button {
+  color: var(--text-color);
+}
+
+/* Tags/Pills */
+.tag,
+.badge,
+.pill {
+  background-color: var(--tag-bg);
+  border-color: var(--tag-border);
+  color: var(--tag-text);
+}

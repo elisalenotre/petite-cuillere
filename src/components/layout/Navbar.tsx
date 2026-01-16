@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import spoonLogo from "../../assets/spoon.svg";
 import styles from "./Navbar.module.css";
+// import ThemeToggle from "../theme/ThemeToggle";
 
 export default function Navbar() {
   const { signOut } = useAuth();
@@ -26,6 +27,9 @@ export default function Navbar() {
 
       <div className={styles.navbarRight}>
         {error && <p className={styles.navbarError}>{error}</p>}
+
+        {/* Bouton de changement de thème
+          <ThemeToggle /> */}
 
         <button className={styles.navbarLogoutBtn} onClick={handleLogout}>
           Se déconnecter

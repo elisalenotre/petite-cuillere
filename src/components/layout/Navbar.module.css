@@ -1,95 +1,118 @@
-/* --- Navbar --- */
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-
+  right: 0;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-
-  padding: 0.8rem 1.4rem;
-  background-color: #faf0e3;
-
-  border-bottom: 2px dashed #e0c9a3;
-  z-index: 1000;
-
-  /* animation d'apparition */
-  animation: navbarIn 1000ms ease-out both;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: var(--navbar-bg);
+  box-shadow: 0 2px 8px var(--navbar-shadow);
+  z-index: 100;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-@keyframes navbarIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* --- Brand (logo + titre cliquables) --- */
 .navbarBrand {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-
+  gap: 0.8rem;
   text-decoration: none;
-  color: inherit;
-
-  border-radius: 999px;
-  padding: 0.2rem 0.5rem;
-  transition: background 0.15s ease, transform 0.1s ease;
+  transition: transform 0.2s ease;
 }
 
-.navbarBrand:focus-visible {
-  outline: 2px solid rgba(197, 158, 109, 0.5);
-  outline-offset: 3px;
+.navbarBrand:hover {
+  transform: translateY(-2px);
 }
 
 .navbarLogo {
-  width: 24px;
-  height: auto;
+  width: 40px;
+  height: 40px;
+  transition: filter 0.3s ease;
+}
+
+/* Inverser l'icône en mode sombre si nécessaire */
+body[data-theme="dark"] .navbarLogo {
+  filter: brightness(1.2) saturate(0.8);
 }
 
 .navbarTitle {
-  font-size: 2rem;
-  font-family: "Italianno", cursive;
-  color: #7a5a38;
-  letter-spacing: 0.05em;
+  font-family: 'Italianno', cursive;
+  font-size: 1.8rem;
+  color: var(--text-accent);
+  transition: color 0.3s ease;
 }
 
-/* --- Right --- */
 .navbarRight {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-}
-
-.navbarLogoutBtn {
-  border-radius: 999px;
-  border: 1px solid #e2cbaa;
-  background: #fff8ee;
-  padding: 0.4rem 0.9rem;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: background 0.15s ease, box-shadow 0.1s, transform 0.1s;
-}
-
-.navbarLogoutBtn:hover {
-  background: #f5e3c8;
-  border: 1px solid rgba(128, 93, 49, 0.35);
-  box-shadow: 0 6px 12px rgba(150, 115, 66, 0.18);
-  transform: translateY(-1px);
+  gap: 1rem;
 }
 
 .navbarError {
-  background: #f8d7d7;
-  color: #a1463b;
-  padding: 0.35rem 0.6rem;
-  border-radius: 10px;
-  border: 1px solid #e7b5b5;
-  font-size: 0.75rem;
+  margin: 0;
+  padding: 0.5rem 1rem;
+  background-color: var(--error-bg);
+  border: 1px solid var(--error-border);
+  color: var(--error-text);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.navbarLogoutBtn {
+  padding: 0.6rem 1.4rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-accent);
+  background: transparent;
+  color: var(--text-accent);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.25s ease;
+}
+
+.navbarLogoutBtn:hover {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+}
+
+.navbarLogoutBtn:active {
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0.8rem 1rem;
+  }
+
+  .navbarTitle {
+    font-size: 1.5rem;
+  }
+
+  .navbarLogo {
+    width: 32px;
+    height: 32px;
+  }
+
+  .navbarLogoutBtn {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbarRight {
+    gap: 0.5rem;
+  }
+
+  .navbarError {
+    display: none; /* Masquer sur très petits écrans */
+  }
+
+  .navbarLogoutBtn {
+    padding: 0.4rem 0.8rem;
+  }
 }
